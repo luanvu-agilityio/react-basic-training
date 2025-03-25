@@ -105,7 +105,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         ];
         userDataKeys.forEach((key) => localStorage.removeItem(key));
         setTimeout(() => {
-          window.location.href = '/login';
+          navigate('/login', { replace: true });
         }, 2000);
       },
       () => {
