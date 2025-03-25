@@ -6,6 +6,6 @@ export default defineConfig(
   viteDefineConfig({
     // ... other Vite configurations
     plugins: [tsconfigPaths()],
-    // base: process.env.VITE_BASE_PATH || '/react-basic-training',
+    base: process.env.VITE_BASE_PATH || '/react-basic-training',
   }),
 );
