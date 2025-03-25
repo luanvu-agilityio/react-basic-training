@@ -80,7 +80,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
       <img
         className="content__search-icon"
-        src="../../../src/assets/icons/topbar-icons/search.svg"
+        src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742868125/search_jksrfd.svg"
         alt="Search"
       />
     </div>
