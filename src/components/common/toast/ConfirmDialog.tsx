@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ICON from '@constants/toast-icon-src';
-import './toast.css';
+import './Toast.css';
 import Button from '@components/common/buttons/Button';
 
 interface ConfirmDialogProps {

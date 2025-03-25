@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import './button.css';
+import './Button.css';
 import Button from '@components/common/buttons/Button';
 
 const meta: Meta<typeof Button> = {

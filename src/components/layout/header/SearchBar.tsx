@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './header.css';
+import './Header.css';
 import { IStudent } from 'types/student';
 
 export interface SearchBarProps {
