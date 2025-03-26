@@ -14,10 +14,7 @@ interface IEnvironment {
 const environment: IEnvironment = {
   localApiUrl: 'http://localhost:3000',
   remoteApiUrl: 'https://crud-api-vuea.onrender.com',
-  allowedOrigins: [
-    'http://localhost:3000',
-    'https://your-vercel-app-domain.vercel.app', // Replace with your actual Vercel app domain
-  ],
+  allowedOrigins: ['http://localhost:3000', 'react-basic-training-luanvu.vercel.app'],
 };
 
 /**
