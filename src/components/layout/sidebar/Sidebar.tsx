@@ -44,7 +44,7 @@ const Sidebar: React.FC<ISidebarProps> = ({
         <div className="sidebar__profile-image">
           <img
             loading="lazy"
-            src={userProfileImage ?? DEFAULT_PROFILE_IMAGE}
+            src={userProfileImage || DEFAULT_PROFILE_IMAGE}
             alt="Profile"
             onError={(e) => {
               // Fallback to default image if the provided image fails to load
@@ -68,7 +68,7 @@ const Sidebar: React.FC<ISidebarProps> = ({
               <img
                 loading="lazy"
                 className="sidebar__nav-icon"
-                src={item.icon}
+                src={item.icon || undefined}
                 alt={item.text}
                 onError={(e) => {
                   // Hide the image if it fails to load

@@ -211,7 +211,7 @@ const StudentForm: React.FC<StudentFormViewProps> = ({
             {formData.avatar ? (
               <img
                 loading="lazy"
-                src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742547439/opzj4nkixf9ftq6bmeyj.jpg"
+                src={formData.avatar}
                 alt="Student avatar"
                 className="student-avatar"
               />

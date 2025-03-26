@@ -231,8 +231,11 @@ const Pagination: React.FC<PaginationProps> = ({
         </div>
 
         <div className="pagination__goto">
-          <label className="pagination__label">Go to page</label>
+          <label htmlFor="gotoPage" className="pagination__label">
+            Go to page
+          </label>
           <input
+            id="gotoPage"
             type="number"
             min="1"
             max={totalPages}

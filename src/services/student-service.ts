@@ -16,6 +16,7 @@ const environment: IEnvironment = {
   remoteApiUrl: 'https://crud-api-vuea.onrender.com',
   allowedOrigins: [
     'http://localhost:3000',
+    'http://localhost:5174',
     'https://react-basic-training-luanvu.vercel.app',
     'https://crud-api-vuea.onrender.com',
   ],
@@ -57,6 +58,7 @@ class ApiDataService extends BaseService<IStudent> {
     return {
       method,
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         Origin: environment.remoteApiUrl,
