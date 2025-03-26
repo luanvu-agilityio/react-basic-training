@@ -59,6 +59,8 @@ class ApiDataService extends BaseService<IStudent> {
       mode: 'cors',
       credentials: 'include',
       headers: {
+        'Access-Control-Request-Headers': '*',
+        'Access-Control-Request-Method': '*',
         'Content-Type': 'application/json',
         Origin: environment.remoteApiUrl,
       },
