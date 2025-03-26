@@ -14,20 +14,11 @@ interface ConfirmDialogProps {
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   title,
   message,
-
   onClose,
   onConfirm,
   onCancel,
 }) => {
   const [isVisible, setIsVisible] = useState(true);
-
-  const handleCloseClick = () => {
-    if (onCancel) {
-      onCancel();
-    }
-    setIsVisible(false);
-    setTimeout(onClose, 300);
-  };
 
   const handleConfirmClick = () => {
     if (onConfirm) {
@@ -37,13 +28,16 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     setTimeout(onClose, 2000);
   };
 
-  const handleCancelClick = () => {
-    if (onCancel) {
-      onCancel();
+  const handleDismiss = (callback?: () => void) => {
+    if (callback) {
+      callback();
     }
     setIsVisible(false);
     setTimeout(onClose, 300);
   };
+
+  const handleCloseClick = () => handleDismiss(onCancel);
+  const handleCancelClick = () => handleDismiss(onCancel);
 
   const getDialogClassName = () => {
     return `confirm-dialog confirm-dialog--warning ${!isVisible ? 'confirm-dialog--hidden' : ''}`;

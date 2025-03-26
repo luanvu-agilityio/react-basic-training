@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { DEFAULT_PROFILE_IMAGE } from '@constants/dummy-user';
+import { NAV_ITEMS as navItems } from '@constants/nav-item';
 import './Sidebar.css';
 
 export type NavItem = 'home' | 'course' | 'students' | 'payment' | 'report' | 'setting';
@@ -13,9 +15,6 @@ interface ISidebarProps {
   onLogout?: () => void;
   expanded: boolean;
 }
-
-const DEFAULT_PROFILE_IMAGE =
-  'https://res.cloudinary.com/ds82onf5q/image/upload/v1741144070/dfh4itqdkturgj3yqtwn.jpg';
 
 const Sidebar: React.FC<ISidebarProps> = ({
   username,
@@ -38,52 +37,14 @@ const Sidebar: React.FC<ISidebarProps> = ({
     }
   };
 
-  const navItems = [
-    {
-      to: '/home',
-      name: 'home',
-      icon: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742867571/home_ydi5zu.svg',
-      text: 'Home',
-    },
-    {
-      to: '/courses',
-      name: 'course',
-      icon: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742867570/course_d2jfjd.svg',
-      text: 'Course',
-    },
-    {
-      to: '/students',
-      name: 'student',
-      icon: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742867572/student_irxgld.svg',
-      text: 'Students',
-    },
-    {
-      to: '/Payment',
-      name: 'payment',
-      icon: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742867571/payment_peqmdt.svg',
-      text: 'Payment',
-    },
-    {
-      to: '/Report',
-      name: 'report',
-      icon: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742867571/report_rm69ya.svg',
-      text: 'Report',
-    },
-    {
-      to: '/Setting',
-      name: 'setting',
-      icon: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742867571/setting_qbe1fw.svg',
-      text: 'Setting',
-    },
-  ];
-
   return (
     <aside className={`sidebar ${expanded ? 'expanded' : ''}`}>
       <h1 className="sidebar__title">crud operations</h1>
       <div className="sidebar__profile">
         <div className="sidebar__profile-image">
           <img
-            src={userProfileImage || DEFAULT_PROFILE_IMAGE}
+            loading="lazy"
+            src={userProfileImage ?? DEFAULT_PROFILE_IMAGE}
             alt="Profile"
             onError={(e) => {
               // Fallback to default image if the provided image fails to load
@@ -105,6 +66,7 @@ const Sidebar: React.FC<ISidebarProps> = ({
           >
             {item.icon && (
               <img
+                loading="lazy"
                 className="sidebar__nav-icon"
                 src={item.icon}
                 alt={item.text}
@@ -118,14 +80,20 @@ const Sidebar: React.FC<ISidebarProps> = ({
           </Link>
         ))}
       </nav>
-      <div className="sidebar__logout" onClick={handleLogout}>
+      <button
+        className="sidebar__logout"
+        onClick={handleLogout}
+        onKeyDown={(e) => e.key === 'Enter' && handleLogout()}
+        tabIndex={0}
+      >
         Logout
         <img
+          loading="lazy"
           className="sidebar__logout-icon"
           src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742867571/logout_qfh4jb.svg"
           alt="Logout"
         />
-      </div>
+      </button>
     </aside>
   );
 };

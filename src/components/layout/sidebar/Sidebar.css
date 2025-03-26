@@ -169,6 +169,8 @@
   color: var(--black-color);
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-regular);
+  border: none;
+  background-color: transparent;
 }
 
 .sidebar__logout:hover {
@@ -223,9 +225,6 @@
   .sidebar__nav-item.student {
     padding: 12px 32px;
   }
-}
-
-@media (min-width: 993px) and (max-width: 1199px) {
 }
 
 /* Medium tablets */

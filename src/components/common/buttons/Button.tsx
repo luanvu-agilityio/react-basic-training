@@ -1,6 +1,6 @@
 import React, { ButtonHTMLAttributes, MouseEvent } from 'react';
 import './Button.css';
-import { ButtonType } from '../../../types/button';
+import { ButtonType } from 'types/button';
 
 export interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type'> {

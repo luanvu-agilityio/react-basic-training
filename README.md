@@ -1,4 +1,4 @@
-# React Basic Practice (to be updated later)
+# React Basic Practice 
 
 ## Overview
 
@@ -83,23 +83,28 @@ This project showcases practical applications of React with TypeScript while del
         |- images/
         |- icons/
     |- styles/
-        |- to be updated 
+
+    |- constants/
+
     |- component/
         |- common/
         |- layout/
         |- student/
-    |- hooks/
-        |- to be updated
+   
     |- pages/
-        |- to be updated
+        |- LoginPage/
+        |- PageNotFound/
+        |- StudentPage/
+
     |- services/
-        |- to be updated
+        |- BaseService
+        |- StudentService
+        |- UserService
+        |- ImageUpload
     |- types/
-        |- to be updated
-    |- utils/
-        |- to be updated
-    |- routes/
-        |- to be updated
+    
+    |- helpers/
+   
     |- App.tsx
     |- main.tsx
     |- vite-env.d.ts
@@ -131,13 +136,16 @@ This project showcases practical applications of React with TypeScript while del
 | pnpm run dev                                                              | Run the application              |
 | Open new terminal for story book                                                                             |
 | pnpm storybook                                                            | Run storybook                    |
+| Open new terminal to run JSON server locally                                                                 |
+| pnpm run json-server                                                      | Run Json server locally          |
+
 
 <b>Notes:<b>
 
 
 - Database running at http://localhost:3000
 
-- Alternatively, see the deployment link on render.com at the end of this document for more details
+- Alternatively, see the deployment link on Vercel at the end of this document for more details
 
 ## Contributing
 
@@ -151,7 +159,7 @@ I welcome any and all contribution! If you have found or encountered any bugs or
 
 [Practice plan](https://docs.google.com/document/d/1NtiwHfMuaavMyQpGGj_O2nzuubNSdHKw/edit)
 
-[Deployment link] to be updated later
+[Deployment link] (https://react-basic-training-luanvu.vercel.app/login)
 
 ###
 

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 import './LoadingSpinner.css';
 
 interface LoadingSpinnerProps {
@@ -157,9 +157,7 @@ export const LoadingSpinnerContainer: React.FC = () => {
     return unsubscribe;
   }, []);
 
-  if (!isLoading) return null;
-
-  return <LoadingSpinner />;
+  return isLoading ? <LoadingSpinner /> : null;
 };
 
 export default LoadingSpinner;

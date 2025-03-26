@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import LoginForm from '@pages/LoginPage';
-import PageNotAvailable from '@pages/PageNotFound';
-import StudentsPage from '@pages/StudentsPage';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+  useNavigate,
+} from 'react-router-dom';
+
+import LoginForm from '@pages/LoginPage/LoginPage';
+import PageNotAvailable from '@pages/PageNotFound/PageNotFound';
+import StudentsPage from '@pages/StudentPage/StudentsPage';
 import SidebarToggle from '@components/layout/sidebar/SidebarToggle';
 import Sidebar, { NavItem } from '@components/layout/sidebar/Sidebar';
 import { ToastProvider, useToast } from 'contexts/Toast.context';
-import Header from '@components/layout/header/Header';
+import Header from '@components/layout/header/Header/Header';
 import {
   LoadingSpinnerContainer,
   useLoadingSpinner,
@@ -68,10 +75,11 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     }
 
     // Get user data from localStorage
-    const username = localStorage.getItem('userName') || '';
-    const userRole = localStorage.getItem('userRole') || 'User';
+    const username = localStorage.getItem('userName') ?? '';
+    const userRole = localStorage.getItem('userRole') ?? 'User';
     const userAvatar =
-      localStorage.getItem('userAvatar') || '../../src/assets/images/user-images/user-profile.png';
+      localStorage.getItem('userAvatar') ??
+      'https://res.cloudinary.com/ds82onf5q/image/upload/v1742547439/opzj4nkixf9ftq6bmeyj.jpg';
 
     setUserData({
       username,
