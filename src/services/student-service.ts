@@ -62,7 +62,6 @@ class ApiDataService extends BaseService<IStudent> {
         'Access-Control-Request-Headers': '*',
         'Access-Control-Request-Method': '*',
         'Content-Type': 'application/json',
-        Origin: environment.remoteApiUrl,
       },
       ...(body && { body: JSON.stringify(body) }),
     };
