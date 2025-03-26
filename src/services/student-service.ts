@@ -60,7 +60,7 @@ class ApiDataService extends BaseService<IStudent> {
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        Origin: environment.localApiUrl,
+        Origin: environment.remoteApiUrl,
       },
       ...(body && { body: JSON.stringify(body) }),
     };
