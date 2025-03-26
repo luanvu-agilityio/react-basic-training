@@ -1,18 +1,24 @@
 import { BaseService } from './base-service';
 import { IStudent } from 'types/student';
 import { REQUEST_ERROR_MESSAGES } from '@constants/request-error-message';
+
 /**
  * Interfaces for environment config
  */
-
 interface IEnvironment {
   localApiUrl: string;
   remoteApiUrl: string;
+  allowedOrigins: string[];
 }
 
 const environment: IEnvironment = {
   localApiUrl: 'http://localhost:3000',
   remoteApiUrl: 'https://crud-api-vuea.onrender.com',
+  allowedOrigins: [
+    'http://localhost:3000',
+    'https://react-basic-training-luanvu.vercel.app/',
+    'https://crud-api-vuea.onrender.com',
+  ],
 };
 
 /**
@@ -23,22 +29,41 @@ class ApiDataService extends BaseService<IStudent> {
    * Constructor to initialize the base URL for the student endpoint
    * @param baseUrl - The base URL for the student endpoint
    */
-
   constructor(baseUrl: string) {
     super(`${baseUrl}/students`);
   }
 
   /**
-   * Handles the response from API
+   * Handles the response from API with improved error handling and CORS support
    * @param response - the response from the API
    * @returns  a promise that resolves to the parse response date
    */
   protected async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
-      throw response;
+      const errorBody = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorBody}`);
     }
 
     return await response.json();
+  }
+
+  /**
+   * Configures fetch options with CORS and headers
+   * @param method - HTTP method
+   * @param body - Request body (optional)
+   * @returns fetch options
+   */
+  private getFetchOptions(method: string, body?: IStudent): RequestInit {
+    return {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': environment.allowedOrigins.join(', '),
+        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+      ...(body && { body: JSON.stringify(body) }),
+    };
   }
 
   /**
@@ -47,7 +72,7 @@ class ApiDataService extends BaseService<IStudent> {
    */
   async getAll(): Promise<IStudent[]> {
     try {
-      const response = await fetch(this.baseUrl);
+      const response = await fetch(this.baseUrl, this.getFetchOptions('GET'));
       return this.handleResponse<IStudent[]>(response);
     } catch (error) {
       throw this.handleError(error, REQUEST_ERROR_MESSAGES.FETCH_STUDENTS_ERROR);
@@ -55,13 +80,13 @@ class ApiDataService extends BaseService<IStudent> {
   }
 
   /**
-   * Retrieves a student by id from API\
+   * Retrieves a student by id from API
    * @param id = the id of student  to retrieve
-   * @returns a promise that resolves to the student, or undefined if notfound
+   * @returns a promise that resolves to the student, or undefined if not found
    */
   async getById(id: string): Promise<IStudent | undefined> {
     try {
-      const response = await fetch(`${this.baseUrl}/${id}`);
+      const response = await fetch(`${this.baseUrl}/${id}`, this.getFetchOptions('GET'));
       if (response.status === 404) {
         return undefined;
       }
@@ -76,17 +101,10 @@ class ApiDataService extends BaseService<IStudent> {
    * Creates a new student and save it the API
    * @param student - the student to create
    * @returns a promise that resolves to the created student
-   *
    */
   async create(student: IStudent): Promise<IStudent> {
     try {
-      const response = await fetch(this.baseUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(student),
-      });
+      const response = await fetch(this.baseUrl, this.getFetchOptions('POST', student));
       return this.handleResponse<IStudent>(response);
     } catch (error) {
       console.error('Error creating student:', error);
@@ -101,13 +119,10 @@ class ApiDataService extends BaseService<IStudent> {
    */
   async update(student: IStudent): Promise<IStudent> {
     try {
-      const response = await fetch(`${this.baseUrl}/${student.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(student),
-      });
+      const response = await fetch(
+        `${this.baseUrl}/${student.id}`,
+        this.getFetchOptions('PUT', student),
+      );
       return this.handleResponse<IStudent>(response);
     } catch (error) {
       throw this.handleError(error, REQUEST_ERROR_MESSAGES.UPDATE_STUDENT_ERROR);
@@ -121,9 +136,7 @@ class ApiDataService extends BaseService<IStudent> {
    */
   async delete(id: string): Promise<void> {
     try {
-      const response = await fetch(`${this.baseUrl}/${id}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(`${this.baseUrl}/${id}`, this.getFetchOptions('DELETE'));
       if (!response.ok) {
         throw new Error(`Error! Status: ${response.status}`);
       }
@@ -158,7 +171,6 @@ export class DataServiceEnvironment {
       });
   }
 }
-
 /**
  * Get the singleton instance of BaseService
  * @returns a Promise that resolves to the singleton instance of BaseService
