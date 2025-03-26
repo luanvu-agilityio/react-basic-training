@@ -16,7 +16,7 @@ const environment: IEnvironment = {
   remoteApiUrl: 'https://crud-api-vuea.onrender.com',
   allowedOrigins: [
     'http://localhost:3000',
-    'https://react-basic-training-luanvu.vercel.app/',
+    'https://react-basic-training-luanvu.vercel.app',
     'https://crud-api-vuea.onrender.com',
   ],
 };
@@ -56,11 +56,11 @@ class ApiDataService extends BaseService<IStudent> {
   private getFetchOptions(method: string, body?: IStudent): RequestInit {
     return {
       method,
+      mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': environment.allowedOrigins.join(', '),
-        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        Origin: environment.localApiUrl,
       },
       ...(body && { body: JSON.stringify(body) }),
     };
