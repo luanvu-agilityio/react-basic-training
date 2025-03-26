@@ -36,7 +36,7 @@ const StudentList: React.FC<StudentListProps> = ({ students, onEdit, onDelete })
             students.map((student) => (
               <tr key={student.id} className="students__table-row" data-id={student.id}>
                 <td className="students__table-cell">
-                  <img src={student.avatar} alt={`Student ${student.name}`} loading="lazy" />
+                  <img src={student.avatar} alt={`Student ${student.name}`} />
                 </td>
                 <td className="students__table-cell name-cell" data-label="Name">
                   {student.name}
