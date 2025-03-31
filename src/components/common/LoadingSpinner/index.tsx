@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './loading-spinner.css'; // Assuming you have CSS for the spinner
+import './index.css';
 
 export interface LoadingSpinnerProps {
   fullScreen?: boolean;
