@@ -159,12 +159,12 @@ export class DataServiceEnvironment {
    */
   static async create(): Promise<BaseService<IStudent>> {
     // Test local JSON server first, then fall back to remote
-    return fetch(`${environment.localApiUrl}/students`)
-      .then(() => new ApiDataService(environment.localApiUrl))
+    return fetch(`${environment.remoteApiUrl}/students`)
+      .then(() => new ApiDataService(environment.remoteApiUrl))
       .catch(() => {
         // Test remote API next
-        return fetch(`${environment.remoteApiUrl}/students`)
-          .then(() => new ApiDataService(environment.remoteApiUrl))
+        return fetch(`${environment.localApiUrl}/students`)
+          .then(() => new ApiDataService(environment.localApiUrl))
           .catch(() => {
             // fallback for API URL
             return new ApiDataService(environment.remoteApiUrl);
