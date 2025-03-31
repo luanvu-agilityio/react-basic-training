@@ -108,7 +108,7 @@
   border-radius: 0.4rem;
 
   background-color: var(--orange-color);
-  color: var(--white-color);
+  color: #333;
   font-size: var(--font-size-14);
   font-weight: var(--font-weight-regular);
   text-transform: uppercase;
