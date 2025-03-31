@@ -27,10 +27,15 @@ const Pagination: React.FC<PaginationProps> = ({
   initialPage = 1,
   initialItemsPerPage = 5,
 }) => {
+  const effectiveTotalPages = Math.max(1, Math.ceil(totalItems / initialItemsPerPage || 5));
+
+  // Then use in useState:
   // State management for pagination
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
-  const [totalPages, setTotalPages] = useState(Math.max(1, Math.ceil(totalItems / itemsPerPage)));
+  const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage || 5);
+
+  const [totalPages, setTotalPages] = useState(effectiveTotalPages);
+
   const [goToPage, setGoToPage] = useState(currentPage.toString());
 
   /**
