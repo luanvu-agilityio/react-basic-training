@@ -1,3 +1,8 @@
+.pagination {
+  min-height: 6rem;
+  contain: layout style paint;
+}
+
 .students__pagination-container {
   margin-top: 2rem;
   margin-bottom: 2rem;
@@ -9,7 +14,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 11rem;
+  margin-bottom: 2rem;
 }
 
 .pagination__items-per-page {
@@ -92,6 +97,7 @@
   color: var(--dark-gray-color);
   font-size: var(--font-size-12);
   white-space: nowrap;
+  min-width: 12rem;
 }
 
 .pagination__goto {
@@ -126,7 +132,9 @@
 
 .pagination__page-numbers {
   display: flex;
+  justify-content: center;
   align-items: center;
+  min-width: 10rem;
   gap: 0.25rem;
   margin: 0 0.5rem;
 }
