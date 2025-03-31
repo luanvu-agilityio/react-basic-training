@@ -19,13 +19,17 @@ const TABLE_COLUMNS = [
     render: (student: IStudent) => (
       <Avatar
         className="student-avatar"
-        src={student.avatar ?? 'https://example.com/default-avatar.png'}
+        src={
+          student.avatar ??
+          'https://res.cloudinary.com/ds82onf5q/image/upload/w_65,h_55,c_fill,q_auto,f_auto/v1742547439/opzj4nkixf9ftq6bmeyj.jpg'
+        }
         alt={`Student ${student.name}`}
         style={{
           width: '65px',
           height: '55px',
           borderRadius: '5px',
         }}
+        lazyLoad={false}
       />
     ),
   },
@@ -61,14 +65,18 @@ const TABLE_COLUMNS = [
           <img
             src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742868082/edit_gxvseg.svg"
             alt="Edit student"
-            loading="lazy"
+            loading="eager"
+            width={18}
+            height={18}
           />
         </Button>
         <Button className="btn btn--delete" onClick={() => student.id && onDelete(student)}>
           <img
             src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742868081/delete_oynjal.svg"
             alt="Delete student"
-            loading="lazy"
+            loading="eager"
+            width={18}
+            height={18}
           />
         </Button>
       </div>

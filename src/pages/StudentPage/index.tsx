@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@components/common/Button';
 import StudentForm from '@components/student/StudentForm';
@@ -165,7 +165,9 @@ const StudentsPage: React.FC = () => {
     try {
       const service = await getDataService();
       await service.delete(student.id);
+
       setAllStudents((prevStudents) => prevStudents.filter((s) => s.id !== student.id)); // Remove the student from the allStudents state.
+
       if (searchedStudents !== null) {
         setSearchedStudents(searchedStudents.filter((s) => s.id !== student.id)); // Remove the student from the search results.
       }
@@ -192,10 +194,10 @@ const StudentsPage: React.FC = () => {
     setSelectedStudent(undefined); // Clear the selected student state.
   };
 
-  const getStudents = async (): Promise<IStudent[]> => {
+  const getStudents = useCallback(async (): Promise<IStudent[]> => {
     const service = await getDataService();
     return service.getAll();
-  };
+  }, []);
 
   return (
     <div>
