@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@components/common/Button';
 import StudentForm from '@components/student/StudentForm';
@@ -28,6 +28,8 @@ import SortDropdown from '@components/student/SortDropdown';
 const StudentsPage: React.FC = () => {
   const location = useLocation(); // React Router hook to access the current location.
   const navigate = useNavigate(); // React Router hook to programmatically navigate.
+  // Add a ref to track if this is the initial load
+  const initialLoadRef = useRef(true);
 
   // State variables
   const [allStudents, setAllStudents] = useState<IStudent[]>([]); // Stores all students fetched from the backend
@@ -63,23 +65,27 @@ const StudentsPage: React.FC = () => {
   }, [currentPage, itemsPerPage, navigate, location.pathname]);
 
   // Fetch all students
-  useEffect(() => {
-    const loadStudents = async () => {
-      try {
-        setIsLoading(true); // Set loading state to true while fetching data.
-        const service = await getDataService(); // Get the data service instance.
-        const fetchedStudents = await service.getAll(); // Fetch all students.
-        setAllStudents(fetchedStudents); // Store all students in state.
-        setDisplayedStudents(fetchedStudents); // Initially display all students.
-      } catch (error) {
-        console.error('Failed to load students: ', error);
-        showToast('error', 'Error', 'Failed to load students. Please try again.', 3000);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadStudents();
+  const loadStudents = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const service = await getDataService();
+      const fetchedStudents = await service.getAll();
+      setAllStudents(fetchedStudents);
+      setDisplayedStudents(fetchedStudents);
+    } catch (error) {
+      console.error('Failed to load students: ', error);
+      showToast('error', 'Error', 'Failed to load students. Please try again.', 3000);
+    } finally {
+      setIsLoading(false);
+    }
   }, [showToast]);
+
+  useEffect(() => {
+    if (initialLoadRef.current) {
+      loadStudents();
+      initialLoadRef.current = false;
+    }
+  }, []);
 
   // Apply sort whenever sort config changes or displayed students change due to search
   useEffect(() => {

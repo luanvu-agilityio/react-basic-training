@@ -81,13 +81,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    *
    * @param {UserData} userData - User information
    */
-  const login = (userData: UserData) => {
-    setUser(userData);
-    setIsAuthenticated(true);
-    localStorage.setItem('userData', JSON.stringify(userData));
-    localStorage.setItem('isLoggedIn', 'true');
-    navigate(ROUTES.DEFAULT);
-    showToast('success', 'Login Successful', `Welcome back, ${userData.username}`);
+  const login = async (userData: UserData) => {
+    try {
+      show();
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      setUser(userData);
+      setIsAuthenticated(true);
+      localStorage.setItem('userData', JSON.stringify(userData));
+      localStorage.setItem('isLoggedIn', 'true');
+      navigate(ROUTES.STUDENTS, { replace: true }); // Redirect immediately after login
+      showToast('success', 'Login Successful', `Welcome back, ${userData.username}`);
+    } catch (error) {
+      console.error('Login failed:', error);
+      showToast('error', 'Login Failed', 'An error occurred during login. Please try again.');
+    } finally {
+      hide();
+    }
   };
 
   /**
