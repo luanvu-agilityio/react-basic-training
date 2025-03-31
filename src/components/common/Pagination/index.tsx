@@ -130,73 +130,56 @@ const Pagination: React.FC<PaginationProps> = ({
     }
 
     const pageNumbers = [];
+    // Always show the first page
 
-    // Always include first page (or placeholder)
-    pageNumbers.push(
-      <Button
-        key="page-1"
-        className={`pagination__button pagination__button--number ${
-          1 === currentPage ? 'pagination__button--active' : ''
-        }`}
-        onClick={() => handlePageClick(1)}
-      >
-        1
-      </Button>,
-    );
+    if (startPage > 1) {
+      pageNumbers.push(
+        <Button
+          key="page-1"
+          className={`pagination__button pagination__button--number ${
+            1 === currentPage ? 'pagination__button--active' : ''
+          }`}
+          onClick={() => handlePageClick(1)}
+        >
+          1
+        </Button>,
+      );
 
-    // Always include first ellipsis (visible or hidden)
-    pageNumbers.push(
-      <span
-        key="ellipsis-1"
-        className="pagination__ellipsis"
-        style={{ visibility: startPage <= 2 ? 'hidden' : 'visible' }}
-      >
-        ...
-      </span>,
-    );
-
-    // Always render the same number of middle buttons
-    // Fill with placeholders if needed
-    for (let i = 0; i < maxPagesToShow; i++) {
-      const pageNum = startPage + i;
-      if (pageNum > 1 && pageNum < totalPages) {
+      // Add ellipses if there is a gap
+      if (startPage > 2) {
         pageNumbers.push(
-          <Button
-            key={`page-${pageNum}`}
-            className={`pagination__button pagination__button--number ${
-              pageNum === currentPage ? 'pagination__button--active' : ''
-            }`}
-            onClick={() => handlePageClick(pageNum)}
-          >
-            {pageNum}
-          </Button>,
-        );
-      } else {
-        // Add invisible placeholder to maintain layout
-        pageNumbers.push(
-          <span
-            key={`placeholder-${i}`}
-            style={{ width: '2rem', display: 'inline-block', visibility: 'hidden' }}
-          >
-            {i}
+          <span key="ellipsis-1" className="pagination__ellipsis">
+            ...
           </span>,
         );
       }
     }
 
-    // Always include second ellipsis
-    pageNumbers.push(
-      <span
-        key="ellipsis-2"
-        className="pagination__ellipsis"
-        style={{ visibility: endPage >= totalPages - 1 ? 'hidden' : 'visible' }}
-      >
-        ...
-      </span>,
-    );
+    // Add Page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <Button
+          key={`page-${i}`}
+          className={`pagination__button pagination__button--number ${
+            i === currentPage ? 'pagination__button--active' : ''
+          }`}
+          onClick={() => handlePageClick(i)}
+        >
+          {i}
+        </Button>,
+      );
+    }
 
-    // Always include last page
-    if (totalPages > 1) {
+    // Always show the lastPage
+    if (endPage < totalPages) {
+      // Add ellipsis if there is a gap
+      if (endPage < totalPages - 1) {
+        pageNumbers.push(
+          <span key="ellipsis-2" className="pagination__ellipsis">
+            ...
+          </span>,
+        );
+      }
       pageNumbers.push(
         <Button
           key={`page-${totalPages}`}
@@ -209,13 +192,8 @@ const Pagination: React.FC<PaginationProps> = ({
         </Button>,
       );
     }
-
     return pageNumbers;
   };
-
-  // Calculate the current showing items range
-  const startItem = Math.min((currentPage - 1) * itemsPerPage + 1, totalItems);
-  const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
     <div className="pagination">
@@ -257,9 +235,6 @@ const Pagination: React.FC<PaginationProps> = ({
           </Button>
 
           <div className="pagination__page-indicator">
-            <span className="pagination__info">
-              Showing {startItem} to {endItem} of {totalItems} entries
-            </span>
             <div className="pagination__page-numbers">{renderPageNumber()}</div>
           </div>
 
