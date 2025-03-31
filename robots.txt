@@ -1,10 +1,10 @@
 User-agent: *
 Allow: /
 
-# Sitemap location
-Sitemap: https://react-basic-training-luanvu.vercel.app/sitemap.xml
-
-# Disallow any temporary files or development-specific paths
+# Disallow specific directories
 Disallow: /temp/
 Disallow: /dev/
 Disallow: /*.json$
+
+# Sitemap declaration
+Sitemap: https://react-basic-training-luanvu.vercel.app/sitemap.xml
