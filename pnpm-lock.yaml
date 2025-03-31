@@ -24,6 +24,9 @@ importers:
       '@eslint/js':
         specifier: ^9.22.0
         version: 9.22.0
+      '@storybook/addon-actions':
+        specifier: ^8.6.11
+        version: 8.6.11(storybook@8.6.7(prettier@3.5.3))
       '@storybook/addon-essentials':
         specifier: 8.6.7
         version: 8.6.7(@types/react@19.0.11)(storybook@8.6.7(prettier@3.5.3))
@@ -666,6 +669,11 @@ packages:
 
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
+
+  '@storybook/addon-actions@8.6.11':
+    resolution: {integrity: sha512-7VORphqmxJf2J2a8tRgCAIeaMQ1JjYZwmwsrOwXBt77NjJbAC2qx9KecN1fsKKCyRVSk/wAICvOLStKM15+v2g==}
+    peerDependencies:
+      storybook: ^8.6.11
 
   '@storybook/addon-actions@8.6.7':
     resolution: {integrity: sha512-XgZCwIcZGThEyD7e2q7rN/jzg7ZHUxn/ln403eex04jWAGBBbtC2IVuowwCWV8HwDihnhpCZEP6HlgjakOYZbQ==}
@@ -3517,6 +3525,15 @@ snapshots:
     optional: true
 
   '@rtsao/scc@1.1.0': {}
+
+  '@storybook/addon-actions@8.6.11(storybook@8.6.7(prettier@3.5.3))':
+    dependencies:
+      '@storybook/global': 5.0.0
+      '@types/uuid': 9.0.8
+      dequal: 2.0.3
+      polished: 4.3.1
+      storybook: 8.6.7(prettier@3.5.3)
+      uuid: 9.0.1
 
   '@storybook/addon-actions@8.6.7(storybook@8.6.7(prettier@3.5.3))':
     dependencies:
