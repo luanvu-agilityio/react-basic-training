@@ -1,4 +1,5 @@
 User-Agent: *
-Allow: /
+Allow: /students
+Allow: /login
 Disallow: /private/
 Sitemap: https://acme.com/sitemap.xml
