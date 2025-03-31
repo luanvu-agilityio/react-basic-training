@@ -11,7 +11,6 @@ interface AvatarProps {
 const Avatar: React.FC<AvatarProps> = ({ src, alt = 'Profile', className, style }) => (
   <img
     className={className}
-    loading="lazy"
     src={src || DEFAULT_PROFILE_IMAGE}
     alt={alt}
     style={style}
