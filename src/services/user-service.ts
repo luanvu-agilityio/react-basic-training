@@ -145,12 +145,12 @@ export class UserServiceEnvironment {
     };
 
     // Test local JSON server first, then fall back to remote
-    return fetch(`${environment.localApiUrl}/users`)
-      .then(() => new UserService(environment.localApiUrl))
+    return fetch(`${environment.remoteApiUrl}/users`)
+      .then(() => new UserService(environment.remoteApiUrl))
       .catch(() => {
         // Test remote API next
-        return fetch(`${environment.remoteApiUrl}/users`)
-          .then(() => new UserService(environment.remoteApiUrl))
+        return fetch(`${environment.localApiUrl}/users`)
+          .then(() => new UserService(environment.localApiUrl))
           .catch(() => {
             // Fallback for API URL
             return new UserService(environment.remoteApiUrl);
