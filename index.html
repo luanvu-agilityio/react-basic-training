@@ -2,26 +2,72 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SEO Meta Tags -->
+    <title>React Basic Practice - CRUD Student Management App</title>
+    <meta
+      name="description"
+      content="A React student management application with CRUD operations. Created by Luan Vu, designed from Figma."
+    />
+    <meta name="author" content="Luan Vu" />
+    <meta name="keywords" content="react, crud, student management, web application" />
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="React Basic Practice - CRUD App" />
+    <meta
+      property="og:description"
+      content="A React student management application with CRUD operations."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://react-basic-training-luanvu.vercel.app/" />
+    <meta
+      property="og:image"
+      content="https://res.cloudinary.com/ds82onf5q/image/upload/v1743393692/svxq9gzsjdav32kbuina.jpg"
+    />
+
+    <!-- Google Site Verification -->
+    <meta name="google-site-verification" content="er7_a29NRepXyzLrZYQkRoXSCV-d9KuFlsBTOcN-BEY" />
+
+    <!-- Preconnect to API domain -->
     <link rel="preconnect" href="https://crud-api-vuea.onrender.com" />
+
+    <!-- Preload critical resources -->
     <link
       rel="preload"
       href="https://res.cloudinary.com/ds82onf5q/image/upload/w_65,h_55,c_fill,q_auto,f_auto/v1743393692/svxq9gzsjdav32kbuina.jpg"
       as="image"
       fetchpriority="high"
     />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta
-      name="description"
-      content="Author: Luan Vu, React basic practice: CRUD operations,
-    Illustrator: design from Figma"
-    />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="./src/styles/index.css" />
-    <title>React basic practice</title>
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://react-basic-training-luanvu.vercel.app/" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Structured data for SEO -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "React Basic Practice - CRUD App",
+        "description": "A React student management application with CRUD operations.",
+        "author": {
+          "@type": "Person",
+          "name": "Luan Vu"
+        },
+        "applicationCategory": "Education",
+        "operatingSystem": "Web Browser"
+      }
+    </script>
   </body>
 </html>

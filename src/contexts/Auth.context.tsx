@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, useMemo } from '
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'route/config';
 import { useToast } from './Toast.context';
+import { useLoadingSpinner } from './LoadingSpinner.context';
 /**
  * Authentication Context Provider
  *
@@ -55,6 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const { showToast, showConfirmation } = useToast();
+  const { show, hide } = useLoadingSpinner();
 
   /**
    * Check for existing auth session on mount
@@ -101,13 +103,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       'Confirm Logout',
       'Are you sure you want to logout ?',
       () => {
-        setUser(null);
-        setIsAuthenticated(false);
-        localStorage.removeItem('userData');
-        localStorage.removeItem('isLoggedIn');
-
-        showToast('info', 'Logged Out', 'You have been successfully logged out.');
-        navigate(ROUTES.LOGIN);
+        show();
+        setTimeout(() => {
+          setUser(null);
+          setIsAuthenticated(false);
+          localStorage.removeItem('userData');
+          localStorage.removeItem('isLoggedIn');
+          hide();
+          showToast('info', 'Logged Out', 'You have been successfully logged out.');
+          navigate(ROUTES.LOGIN);
+        }, 500);
       },
       () => {
         console.log('Logout cancelled');

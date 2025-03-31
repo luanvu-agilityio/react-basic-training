@@ -79,7 +79,7 @@
   border-top: 1px solid var(--input-border-color);
 
   background-color: #f9f9f9;
-  color: var(--gray-color);
+  color: #454444;
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-12);
 }

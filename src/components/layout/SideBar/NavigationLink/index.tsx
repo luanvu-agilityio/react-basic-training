@@ -45,7 +45,7 @@ export const SidebarNavigation: React.FC<NavigationLinkProps> = ({ onNavItemClic
               loading="lazy"
               className="sidebar__nav-icon"
               src={item.icon || undefined}
-              alt={item.text}
+              alt={`${item.text} Page`}
               onError={(e) => {
                 // Hide the image if it fails to load
                 (e.target as HTMLImageElement).style.display = 'none';

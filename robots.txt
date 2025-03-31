@@ -1,5 +1,10 @@
-User-Agent: *
-Allow: /students
-Allow: /login
-Disallow: /private/
-Sitemap: https://acme.com/sitemap.xml
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://react-basic-training-luanvu.vercel.app/sitemap.xml
+
+# Disallow any temporary files or development-specific paths
+Disallow: /temp/
+Disallow: /dev/
+Disallow: /*.json$

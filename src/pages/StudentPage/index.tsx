@@ -217,7 +217,7 @@ const StudentsPage: React.FC = () => {
           <div className="page__action">
             <SortDropdown onSortChange={handleSortChange} initialConfig={sortConfig} />
             <Button
-              className="page__add-btn"
+              className="btn btn--add"
               onClick={() => {
                 setSelectedStudent(undefined); // Clear the selected student state.
                 setShowForm(true);

@@ -32,7 +32,7 @@ export const Logout: React.FC<LogoutProps> = ({ onLogout }) => {
         loading="lazy"
         className="sidebar__logout-icon"
         src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742867571/logout_qfh4jb.svg"
-        alt="Logout"
+        alt="Click here to logout of the system"
       />
     </Button>
   );

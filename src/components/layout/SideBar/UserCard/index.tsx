@@ -31,10 +31,7 @@ const UserCard: React.FC<UserCardProps> = ({ username, userRole, userAvatar }) =
         marginBottom: '0.5rem',
       }}
     />
-    <UserRole
-      role={userRole}
-      style={{ color: 'var(--orange-color)', fontSize: 'var(--font-size-14)' }}
-    />
+    <UserRole role={userRole} style={{ color: '#830900', fontSize: 'var(--font-size-14)' }} />
   </div>
 );
 export default UserCard;
