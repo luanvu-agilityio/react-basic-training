@@ -18,19 +18,19 @@ export const NAV_ITEMS = [
     text: 'Students',
   },
   {
-    to: '/Payment',
+    to: '/payment',
     name: 'payment',
     icon: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742867571/payment_peqmdt.svg',
     text: 'Payment',
   },
   {
-    to: '/Report',
+    to: '/report',
     name: 'report',
     icon: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742867571/report_rm69ya.svg',
     text: 'Report',
   },
   {
-    to: '/Setting',
+    to: '/setting',
     name: 'setting',
     icon: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742867571/setting_qbe1fw.svg',
     text: 'Setting',

@@ -1,5 +1,6 @@
 import { IStudent } from 'types/student';
 import { ISortConfig } from 'types/sort';
+
 export const sortStudents = (students: IStudent[], config: ISortConfig): IStudent[] => {
   const { field, order } = config;
 

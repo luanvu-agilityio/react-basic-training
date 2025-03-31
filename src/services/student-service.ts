@@ -16,7 +16,7 @@ const environment: IEnvironment = {
   remoteApiUrl: 'https://crud-api-vuea.onrender.com',
   allowedOrigins: [
     'http://localhost:3000',
-    'http://localhost:5174',
+    'http://localhost:5173',
     'https://react-basic-training-luanvu.vercel.app',
     'https://crud-api-vuea.onrender.com',
   ],

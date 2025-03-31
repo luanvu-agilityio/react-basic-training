@@ -1,0 +1,22 @@
+.btn {
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 1rem;
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-bold);
+}
+
+.btn__text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+}
+
+@media (max-width: 576px) {
+  .btn {
+    padding: 0.8rem 1.5rem;
+  }
+}

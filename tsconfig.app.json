@@ -37,7 +37,7 @@
       "@hooks/*": ["hooks/*"],
       "@pages/*": ["pages/*"],
       "@routes/*": ["routes/*"],
-      "services/*": ["services/*"]
+      "@services/*": ["services/*"]
     }
   },
   "include": ["src"]
