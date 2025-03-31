@@ -5,7 +5,6 @@ import { useNavigation } from '@contexts/Navigation.context';
 import { ROUTES } from 'route/config';
 import Sidebar from '../SideBar';
 import SidebarToggle from '../SidebarToggle';
-import { LoadingSpinnerContainer } from '@components/common/LoadingSpinner';
 
 /**
  * A layout component that protects routes requiring authentication.
@@ -57,9 +56,6 @@ const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({ children }) => {
       >
         {children}
       </main>
-
-      {/* Global loading spinner container */}
-      <LoadingSpinnerContainer />
     </div>
   );
 };

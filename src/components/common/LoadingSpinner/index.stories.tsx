@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
-import { LoadingSpinner, LoadingSpinnerContainer, useLoadingSpinner } from './index';
-import Button from '../Button';
+import { useLoadingSpinner } from '@contexts/LoadingSpinner.context';
+import { LoadingSpinner } from './index';
 
 const meta: Meta<typeof LoadingSpinner> = {
   title: 'Components/LoadingSpinner',
@@ -51,26 +51,21 @@ export const CustomText: Story = {
 export const GlobalSpinnerDemo: React.FC = () => {
   const { show, hide, isLoading } = useLoadingSpinner();
 
-  const handleShowSpinner = () => {
-    show();
-    // Auto-hide after 3 seconds
-    setTimeout(() => {
-      hide();
-    }, 3000);
+  const handleFetchData = async () => {
+    show(); // Show the spinner
+    try {
+      // Your async operations here
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    } finally {
+      hide(); // Hide the spinner
+    }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', padding: '2rem' }}>
-      <h2>Global Loading Spinner Demo</h2>
-      <p>Click the button below to show the loading spinner for 3 seconds.</p>
-      <div>
-        <Button className="click-btn" onClick={handleShowSpinner} disabled={isLoading()}>
-          {isLoading() ? 'Loading...' : 'Show Loading Spinner'}
-        </Button>
-      </div>
-      <p>Current Status: {isLoading() ? 'Loading' : 'Idle'}</p>
-
-      <LoadingSpinnerContainer />
+    <div>
+      <button onClick={handleFetchData} disabled={isLoading}>
+        {isLoading ? 'Loading...' : 'Fetch Data'}
+      </button>
     </div>
   );
 };
