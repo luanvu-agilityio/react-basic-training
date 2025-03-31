@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Button from '../Button';
 import './index.css';
 
@@ -27,16 +27,16 @@ const Pagination: React.FC<PaginationProps> = ({
   initialPage = 1,
   initialItemsPerPage = 5,
 }) => {
-  const effectiveTotalPages = Math.max(1, Math.ceil(totalItems / initialItemsPerPage || 5));
+  const effectiveItemsPerPage = initialItemsPerPage || 5;
+  const effectiveTotalPages = Math.max(1, Math.ceil(totalItems / effectiveItemsPerPage));
+  const effectiveInitialPage = Math.min(initialPage || 1, effectiveTotalPages);
 
   // Then use in useState:
   // State management for pagination
-  const [currentPage, setCurrentPage] = useState(initialPage);
-  const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage || 5);
-
+  const [currentPage, setCurrentPage] = useState(effectiveInitialPage);
+  const [itemsPerPage, setItemsPerPage] = useState(effectiveItemsPerPage);
   const [totalPages, setTotalPages] = useState(effectiveTotalPages);
-
-  const [goToPage, setGoToPage] = useState(currentPage.toString());
+  const [goToPage, setGoToPage] = useState(effectiveInitialPage.toString());
 
   /**
    * Effect to update total pages when items count or items per page changes
@@ -48,6 +48,7 @@ const Pagination: React.FC<PaginationProps> = ({
     // Adjust the current page if it exceed the new total Pages (given the current items per page)
     if (currentPage > newTotalPages) {
       setCurrentPage(newTotalPages);
+      setGoToPage(newTotalPages.toString());
     }
   }, [totalItems, itemsPerPage, currentPage]);
 
@@ -56,7 +57,7 @@ const Pagination: React.FC<PaginationProps> = ({
    */
   useEffect(() => {
     onPageChange(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage]);
+  }, [currentPage, itemsPerPage, onPageChange]);
 
   /**
    * Handlers for pagination controls
@@ -65,29 +66,36 @@ const Pagination: React.FC<PaginationProps> = ({
     const newItemsPerPage = parseInt(e.target.value);
     setItemsPerPage(newItemsPerPage);
     setCurrentPage(1);
+    setGoToPage('1');
   };
 
   const handleFirstPage = () => {
     if (currentPage !== 1) {
       setCurrentPage(1);
+      setGoToPage('1');
     }
   };
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+      const newPage = currentPage - 1;
+      setCurrentPage(newPage);
+      setGoToPage(newPage.toString());
     }
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
+      const newPage = currentPage + 1;
+      setCurrentPage(newPage);
+      setGoToPage(newPage.toString());
     }
   };
 
   const handleLastPage = () => {
     if (currentPage !== totalPages) {
       setCurrentPage(totalPages);
+      setGoToPage(totalPages.toString());
     }
   };
 
@@ -95,7 +103,9 @@ const Pagination: React.FC<PaginationProps> = ({
    * Handlers for "Go to page" functionality
    */
   const handleGoToInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGoToPage(e.target.value);
+    // Only allow numbers
+    const value = e.target.value.replace(/[^0-9]/g, '');
+    setGoToPage(value);
   };
 
   const handleGoToKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -116,15 +126,16 @@ const Pagination: React.FC<PaginationProps> = ({
   const handlePageClick = (page: number) => {
     if (page !== currentPage) {
       setCurrentPage(page);
+      setGoToPage(page.toString());
     }
   };
 
   /**
-   * Renders page numbers with ellipsis
+   * Memoized page numbers to prevent unnecessary re-renders
    * Shows first page, last page, and a window of pages around current page
    * Adds ellipsis when there are gaps in the sequence
    */
-  const renderPageNumber = () => {
+  const pageNumbers = useMemo(() => {
     const maxPagesToShow = 3;
     let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
     const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
@@ -134,11 +145,11 @@ const Pagination: React.FC<PaginationProps> = ({
       startPage = Math.max(1, endPage - maxPagesToShow + 1);
     }
 
-    const pageNumbers = [];
+    const elements = [];
     // Always show the first page
 
     if (startPage > 1) {
-      pageNumbers.push(
+      elements.push(
         <Button
           key="page-1"
           className={`pagination__button pagination__button--number ${
@@ -152,7 +163,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
       // Add ellipses if there is a gap
       if (startPage > 2) {
-        pageNumbers.push(
+        elements.push(
           <span key="ellipsis-1" className="pagination__ellipsis">
             ...
           </span>,
@@ -162,7 +173,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
     // Add Page numbers
     for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
+      elements.push(
         <Button
           key={`page-${i}`}
           className={`pagination__button pagination__button--number ${
@@ -179,13 +190,13 @@ const Pagination: React.FC<PaginationProps> = ({
     if (endPage < totalPages) {
       // Add ellipsis if there is a gap
       if (endPage < totalPages - 1) {
-        pageNumbers.push(
+        elements.push(
           <span key="ellipsis-2" className="pagination__ellipsis">
             ...
           </span>,
         );
       }
-      pageNumbers.push(
+      elements.push(
         <Button
           key={`page-${totalPages}`}
           className={`pagination__button pagination__button--number ${
@@ -197,8 +208,26 @@ const Pagination: React.FC<PaginationProps> = ({
         </Button>,
       );
     }
-    return pageNumbers;
-  };
+
+    // If pages are few, add placeholder for layout stability
+    if (elements.length < 3 && totalPages > 0) {
+      const placeholdersNeeded = 3 - elements.length;
+      for (let i = 0; i < placeholdersNeeded; i++) {
+        elements.push(
+          <span key={`placeholder-${i}`} className="pagination__placeholder" aria-hidden="true">
+            {/* Empty placeholder for layout stability */}
+          </span>,
+        );
+      }
+    }
+
+    return elements;
+  }, [currentPage, totalPages]);
+
+  // Early return an empty placeholder of proper height if there are no items
+  if (totalItems === 0) {
+    return <div className="pagination" aria-hidden="true" style={{ minHeight: '6rem' }}></div>;
+  }
 
   return (
     <div className="pagination">
@@ -240,7 +269,7 @@ const Pagination: React.FC<PaginationProps> = ({
           </Button>
 
           <div className="pagination__page-indicator">
-            <div className="pagination__page-numbers">{renderPageNumber()}</div>
+            <div className="pagination__page-numbers">{pageNumbers}</div>
           </div>
 
           <Button
