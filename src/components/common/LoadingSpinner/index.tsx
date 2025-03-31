@@ -1,28 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import './loading-spinner.css'; // Assuming you have CSS for the spinner
 
-import './index.css';
-
-/**
- * A comprehensive loading spinner system for React applications.
- *
- * This module provides a loading spinner component and associated utilities for managing
- * global loading states. It includes a singleton manager pattern for coordinating multiple
- * loading states across the application.
- *
- * Components:
- * - LoadingSpinner: The main spinner component with configurable display options
- * - LoadingSpinnerContainer: A container component that manages global loading state
- *
- * Utilities:
- * - LoadingSpinnerManager: A singleton class for managing global loading state
- * - useLoadingSpinner: A custom hook for accessing loading spinner controls
- *
- * @component LoadingSpinner
- * @props {boolean} [fullScreen=true] - Whether to display the spinner in fullscreen mode
- * @props {string} [loadingText="Please wait..."] - Text to display below the spinner
- * @props {number} [minimumDisplayTime=1000] - Minimum time (ms) to display the spinner
- */
-interface LoadingSpinnerProps {
+export interface LoadingSpinnerProps {
   fullScreen?: boolean;
   loadingText?: string;
   minimumDisplayTime?: number;
@@ -30,7 +9,7 @@ interface LoadingSpinnerProps {
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   fullScreen = true,
-  loadingText = 'Please wait,,,',
+  loadingText = 'Please wait...',
   minimumDisplayTime = 1000,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -83,101 +62,6 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
       </div>
     </div>
   );
-};
-
-class LoadingSpinnerManager {
-  private static instance: LoadingSpinnerManager | null = null;
-  private loadingCount = 0;
-  private callbacks: Array<(isLoading: boolean) => void> = [];
-
-  private constructor() {}
-
-  /**
-   * Returns the singleton instance of the LoadingSpinnerManager.
-   * Ensures that only one instance of the manager exists.
-   */
-  public static getInstance(): LoadingSpinnerManager {
-    if (!LoadingSpinnerManager.instance) {
-      LoadingSpinnerManager.instance = new LoadingSpinnerManager();
-    }
-    return LoadingSpinnerManager.instance;
-  }
-
-  /**
-   * Increments the loading count and notifies all subscribers.
-   * This is used to indicate that a loading process has started.
-   */
-  public show(): void {
-    this.loadingCount++;
-    this.notifySubscribers();
-  }
-
-  /**
-   * Decrements the loading count (ensuring it doesn't go below zero)
-   * and notifies all subscribers. This is used to indicate that a
-   * loading process has ended.
-   */
-  public hide(): void {
-    this.loadingCount = Math.max(0, this.loadingCount - 1);
-    this.notifySubscribers();
-  }
-
-  /**
-   * Returns whether there are any active loading processes.
-   * @returns {boolean} True if loadingCount > 0, otherwise false.
-   */
-  public isLoading(): boolean {
-    return this.loadingCount > 0;
-  }
-
-  /**
-   * Subscribes a callback to be notified whenever the loading state changes.
-   * @param callback - A function to be called with the current loading state.
-   * @returns {() => void} A function to unsubscribe the callback.
-   */
-  public subscribe(callback: (isLoading: boolean) => void): () => void {
-    this.callbacks.push(callback);
-
-    // Return unsubscribe function
-    return () => {
-      this.callbacks = this.callbacks.filter((cb) => cb !== callback);
-    };
-  }
-
-  /**
-   * Notifies all subscribed callbacks of the current loading state.
-   * This is called internally whenever the loading state changes.
-   */
-  private notifySubscribers(): void {
-    const isLoading = this.isLoading();
-    this.callbacks.forEach((callback) => callback(isLoading));
-  }
-}
-
-export const useLoadingSpinner = () => {
-  const manager = LoadingSpinnerManager.getInstance();
-
-  return {
-    show: () => manager.show(),
-    hide: () => manager.hide(),
-    isLoading: () => manager.isLoading(),
-  };
-};
-
-/**
- * Container component that manages the global loading spinner
- */
-export const LoadingSpinnerContainer: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const manager = LoadingSpinnerManager.getInstance();
-
-  useEffect(() => {
-    // Subscribe to loading state changes
-    const unsubscribe = manager.subscribe(setIsLoading);
-    return unsubscribe;
-  }, []);
-
-  return isLoading ? <LoadingSpinner /> : null;
 };
 
 export default LoadingSpinner;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EMAIL_REGEX } from '@constants/regex';
 import { LOGIN_ERROR_MESSAGES } from '@constants/login-error-message';
-import { useLoadingSpinner } from '@components/common/LoadingSpinner';
+import { useLoadingSpinner } from '@contexts/LoadingSpinner.context';
 import Button from '@components/common/Button';
 import Toast from '@components/common/Toast';
 import { Title } from '../Title';
@@ -192,7 +192,7 @@ const LoginForm: React.FC = () => {
           setTimeout(() => {
             navigate(ROUTES.DEFAULT);
             hide();
-          }, 1000);
+          }, 300);
         } else {
           showToast('error', 'Error!', LOGIN_ERROR_MESSAGES.AUTH_FAILED);
           setFormState({ ...formState, password: '' });
