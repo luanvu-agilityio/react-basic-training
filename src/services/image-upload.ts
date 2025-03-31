@@ -17,6 +17,7 @@ export class CloudinaryUploadService {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', this.UPLOAD_PRESET);
+    formData.append('eager', 'w_65,h_55,c_fill,q_auto,f_auto');
 
     try {
       // Make request to Cloudinary API
