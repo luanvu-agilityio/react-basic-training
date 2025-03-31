@@ -16,14 +16,12 @@ const Avatar: React.FC<AvatarProps & { lazyLoad?: boolean }> = ({
   lazyLoad,
 }) => {
   // Add transformations to the Cloudinary URL if it exists
-  const optimizedSrc = src?.includes('cloudinary.com')
-    ? src.replace('/upload/', '/upload/w_65,h_55,c_fill,q_auto,f_auto/')
-    : src || DEFAULT_PROFILE_IMAGE;
+  const avatarSrc = src.includes('cloudinary.com') ? src : DEFAULT_PROFILE_IMAGE;
 
   return (
     <img
       className={className}
-      src={optimizedSrc}
+      src={avatarSrc}
       alt={alt}
       style={style}
       loading={lazyLoad ? 'lazy' : 'eager'}

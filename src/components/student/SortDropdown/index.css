@@ -23,6 +23,16 @@
   display: inline-block;
 }
 
+/* Button placeholder to prevent layout shifts */
+.sort-dropdown__placeholder {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
 .sort-dropdown__button {
   display: flex;
   align-items: center;
@@ -38,6 +48,8 @@
   color: #333;
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  /* Reserve space for text content */
+  min-height: 38px;
 }
 
 .sort-dropdown__button--order {
@@ -54,6 +66,8 @@
   margin-left: 5px;
   color: #666;
   transition: transform 0.2s ease;
+  /* Prevent the arrow from pushing text */
+  flex-shrink: 0;
 }
 
 .sort-dropdown.open .arrow-down {
@@ -71,24 +85,37 @@
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   overflow: hidden;
+  /* Use opacity for animation instead of display */
   opacity: 0;
+  visibility: hidden;
   transform: translateY(-10px);
   transition:
     opacity 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    visibility 0.2s ease;
   pointer-events: none;
   border: 1px solid #e0e0e0;
+  /* Reserve space even when hidden to prevent layout shifts */
+  height: 0;
 }
 
 .sort-dropdown__menu:not(.hidden) {
   opacity: 1;
+  visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
+  height: auto;
+  max-height: 300px;
 }
 
 .sort-dropdown__search {
   padding: 10px;
   border-bottom: 1px solid #f0f0f0;
+  /* Make search sticky to prevent content jumps */
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
 }
 
 .sort-dropdown__search input {
@@ -98,6 +125,8 @@
   border-radius: 4px;
   font-size: 14px;
   outline: none;
+  /* Prevent input from changing size */
+  box-sizing: border-box;
 }
 
 .sort-dropdown__search input:focus {
@@ -108,6 +137,8 @@
 .sort-dropdown__options {
   max-height: 240px;
   overflow-y: auto;
+  /* Make sure we always have a fixed height to prevent jumps */
+  min-height: 40px;
 }
 
 .sort-dropdown__no-results {
@@ -130,6 +161,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* Fixed height to prevent layout shifts */
+  min-height: 40px;
+  box-sizing: border-box;
 }
 
 .sort-dropdown__item:not(:last-child) {
@@ -151,6 +185,8 @@
   width: 16px;
   height: 16px;
   display: inline-block;
+  /* Reserve the space for the checkmark */
+  flex-shrink: 0;
 }
 
 .sort-dropdown__item.active::after {
@@ -163,12 +199,14 @@
   display: none;
 }
 
-/* Existing mobile styles */
+/* Existing mobile styles with improvements */
 @media screen and (max-width: 768px) {
   .dual-sort-container {
     flex-direction: column;
     gap: 8px;
     width: 100%;
+    /* Reserve space for the component */
+    min-height: 86px;
   }
 
   .sort-dropdown {
@@ -180,30 +218,37 @@
   }
 }
 
-/* New mobile-specific styles */
+/* Updated mobile-specific styles for better layout stability */
 @media screen and (max-width: 480px) {
   .page__header-container {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+    /* Reserve space to prevent layout shift */
+    min-height: 120px;
   }
 
   .page__actions {
     width: 100%;
     flex-direction: column;
     align-items: stretch;
+    /* Reserve space */
+    min-height: 86px;
   }
 
   .sort-dropdown__button {
     min-width: unset;
     padding: 8px 12px;
     font-size: 13px;
+    /* Fixed height */
+    min-height: 36px;
   }
 
   .sort-dropdown__button--order {
     min-width: unset;
   }
 
+  /* Position menu at bottom of screen */
   .sort-dropdown__menu {
     position: fixed;
     top: auto;
@@ -215,6 +260,12 @@
     max-height: 60vh;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    /* Ensure transitions work with fixed positioning */
+    transform: translateY(100%);
+  }
+
+  .sort-dropdown__menu:not(.hidden) {
+    transform: translateY(0);
   }
 
   .sort-dropdown__search {
@@ -232,6 +283,7 @@
   .sort-dropdown__item {
     padding: 12px 16px;
     font-size: 15px;
+    min-height: 45px;
   }
 
   .sort-dropdown__search input {
@@ -239,6 +291,7 @@
     font-size: 15px;
   }
 
+  /* Mobile bottom sheet handle */
   .sort-dropdown__menu::before {
     content: '';
     display: block;
@@ -248,6 +301,26 @@
     border-radius: 2px;
     margin: 8px auto;
   }
+
+  /* Add backdrop when dropdown is open on mobile */
+  .sort-dropdown.open::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    opacity: 0;
+    animation: fadeIn 0.2s forwards;
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 /* Small mobile devices */
@@ -255,10 +328,12 @@
   .sort-dropdown__button {
     font-size: 12px;
     padding: 6px 10px;
+    min-height: 32px;
   }
 
   .sort-dropdown__item {
     padding: 10px 12px;
     font-size: 13px;
+    min-height: 40px;
   }
 }
