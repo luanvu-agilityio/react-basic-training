@@ -22,7 +22,7 @@ export const FormLabel: React.FC<LabelProps> = ({ htmlFor, children, className =
     className={`form__label ${className}`}
     style={{
       fontSize: '14px',
-      fontWeight: 'var(--font-weight-regular)',
+      fontWeight: 'var(--font-weight-semibold)',
       color: 'var(--dark-gray-color)',
     }}
   >
