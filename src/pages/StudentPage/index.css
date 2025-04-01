@@ -43,8 +43,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 10px;
-    left: 30px;
+    bottom: 90px;
+    right: 30px;
     margin-right: 20px;
   }
 

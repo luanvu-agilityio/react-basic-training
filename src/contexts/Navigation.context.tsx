@@ -30,7 +30,7 @@ interface NavigationContextType {
  */
 const NavigationContext = createContext<NavigationContextType>({
   activeItem: 'students',
-  sidebarExpanded: true,
+  sidebarExpanded: false,
   setActiveItem: () => {},
   toggleSidebar: () => {},
 });
@@ -48,7 +48,7 @@ const NavigationContext = createContext<NavigationContextType>({
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // State for active navigation item and sidebar expansion
   const [activeItem, setActiveItem] = useState<NavItem>('students');
-  const [sidebarExpanded, setSidebarExpanded] = useState(true);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   /**
    * Toggles sidebar expansion state

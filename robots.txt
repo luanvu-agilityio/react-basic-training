@@ -1,10 +1,10 @@
-User-agent: Googlebot
+User-agent: *
 Allow: /
 
-# Disallow specific directories
+# Sitemap location
+Sitemap: https://react-basic-training-luanvu.vercel.app/sitemap.xml
+
+# Disallow any temporary files or development-specific paths
 Disallow: /temp/
 Disallow: /dev/
 Disallow: /*.json$
-
-# Sitemap declaration
-Sitemap: https://react-basic-training-luanvu.vercel.app/sitemap.xml

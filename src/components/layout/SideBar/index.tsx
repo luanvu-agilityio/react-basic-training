@@ -5,6 +5,7 @@ import { Title } from '@components/common/Title';
 import UserCard from './UserCard';
 import { useAuth } from '@contexts/Auth.context';
 import './index.css';
+import Button from '@components/common/Button';
 /**
  * Sidebar Component
  *
@@ -28,6 +29,7 @@ interface ISidebarProps {
   /** Callback function for navigation item clicks */
   onNavItemClick: (items: NavItem) => void;
   expanded?: boolean;
+  onToggleSidebar: () => void;
 }
 
 /**
@@ -39,7 +41,8 @@ const Sidebar: React.FC<ISidebarProps> = ({
   userRole,
   userProfileImage,
   onNavItemClick,
-  expanded = true,
+  expanded = false,
+  onToggleSidebar,
 }) => {
   // Get logout function from auth context
   const { logout } = useAuth();
@@ -57,6 +60,18 @@ const Sidebar: React.FC<ISidebarProps> = ({
 
       {/* Logout button */}
       <Logout onLogout={logout} />
+
+      {/* Mobile-only toggle button with up/down arrows */}
+      <Button className="mobile-sidebar-toggle" onClick={onToggleSidebar}>
+        <img
+          src={
+            expanded
+              ? 'https://res.cloudinary.com/ds82onf5q/image/upload/v1743481498/arrowhead-down_zrhsqk.png'
+              : 'https://res.cloudinary.com/ds82onf5q/image/upload/v1743481499/arrowhead-up_wretmt.png'
+          }
+          alt={expanded ? 'Collapse sidebar' : 'Expand sidebar'}
+        />
+      </Button>
     </aside>
   );
 };

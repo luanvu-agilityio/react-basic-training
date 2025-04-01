@@ -4,7 +4,6 @@ import { useAuth } from '@contexts/Auth.context';
 import { useNavigation } from '@contexts/Navigation.context';
 import { ROUTES } from 'route/config';
 import Sidebar from '../SideBar';
-import SidebarToggle from '../SidebarToggle';
 
 /**
  * A layout component that protects routes requiring authentication.
@@ -38,17 +37,15 @@ const ProtectedLayout: React.FC<ProtectedLayoutProps> = ({ children }) => {
         height: '100vh',
       }}
     >
-      {/* Sidebar with user profile and navigation */}
+      {/* Sidebar with user profile and navigation and toggle functionality */}
       <Sidebar
         username={user?.username ?? ''}
         userRole={user?.userRole ?? ''}
         userProfileImage={user?.userProfileImage ?? ''}
         onNavItemClick={setActiveItem}
         expanded={sidebarExpanded}
+        onToggleSidebar={toggleSidebar}
       />
-
-      {/* Toggle button for sidebar expansion */}
-      <SidebarToggle onToggle={toggleSidebar} />
 
       <main
         style={{ flex: 1 }}

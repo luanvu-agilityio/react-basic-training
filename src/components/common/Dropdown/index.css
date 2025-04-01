@@ -31,7 +31,7 @@
 }
 
 .arrow-down {
-  font-size: 10px;
+  font-size: 16px;
   margin-left: 5px;
   color: #666;
   transition: transform 0.2s ease;
@@ -232,24 +232,11 @@
     border-radius: 2px;
     margin: 8px auto;
   }
+}
 
-  .sort-dropdown.open::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 999;
-    opacity: 0;
-    animation: fadeIn 0.2s forwards;
-  }
-
-  @keyframes fadeIn {
-    to {
-      opacity: 1;
-    }
+@keyframes fadeIn {
+  to {
+    opacity: 1;
   }
 }
 
