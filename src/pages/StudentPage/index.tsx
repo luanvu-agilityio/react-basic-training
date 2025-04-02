@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, JSX } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@components/common/Button';
-import StudentForm from '@components/student/StudentForm';
-import StudentList from '@components/student/StudentList';
-import Header from '@components/layout/Header';
+import StudentForm from '@components/StudentForm';
+import StudentList from '@components/StudentList';
+import Header from '@components/PageHeader';
 import Pagination from '@components/common/Pagination';
 import { useToast } from 'contexts/Toast.context';
 import { IStudent } from 'types/student';
@@ -11,10 +11,10 @@ import { ISortConfig } from 'types/sort';
 import { generateUUID } from '@helpers/uuid-generator';
 import { sortStudents } from '@helpers/sort-function';
 import { getDataService } from 'services/student-service';
-import { Title } from '@components/common/Title';
-import { Description } from '@components/common/Description';
+import Title from '@components/common/Title';
 import './index.css';
-import SortDropdown from '@components/student/SortDropdown';
+import StudentSortDropdown from '@components/StudentSortDropdown';
+import Text from '@components/common/Text';
 
 /**
  * StudentsPage Component
@@ -25,7 +25,7 @@ import SortDropdown from '@components/student/SortDropdown';
  * - Searching for students by name or other criteria.
  * - Showing a form in a modal for adding or editing student details.
  */
-const StudentsPage: React.FC = () => {
+const StudentsPage = (): JSX.Element => {
   const location = useLocation(); // React Router hook to access the current location.
   const navigate = useNavigate(); // React Router hook to programmatically navigate.
   // Add a ref to track if this is the initial load
@@ -101,7 +101,15 @@ const StudentsPage: React.FC = () => {
 
   // Handle search results
   const handleSearchResults = (filteredStudents: IStudent[]) => {
-    setSearchedStudents(filteredStudents);
+    // Check if the search is being cleared (matching all students)
+    if (
+      filteredStudents.length === allStudents.length &&
+      JSON.stringify(filteredStudents) === JSON.stringify(allStudents)
+    ) {
+      setSearchedStudents(null); // Reset to null to use allStudents directly
+    } else {
+      setSearchedStudents(filteredStudents);
+    }
   };
 
   // Handle pagination
@@ -207,7 +215,11 @@ const StudentsPage: React.FC = () => {
 
   return (
     <div>
-      <Header allStudents={allStudents} onSearchResults={handleSearchResults} />
+      <Header
+        allStudents={allStudents}
+        onSearchResults={handleSearchResults}
+        searchPlaceholder="Search students..."
+      />
       <section className="page">
         <div
           style={{
@@ -221,7 +233,7 @@ const StudentsPage: React.FC = () => {
             <Title className="page__title" title="Students List" />
           </div>
           <div className="page__action">
-            <SortDropdown onSortChange={handleSortChange} initialConfig={sortConfig} />
+            <StudentSortDropdown onSortChange={handleSortChange} initialConfig={sortConfig} />
             <Button
               className="btn btn--add"
               aria-label="Add new student"
@@ -235,7 +247,7 @@ const StudentsPage: React.FC = () => {
           </div>
         </div>
         {isLoading ? (
-          <Description className="loading-text" description="Loading students..." />
+          <Text className="loading-text" text="Loading students..." />
         ) : (
           <>
             <StudentList

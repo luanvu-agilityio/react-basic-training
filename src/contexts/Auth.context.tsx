@@ -50,7 +50,7 @@ const AuthContext = createContext<AuthContextType>({
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Child components to wrap
  */
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // State management
   const [user, setUser] = useState<UserData | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -146,7 +146,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be use within an AutthProvider');
+    throw new Error('useAuth must be use within an AuthProvider');
   }
   return context;
 };

@@ -1,11 +1,13 @@
 export class CloudinaryUploadService {
   // Cloudinary configuration
   private static readonly CLOUD_NAME = 'ds82onf5q';
-  private static UPLOAD_PRESET = 'sample';
-  private static UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CloudinaryUploadService.CLOUD_NAME}/image/upload`;
+  private static readonly UPLOAD_PRESET = 'sample';
+  private static readonly UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CloudinaryUploadService.CLOUD_NAME}/image/upload`;
 
   /**
    * Upload avatar to Cloudinary
+   * This will only be called after form submission is successful
+   *
    * @param file - File object to upload
    * @returns Promise resolving to the uploaded image URL
    */
@@ -43,8 +45,9 @@ export class CloudinaryUploadService {
    * Validate file before upload
    * @param file - File to validate
    * @throws Error if file is invalid
+   * @returns true if file is valid
    */
-  private static validateFile(file: File): void {
+  static validateFile(file: File): boolean {
     // Allowed file types
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
@@ -60,5 +63,7 @@ export class CloudinaryUploadService {
     if (file.size > maxSizeBytes) {
       throw new Error('File is too large. Maximum size is 5MB.');
     }
+
+    return true;
   }
 }

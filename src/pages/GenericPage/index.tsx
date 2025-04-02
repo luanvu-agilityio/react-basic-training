@@ -1,5 +1,5 @@
-import React from 'react';
-import Header from '@components/layout/Header';
+import React, { JSX } from 'react';
+import PageHeader from '@components/PageHeader';
 import PageNotAvailable from '@pages/PageNotFound';
 
 /**
@@ -12,10 +12,10 @@ import PageNotAvailable from '@pages/PageNotFound';
  * @param {string} props.pageName - Name of the page to display
  * @returns {JSX.Element} Generic page placeholder
  */
-export const GenericPage: React.FC<{ pageName: string }> = ({ pageName }) => {
+export const GenericPage = ({ pageName }: { pageName: string }): JSX.Element => {
   return (
     <div>
-      <Header showSearch={false} />
+      <PageHeader showSearch={false} />
       <section className="page">
         <PageNotAvailable pageName={pageName} />
       </section>

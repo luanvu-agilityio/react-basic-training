@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import LoginForm from '@components/common/LoginForm';
 
 /**
@@ -14,7 +14,7 @@ import LoginForm from '@components/common/LoginForm';
  *
  * @returns {JSX.Element} Login form component
  */
-const LoginPage: React.FC = () => {
+const LoginPage = (): JSX.Element => {
   return <LoginForm />;
 };
 

@@ -1,34 +1,15 @@
 import React from 'react';
-import { DEFAULT_PROFILE_IMAGE } from '@constants/dummy-user';
 
 interface AvatarProps {
   className: string;
   src: string;
   alt: string;
   style?: React.CSSProperties;
+  loading?: 'lazy' | 'eager';
+  onError?: () => void;
 }
 
-const Avatar: React.FC<AvatarProps & { lazyLoad?: boolean }> = ({
-  src,
-  alt = 'Profile',
-  className,
-  style,
-  lazyLoad,
-}) => {
-  // Add transformations to the Cloudinary URL if it exists
-  const avatarSrc = src.includes('cloudinary.com') ? src : DEFAULT_PROFILE_IMAGE;
-
-  return (
-    <img
-      className={className}
-      src={avatarSrc}
-      alt={alt}
-      style={style}
-      loading={lazyLoad ? 'lazy' : 'eager'}
-      onError={(e) => {
-        (e.target as HTMLImageElement).src = DEFAULT_PROFILE_IMAGE;
-      }}
-    />
-  );
+const Avatar = ({ src, alt, className = '', style, loading = 'lazy' }: AvatarProps) => {
+  return <img className={className} src={src} alt={alt} style={style} loading={loading} />;
 };
 export default Avatar;

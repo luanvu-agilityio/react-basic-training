@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@components/common/Button';
 import { Overlay } from '@components/common/Overlay';
 import './index.css';
+import FormInput from '@components/common/FormInput';
 /**
  * dropdown components for sorting functionality.
  *
@@ -27,7 +28,7 @@ interface GenericDropdownProps {
   searchable?: boolean;
 }
 
-const GenericDropdown: React.FC<GenericDropdownProps> = ({
+const GenericDropdown = ({
   id,
   label,
   options,
@@ -36,7 +37,7 @@ const GenericDropdown: React.FC<GenericDropdownProps> = ({
   isOpen,
   toggleOpen,
   searchable = false,
-}) => {
+}: GenericDropdownProps) => {
   const [searchText, setSearchText] = useState<string>('');
   const [filteredOptions, setFilteredOptions] = useState<DropdownOption[]>(options);
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -125,92 +126,84 @@ const GenericDropdown: React.FC<GenericDropdownProps> = ({
         <span className="arrow-down">▼</span>
       </Button>
 
-      {/* Mobile view with Overlay */}
-      {isMobile && isOpen && (
-        <Overlay onClick={toggleOpen}>
+      {isOpen &&
+        (isMobile ? (
+          <Overlay onClick={toggleOpen}>
+            <div
+              id={`${id}Menu`}
+              className="sort-dropdown__menu"
+              role="menu"
+              tabIndex={-1}
+              aria-labelledby={`${id}Button`}
+            >
+              {/* Mobile drawer indicator */}
+              <div className="sort-dropdown__drawer-indicator"></div>
+              {/* Menu content - shared between mobile and desktop */}
+              {renderMenuContent()}
+            </div>
+          </Overlay>
+        ) : (
           <div
             id={`${id}Menu`}
             className="sort-dropdown__menu"
             role="menu"
-            tabIndex={-1}
             aria-labelledby={`${id}Button`}
           >
-            {/* Mobile drawer indicator */}
-            <div className="sort-dropdown__drawer-indicator"></div>
-
-            {/* Search field */}
-            {searchable && (
-              <div className="sort-dropdown__search">
-                <input
-                  type="text"
-                  placeholder="Search fields..."
-                  value={searchText}
-                  onChange={handleSearchInputChange}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </div>
-            )}
-
-            {/* Dropdown options */}
-            <div className="sort-dropdown__options">
-              {filteredOptions.map((option) => (
-                <Button
-                  key={option.value}
-                  className={`sort-dropdown__item ${currentValue === option.value ? 'active' : ''}`}
-                  onClick={() => handleOptionSelect(option.value, option.text)}
-                  role="menuitem"
-                >
-                  <span>{option.text}</span>
-                </Button>
-              ))}
-              {searchable && filteredOptions.length === 0 && (
-                <div className="sort-dropdown__no-results">No matching fields</div>
-              )}
-            </div>
+            {/* Menu content - shared between mobile and desktop */}
+            {renderMenuContent()}
           </div>
-        </Overlay>
-      )}
+        ))}
 
-      {/* Desktop dropdown */}
-      {(!isMobile || !isOpen) && (
+      {/* For desktop when closed */}
+      {!isOpen && !isMobile && (
         <div
           id={`${id}Menu`}
-          className={`sort-dropdown__menu ${isOpen ? '' : 'hidden'}`}
+          className="sort-dropdown__menu hidden"
           role="menu"
           aria-labelledby={`${id}Button`}
         >
-          {/* Search field */}
-          {searchable && (
-            <div className="sort-dropdown__search">
-              <input
-                type="text"
-                placeholder="Search fields..."
-                value={searchText}
-                onChange={handleSearchInputChange}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </div>
-          )}
-
-          {/* Dropdown options */}
-          <div className="sort-dropdown__options">
-            {filteredOptions.map((option) => (
-              <Button
-                key={option.value}
-                className={`sort-dropdown__item ${currentValue === option.value ? 'active' : ''}`}
-                onClick={() => handleOptionSelect(option.value, option.text)}
-                role="menuitem"
-              >
-                <span>{option.text}</span>
-              </Button>
-            ))}
-            {searchable && filteredOptions.length === 0 && (
-              <div className="sort-dropdown__no-results">No matching fields</div>
-            )}
-          </div>
+          {renderMenuContent()}
         </div>
       )}
     </div>
   );
+
+  // Helper function to render menu content
+  function renderMenuContent() {
+    return (
+      <>
+        {/* Search field */}
+        {searchable && (
+          <div className="sort-dropdown__search">
+            <FormInput
+              id={`${id}Search`}
+              type="text"
+              placeholder="Search fields..."
+              value={searchText}
+              onChange={handleSearchInputChange}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
+
+        {/* Dropdown options */}
+        <div className="sort-dropdown__options">
+          {filteredOptions.map((option) => (
+            <Button
+              key={option.value}
+              className={`sort-dropdown__item ${currentValue === option.value ? 'active' : ''}`}
+              onClick={() => handleOptionSelect(option.value, option.text)}
+              role="menuitem"
+            >
+              <span>{option.text}</span>
+            </Button>
+          ))}
+          {searchable && filteredOptions.length === 0 && (
+            <div className="sort-dropdown__no-results">No matching fields</div>
+          )}
+        </div>
+      </>
+    );
+  }
 };
 export default GenericDropdown;

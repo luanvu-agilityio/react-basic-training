@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Button from '../Button';
+import Button from '@components/common/Button';
+import FormLabel from '../FormLabel';
+import InputField from '../FormInput';
+import Text from '../Text';
+import SelectBox from '@components/SelectBox';
+import { paginationOptions } from '@constants/pagination-options';
 import './index.css';
 
 /**
- * A comprehensive Pagination component for React applications.
+ * A Pagination component
  *
  * Features:
  * - Dynamic page number generation with ellipsis
  * - Items per page selection
  * - First/Previous/Next/Last navigation
  * - Go to specific page functionality
- * - Accessible navigation controls
- * - Current items range display
  */
 interface PaginationProps {
   totalItems: number;
@@ -21,12 +24,12 @@ interface PaginationProps {
   initialItemsPerPage?: number;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination = ({
   totalItems,
   onPageChange,
   initialPage = 1,
   initialItemsPerPage = 5,
-}) => {
+}: PaginationProps) => {
   const effectiveItemsPerPage = initialItemsPerPage || 5;
   const effectiveTotalPages = Math.max(1, Math.ceil(totalItems / effectiveItemsPerPage));
   const effectiveInitialPage = Math.min(initialPage || 1, effectiveTotalPages);
@@ -59,16 +62,6 @@ const Pagination: React.FC<PaginationProps> = ({
     onPageChange(currentPage, itemsPerPage);
   }, [currentPage, itemsPerPage, onPageChange]);
 
-  /**
-   * Handlers for pagination controls
-   */
-  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newItemsPerPage = parseInt(e.target.value);
-    setItemsPerPage(newItemsPerPage);
-    setCurrentPage(1);
-    setGoToPage('1');
-  };
-
   const handleFirstPage = () => {
     if (currentPage !== 1) {
       setCurrentPage(1);
@@ -100,11 +93,21 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   /**
+   * Handlers for pagination controls
+   */
+  // Updated to accept a direct number value from SelectBox
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+    setGoToPage('1');
+  };
+
+  /**
    * Handlers for "Go to page" functionality
    */
   const handleGoToInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Only allow numbers
-    const value = e.target.value.replace(/[^0-9]/g, '');
+    const value = e.target.value.replace(/\D/g, '');
     setGoToPage(value);
   };
 
@@ -135,89 +138,63 @@ const Pagination: React.FC<PaginationProps> = ({
    * Shows first page, last page, and a window of pages around current page
    * Adds ellipsis when there are gaps in the sequence
    */
+  const createPageButton = (page: number) => (
+    <Button
+      key={`page-${page}`}
+      className={`pagination__button pagination__button--number ${
+        page === currentPage ? 'pagination__button--active' : ''
+      }`}
+      onClick={() => handlePageClick(page)}
+    >
+      {page}
+    </Button>
+  );
+
+  const createEllipsis = (key: string) => (
+    <span key={key} className="pagination__ellipsis">
+      ...
+    </span>
+  );
+
+  const createPlaceholder = (index: number) => (
+    <span key={`placeholder-${index}`} className="pagination__placeholder" aria-hidden="true">
+      {/* Empty placeholder for layout stability */}
+    </span>
+  );
+
   const pageNumbers = useMemo(() => {
     const maxPagesToShow = 3;
     let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
     const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
 
-    // Adjust start page if end page at maximum
     if (endPage === totalPages) {
       startPage = Math.max(1, endPage - maxPagesToShow + 1);
     }
 
     const elements = [];
-    // Always show the first page
 
     if (startPage > 1) {
-      elements.push(
-        <Button
-          key="page-1"
-          className={`pagination__button pagination__button--number ${
-            1 === currentPage ? 'pagination__button--active' : ''
-          }`}
-          onClick={() => handlePageClick(1)}
-        >
-          1
-        </Button>,
-      );
-
-      // Add ellipses if there is a gap
+      elements.push(createPageButton(1));
       if (startPage > 2) {
-        elements.push(
-          <span key="ellipsis-1" className="pagination__ellipsis">
-            ...
-          </span>,
-        );
+        elements.push(createEllipsis('ellipsis-1'));
       }
     }
 
-    // Add Page numbers
     for (let i = startPage; i <= endPage; i++) {
-      elements.push(
-        <Button
-          key={`page-${i}`}
-          className={`pagination__button pagination__button--number ${
-            i === currentPage ? 'pagination__button--active' : ''
-          }`}
-          onClick={() => handlePageClick(i)}
-        >
-          {i}
-        </Button>,
-      );
+      elements.push(createPageButton(i));
     }
 
-    // Always show the lastPage
     if (endPage < totalPages) {
-      // Add ellipsis if there is a gap
       if (endPage < totalPages - 1) {
-        elements.push(
-          <span key="ellipsis-2" className="pagination__ellipsis">
-            ...
-          </span>,
-        );
+        elements.push(createEllipsis('ellipsis-2'));
       }
-      elements.push(
-        <Button
-          key={`page-${totalPages}`}
-          className={`pagination__button pagination__button--number ${
-            totalPages === currentPage ? 'pagination__button--active' : ''
-          }`}
-          onClick={() => handlePageClick(totalPages)}
-        >
-          {totalPages}
-        </Button>,
-      );
+      elements.push(createPageButton(totalPages));
     }
 
-    // If pages are few, add placeholder for layout stability
     if (elements.length < 3 && totalPages > 0) {
       const placeholdersNeeded = 3 - elements.length;
       for (let i = 0; i < placeholdersNeeded; i++) {
-        elements.push(
-          <span key={`placeholder-${i}`} className="pagination__placeholder" aria-hidden="true">
-            {/* Empty placeholder for layout stability */}
-          </span>,
-        );
+        elements.push(createPlaceholder(i));
       }
     }
 
@@ -233,21 +210,17 @@ const Pagination: React.FC<PaginationProps> = ({
     <div className="pagination">
       <div className="pagination__controls">
         <div className="pagination__items-per-page">
-          <label htmlFor="itemsPerPage" className="pagination__label">
+          <FormLabel htmlFor="itemsPerPage" className="pagination__label">
             Show
-          </label>
-          <select
+          </FormLabel>
+          <SelectBox
             id="itemsPerPage"
             className="pagination__select"
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-          </select>
-          <span className="pagination__label">students</span>
+            options={paginationOptions}
+          />
+          <Text text="students" className="pagination__label" as="span" />
         </div>
 
         <div className="pagination__navigation">
@@ -257,7 +230,7 @@ const Pagination: React.FC<PaginationProps> = ({
             disabled={currentPage === 1}
             onClick={handleFirstPage}
           >
-            <span aria-hidden="true">&laquo;&laquo;</span>
+            <Text text="&laquo;&laquo;" aria-hidden="true" as="span" />
           </Button>
           <Button
             className="pagination__button pagination__button--prev"
@@ -265,7 +238,7 @@ const Pagination: React.FC<PaginationProps> = ({
             disabled={currentPage === 1}
             onClick={handlePrevPage}
           >
-            <span aria-hidden="true">&laquo;</span>
+            <Text text="&laquo;" aria-hidden="true" as="span" />
           </Button>
 
           <div className="pagination__page-indicator">
@@ -278,7 +251,7 @@ const Pagination: React.FC<PaginationProps> = ({
             disabled={currentPage === totalPages}
             onClick={handleNextPage}
           >
-            <span aria-hidden="true">&raquo;</span>
+            <Text text="&raquo;" aria-hidden="true" as="span" />
           </Button>
           <Button
             className="pagination__button pagination__button--last"
@@ -286,15 +259,15 @@ const Pagination: React.FC<PaginationProps> = ({
             disabled={currentPage === totalPages}
             onClick={handleLastPage}
           >
-            <span aria-hidden="true">&raquo;&raquo;</span>
+            <Text text="&raquo;&raquo;" aria-hidden="true" as="span" />
           </Button>
         </div>
 
         <div className="pagination__goto">
-          <label htmlFor="gotoPage" className="pagination__label">
+          <FormLabel htmlFor="gotoPage" className="pagination__label">
             Go to page
-          </label>
-          <input
+          </FormLabel>
+          <InputField
             id="gotoPage"
             type="number"
             min="1"

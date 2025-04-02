@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useMemo } from 'react';
 import Toast from '@components/common/Toast';
-import ConfirmDialog from '@components/common/ConfirmDialog/ConfirmDialog';
+import ConfirmDialog from '@components/common/ConfirmDialog';
 import { ToastType } from 'types/toast';
 
 /**
@@ -60,7 +60,7 @@ const ToastContext = createContext<ToastContextProps | undefined>(undefined);
  *
  * Provides toast notification functionality to the application.
  */
-export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
+export const ToastProvider = ({ children }: ToastProviderProps) => {
   // State to manage toast visibility and content
   const [toast, setToast] = useState<ToastState>({
     visible: false,

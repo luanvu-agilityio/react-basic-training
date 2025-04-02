@@ -1,17 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import './index.css';
 
+/**
+ * LoadingSpinner Component
+ *
+ * A reusable loading spinner component for React applications.
+ *
+ * This component displays a spinner with optional text to indicate loading states.
+ *
+ * Features:
+ * - Full-screen or inline spinner display
+ * - Customizable loading text
+ * - Minimum display time to prevent flickering
+ * - Clean-up logic to manage visibility state
+ */
+
 export interface LoadingSpinnerProps {
   fullScreen?: boolean;
   loadingText?: string;
   minimumDisplayTime?: number;
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+export const LoadingSpinner = ({
   fullScreen = true,
   loadingText = 'Please wait...',
   minimumDisplayTime = 1000,
-}) => {
+}: LoadingSpinnerProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [shouldBeVisible, setShouldBeVisible] = useState(false);
   const [showTimestamp, setShowTimestamp] = useState(0);

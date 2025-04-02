@@ -7,7 +7,7 @@
   font-weight: var(--font-weight-bold);
 }
 
-.btn__text {
+.btn-text {
   display: flex;
   justify-content: center;
   align-items: center;

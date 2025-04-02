@@ -5,18 +5,15 @@ import Button from '@components/common/Button';
 import { ToastType } from 'types/toast';
 
 /**
- * A reusable Toast notification component for React applications.
+ * A reusable Toast notification component
  *
  * This component displays temporary notifications with different types (success, error, warning, info)
- * and automatically dismisses them after a specified duration. It includes an icon, title,
- * message, close button, and progress bar.
+ * and automatically dismisses them after a specified duration.
  *
  * Features:
  * - Multiple notification types with corresponding icons
  * - Auto-dismiss with configurable duration
  * - Progress bar indicating remaining time
- * - Smooth enter/exit animations
- * - Manual close option
  *
  * Props:
  * - `type` (ToastType): The type of notification (success, error, warning, info)
@@ -33,7 +30,7 @@ interface ToastProps {
   onClose: () => void;
 }
 
-const Toast: React.FC<ToastProps> = ({ type, title, message, duration = 3000, onClose }) => {
+const Toast = ({ type, title, message, duration = 3000, onClose }: ToastProps) => {
   // State to manage visibility of the toast
   const [isVisible, setIsVisible] = useState(true);
 

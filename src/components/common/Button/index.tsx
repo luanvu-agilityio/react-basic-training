@@ -2,11 +2,10 @@ import React, { ButtonHTMLAttributes, MouseEvent } from 'react';
 import './index.css';
 
 /**
- * A reusable Button component for React applications.
+ * A reusable Button component
  *
  * This component renders a customizable button element with support for
- * additional props, click handling, and disabled state. It ensures that
- * the `onClick` handler is not triggered when the button is disabled.
+ * additional props, click handling, and disabled state.
  *
  * Props:
  * - `children` (React.ReactNode): The content to be displayed inside the button.
@@ -23,14 +22,14 @@ export interface ButtonProps
   className: string;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button = ({
   children,
   onClick,
   isLoading,
   className,
   disabled = false,
   ...restProps
-}) => {
+}: ButtonProps) => {
   /**
    * Handles click events on the button
    * Prevents default behavior when button is loading or disabled
@@ -55,9 +54,8 @@ export const Button: React.FC<ButtonProps> = ({
       disabled={disabled || isLoading}
       {...restProps}
     >
-      {isLoading}
       {/* Show loading indicator or children content */}
-      <span className="btn__text">{isLoading ? 'Loading...' : children}</span>
+      {isLoading ? <span className="btn-text">Loading...</span> : children}
     </button>
   );
 };

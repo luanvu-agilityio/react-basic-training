@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useRef, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useRef, ReactNode, useMemo } from 'react';
 import { LoadingSpinner, LoadingSpinnerProps } from '@components/common/LoadingSpinner';
 
 // Define the type for our context value
@@ -16,10 +16,7 @@ interface LoadingProviderProps {
   spinnerProps?: LoadingSpinnerProps;
 }
 
-export const LoadingProvider: React.FC<LoadingProviderProps> = ({
-  children,
-  spinnerProps = {},
-}) => {
+export const LoadingProvider = ({ children, spinnerProps = {} }: LoadingProviderProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const loadingCount = useRef(0);
 
@@ -35,8 +32,10 @@ export const LoadingProvider: React.FC<LoadingProviderProps> = ({
     }
   };
 
+  const value = useMemo(() => ({ show, hide, isLoading }), [isLoading]);
+
   return (
-    <LoadingContext.Provider value={{ show, hide, isLoading }}>
+    <LoadingContext.Provider value={value}>
       {children}
       {isLoading && <LoadingSpinner {...spinnerProps} />}
     </LoadingContext.Provider>

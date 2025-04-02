@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import { EMAIL_REGEX } from '@constants/regex';
+import { useNavigate } from 'react-router-dom';
 import { LOGIN_ERROR_MESSAGES } from '@constants/login-error-message';
 import { useLoadingSpinner } from '@contexts/LoadingSpinner.context';
 import Button from '@components/common/Button';
 import Toast from '@components/common/Toast';
-import { Title } from '../Title';
-import { Subtitle } from '../Subtitle';
-import { Description } from '../Description';
-import Link from '../Link';
+import FormLabel from '@components/common/FormLabel';
+import FormInput from '@components/common/FormInput';
+import Link from '@components/common/Link';
+import Text from '@components/common/Text';
+import Title from '@components/common/Title';
 import { ToastType } from 'types/toast';
 import { getUserService } from 'services/user-service';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@contexts/Auth.context';
 import { ROUTES } from 'route/config';
-import { FormLabel } from '../Label';
-import FormInput from '../FormInput';
 import './index.css';
 
 /**
- * A login form component for React applications.
+ * A login form component
  *
  * This component provides a complete authentication interface with email/password inputs,
  * form validation, loading states, error handling, and toast notifications.
@@ -59,7 +58,7 @@ interface ToastState {
   message: string;
 }
 
-const LoginForm: React.FC = () => {
+const LoginForm = () => {
   // Navigation and authentication hooks
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -248,10 +247,15 @@ const LoginForm: React.FC = () => {
       <div className="auth">
         <div className="card card-login">
           <Title className="header__title" title="crud operations" />
-          <Subtitle className="header__subtitle" subtitle="SIGN IN" />
-          <Description
+          <Text
+            text="sign in"
+            as="h2"
+            className="header__subtitle"
+            style={{ textTransform: 'uppercase' }}
+          />
+          <Text
+            text="Enter your credentials to access your account"
             className="header__description"
-            description="Enter your credentials to access your account"
           />
           <form className="card__form" onSubmit={handleSubmit}>
             {formFields.map((field) => (

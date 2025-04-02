@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { PAGE_CONFIG, ROUTES, RouteConfig } from 'route/config';
 import LoginForm from '@pages/LoginPage';
 import { AuthProvider } from '@contexts/Auth.context';
 import { NavigationProvider } from '@contexts/Navigation.context';
 import { ToastProvider } from 'contexts/Toast.context';
-import ProtectedLayout from '@components/layout/ProtectedLayout';
+import ProtectedLayout from '@components/ProtectedLayout';
 import { GenericPage } from '@pages/GenericPage';
 import './styles/index.css';
 import { LoadingProvider } from '@contexts/LoadingSpinner.context';
@@ -30,7 +30,7 @@ import { LoadingProvider } from '@contexts/LoadingSpinner.context';
  * @returns {JSX.Element} Application with routing configuration
  */
 
-function App() {
+function App(): JSX.Element {
   return (
     <Router>
       <ToastProvider>

@@ -1,48 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import '../../layout/Header/index.css';
-import { IStudent } from 'types/student';
-import { filterStudentsByQuery } from '@helpers/filter-student-by-query';
-import InputWithIcon from '@components/common/FormInputWithIcon';
+import './index.css';
+import FormInput from '@components/common/FormInput';
+import { ICON_SRC } from '@constants/icon-src';
 
 /**
  * A reusable SearchBar component with debounced search functionality.
  *
  * This component provides a search input field with debounced search capabilities
- * to efficiently filter through student data. It includes an icon and supports
- * both onChange and Enter key search triggers.
+ * to efficiently search through any data.
  *
  * Props:
- * - `allStudents` (IStudent[]): Array of all students to search through
- * - `onSearchResults` (function): Callback function that receives filtered students
- * - `placeholder` (string, optional): Custom placeholder text. Defaults to "Search students..."
+ * - `onSearch` (function): Callback function that receives the search query string
+ * - `placeholder` (string, optional): Custom placeholder text. Defaults to "Search..."
  * - `debounceTime` (number, optional): Debounce delay in milliseconds. Defaults to 300ms
+ * - `initialQuery` (string, optional): Initial search query. Defaults to empty string
  */
 export interface SearchBarProps {
-  allStudents: IStudent[];
-  onSearchResults: (students: IStudent[]) => void;
+  onSearch: (query: string) => void;
   placeholder?: string;
   debounceTime?: number;
+  initialQuery?: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({
-  allStudents,
-  onSearchResults,
-  placeholder = 'Search students...',
+const SearchBar = ({
+  onSearch,
+  placeholder = 'Search...',
   debounceTime = 300,
-}) => {
+  initialQuery = '',
+}: SearchBarProps) => {
   // State for managing the immediate search query input
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
   // State for managing the debounced version of the search query
-  const [debounceQuery, setDebounceQuery] = useState<string>('');
+  const [debounceQuery, setDebounceQuery] = useState<string>(initialQuery);
 
   /**
    * Performs the actual search operation using the provided query
-   * @param query - The search string to filter students
+   * @param query - The search string to filter data
    */
   const performSearch = (query: string) => {
-    const filteredStudents = query.trim() ? filterStudentsByQuery(allStudents, query) : allStudents;
-
-    onSearchResults(filteredStudents);
+    onSearch(query);
   };
 
   /**
@@ -60,11 +56,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   /**
    * Effect to trigger search when debounced query changes
-   * Also re-runs when allStudents array changes to keep results in sync
    */
   useEffect(() => {
     performSearch(debounceQuery);
-  }, [debounceQuery, allStudents]);
+  }, [debounceQuery]);
 
   /**
    * Handles real-time input changes
@@ -85,17 +80,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   // Configuration object for the search icon
-  const icon = {
-    search: {
-      src: 'https://res.cloudinary.com/ds82onf5q/image/upload/v1742868125/search_jksrfd.svg',
-      alt: 'Search',
-      className: 'search-icon',
-    },
-  };
 
   return (
     <div className="content__search">
-      <InputWithIcon
+      <FormInput
         type="text"
         id="search"
         className="content__search-input"
@@ -103,8 +91,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
         value={searchQuery}
         onChange={handleSearchChange}
         onKeyDown={handleKeyDown}
-        icon={icon.search}
-        aria-label="Search students"
+        imgSrc={ICON_SRC.search.src}
+        imgAlt={ICON_SRC.search.alt}
+        imgClassName={ICON_SRC.search.className}
+        aria-label={`Search ${placeholder?.toLowerCase() || 'items'}`}
       />
     </div>
   );

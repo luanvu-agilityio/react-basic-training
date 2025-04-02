@@ -45,7 +45,7 @@ const NavigationContext = createContext<NavigationContextType>({
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Child components to wrap
  */
-export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
   // State for active navigation item and sidebar expansion
   const [activeItem, setActiveItem] = useState<NavItem>('students');
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
