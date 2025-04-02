@@ -15,7 +15,7 @@ import PageNotAvailable from '@pages/PageNotFound';
 export const GenericPage = ({ pageName }: { pageName: string }): JSX.Element => {
   return (
     <div>
-      <PageHeader showSearch={false} />
+      <PageHeader showSearch={true} searchPlaceholder="Search..." />
       <section className="page">
         <PageNotAvailable pageName={pageName} />
       </section>
