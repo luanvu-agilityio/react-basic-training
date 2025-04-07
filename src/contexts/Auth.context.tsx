@@ -2,7 +2,8 @@ import React, { createContext, useContext, useEffect, useState, useMemo } from '
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'route/config';
 import { useToast } from './Toast.context';
-import { useLoadingSpinner } from './LoadingSpinner.context';
+import LoadingSpinner from '@components/common/LoadingSpinner';
+
 /**
  * Authentication Context Provider
  *
@@ -27,6 +28,7 @@ interface AuthContextType {
   user: UserData | null;
   /** Flag indicating if user is authenticated */
   isAuthenticated: boolean;
+  isLoading: boolean;
   /** Function to handle user login */
   login: (userData: UserData) => void;
   /** Function to handle user logout */
@@ -37,6 +39,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isAuthenticated: false,
+  isLoading: false,
   login: () => {},
   logout: () => {},
 });
@@ -54,9 +57,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // State management
   const [user, setUser] = useState<UserData | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { showToast, showConfirmation } = useToast();
-  const { show, hide } = useLoadingSpinner();
 
   /**
    * Check for existing auth session on mount
@@ -83,7 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
    */
   const login = async (userData: UserData) => {
     try {
-      show();
+      setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 300));
 
       setUser(userData);
@@ -93,10 +96,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       navigate(ROUTES.STUDENTS, { replace: true }); // Redirect immediately after login
       showToast('success', 'Login Successful', `Welcome back, ${userData.username}`);
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error('Login error:', error);
       showToast('error', 'Login Failed', 'An error occurred during login. Please try again.');
     } finally {
-      hide();
+      setIsLoading(false);
     }
   };
 
@@ -113,27 +116,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       'Confirm Logout',
       'Are you sure you want to logout ?',
       () => {
-        show();
+        setIsLoading(true);
         setTimeout(() => {
           setUser(null);
           setIsAuthenticated(false);
           localStorage.removeItem('userData');
           localStorage.removeItem('isLoggedIn');
-          hide();
+
           showToast('info', 'Logged Out', 'You have been successfully logged out.');
           navigate(ROUTES.LOGIN);
+          setIsLoading(false);
         }, 500);
       },
-      () => {
-        console.log('Logout cancelled');
-      },
+      () => {},
     );
   };
 
   // Memoize context value to prevent unnecessary rerenders
-  const value = useMemo(() => ({ user, isAuthenticated, login, logout }), [user, isAuthenticated]);
+  const value = useMemo(
+    () => ({ user, isAuthenticated, isLoading, login, logout }),
+    [user, isAuthenticated],
+  );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {isLoading && <LoadingSpinner loadingText="Processing..." />}
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 /**

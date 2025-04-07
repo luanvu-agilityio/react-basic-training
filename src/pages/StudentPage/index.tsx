@@ -1,20 +1,24 @@
 import React, { useState, useEffect, useCallback, useRef, JSX } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@components/common/Button';
-import StudentForm from '@components/StudentForm';
+import StudentForm from 'models/StudentForm';
 import StudentList from '@components/StudentList';
 import Header from '@components/PageHeader';
 import Pagination from '@components/common/Pagination';
 import { useToast } from 'contexts/Toast.context';
 import { IStudent } from 'types/student';
 import { ISortConfig } from 'types/sort';
-import { generateUUID } from '@helpers/uuid-generator';
-import { sortStudents } from '@helpers/sort-function';
+import { generateUUID } from '@utils/uuid-generator';
+import { sortStudents } from '@utils/sort-function';
 import { getDataService } from 'services/student-service';
-import Title from '@components/common/Title';
 import './index.css';
 import StudentSortDropdown from '@components/StudentSortDropdown';
 import Text from '@components/common/Text';
+import { generateEnrollmentNumber } from '@utils/enrollment-number-generator';
+import { Validator } from '@utils/form-validation';
+import { CloudinaryUploadService } from '@services/image-upload';
+import { DEFAULT_AVATAR } from '@constants/avatar';
+import { formatDate } from '@utils/date-formatter';
 
 /**
  * StudentsPage Component
@@ -23,7 +27,7 @@ import Text from '@components/common/Text';
  * - Displaying a list of students with pagination and sorting.
  * - Adding, editing, and deleting student records.
  * - Searching for students by name or other criteria.
- * - Showing a form in a modal for adding or editing student details.
+ * - Managing form state and validation for student data.
  */
 const StudentsPage = (): JSX.Element => {
   const location = useLocation(); // React Router hook to access the current location.
@@ -41,6 +45,14 @@ const StudentsPage = (): JSX.Element => {
   const [sortConfig, setSortConfig] = useState<ISortConfig>({ field: 'name', order: 'asc' }); // Sorting configuration
   const [searchedStudents, setSearchedStudents] = useState<IStudent[] | null>(null); // Stores search results
   const [paginatedStudents, setPaginatedStudents] = useState<IStudent[]>([]); // Students displayed on the current page
+
+  //Form management state
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [currentStudentId, setCurrentStudentId] = useState<string | null>(null);
+  const [formData, setFormData] = useState<Partial<IStudent>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(null);
+  const [tempAvatarUrl, setTempAvatarUrl] = useState<string | null>(null);
 
   // Parse initial page and items per page from URL
   const [currentPage, setCurrentPage] = useState(() => {
@@ -129,6 +141,207 @@ const StudentsPage = (): JSX.Element => {
     setSortConfig(newConfig);
   };
 
+  /**
+   * Initialize form state based on mode (add/edit)
+   * Handles:
+   * - Setting edit mode
+   * - Populating form data
+   * - Generating enrollment number
+   * - Clearing errors
+   */
+  useEffect(() => {
+    if (showForm) {
+      if (selectedStudent) {
+        // Edit mode
+        setIsEditMode(true);
+        setCurrentStudentId(selectedStudent.id || null);
+        setFormData(selectedStudent);
+      } else {
+        // Add new mode
+        setIsEditMode(false);
+        setCurrentStudentId(null);
+        setFormData({});
+        getEnrollmentNumber();
+      }
+      setSelectedAvatarFile(null);
+      setTempAvatarUrl(null);
+      setErrors({});
+    }
+  }, [showForm, selectedStudent]);
+
+  /**
+   * Generates a unique enrollment number for new students
+   * Uses existing students list to ensure uniqueness
+   */
+  const getEnrollmentNumber = async () => {
+    try {
+      const enrollNum = generateEnrollmentNumber(allStudents);
+      setFormData((prev) => ({ ...prev, enrollNum }));
+    } catch (error) {
+      console.error('Failed to generate enrollment number:', error);
+    }
+  };
+
+  /**
+   * Updates the error state for a specific field
+   * @param field - The field being validated
+   * @param errorMessage - The error message (if any)
+   */
+  const updateFieldError = (field: keyof IStudent, errorMessage?: string) => {
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      if (errorMessage) {
+        newErrors[field] = errorMessage;
+      } else {
+        delete newErrors[field];
+      }
+      return newErrors;
+    });
+  };
+
+  /**
+   * Validates individual form fields
+   * Handles:
+   * - Required fields
+   * - Email format
+   * - Duplicate email check
+   * - Phone number format
+   */
+  const validateField = async (field: keyof IStudent, value: string) => {
+    //Creates a partial student object with just the field being validated
+    const partialStudent: Partial<IStudent> = { [field]: value };
+
+    if (isEditMode && currentStudentId) {
+      partialStudent.id = currentStudentId;
+    }
+
+    // Validate the field
+    const { errors: fieldErrors } = Validator.validateForm(partialStudent, allStudents);
+
+    // Update errors state
+    updateFieldError(field, fieldErrors[field]);
+  };
+
+  /**
+   * Handles form input changes from StudentForm
+   * Maps input IDs to student properties
+   * Triggers validation for changed field
+   */
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    // Map input IDs to student properties
+    const fieldMap: Record<string, keyof IStudent> = {
+      name: 'name',
+      email: 'email',
+      phone: 'phoneNum',
+      admission: 'dateAdmission',
+    };
+
+    const field = fieldMap[name] || (name as keyof IStudent);
+
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+
+    validateField(field, value);
+  };
+
+  /**
+   * Handles avatar file selection (not uploading yet)
+   * Creates local preview and stores file for later upload
+   */
+  const handleFileSelect = (file: File | null) => {
+    // Clear any previous errors
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors['avatar'];
+      return newErrors;
+    });
+
+    // Clear previous temp URL if exists
+    if (tempAvatarUrl) {
+      URL.revokeObjectURL(tempAvatarUrl);
+      setTempAvatarUrl(null);
+    }
+
+    if (!file) {
+      setSelectedAvatarFile(null);
+      return;
+    }
+
+    // Validate file before creating preview
+    try {
+      CloudinaryUploadService.validateFile(file);
+
+      // Store file for later upload
+      setSelectedAvatarFile(file);
+
+      // Create temporary local preview
+      const localPreviewUrl = URL.createObjectURL(file);
+      setTempAvatarUrl(localPreviewUrl);
+    } catch (error) {
+      console.error('Avatar validation failed', error);
+      setErrors((prev) => ({
+        ...prev,
+        avatar: error instanceof Error ? error.message : 'Invalid file',
+      }));
+    }
+  };
+
+  /**
+   * Submit handler moved from StudentForm
+   * Validates all fields
+   * Formats data for submission
+   * Triggers save callback if valid
+   */
+  const handleSubmitForm = async () => {
+    // Create the final student data object for validation
+    const studentData: Partial<IStudent> = {
+      ...formData,
+      avatar: formData.avatar ?? DEFAULT_AVATAR,
+    };
+
+    // Format date for submission if it exists
+    if (formData.dateAdmission) {
+      const date = new Date(formData.dateAdmission);
+      studentData.dateAdmission = formatDate(date);
+    }
+
+    // Add ID if in edit mode
+    if (currentStudentId) {
+      studentData.id = currentStudentId;
+    }
+
+    // Validate all fields at once
+    const { isValid, errors: validationErrors } = Validator.validateForm(studentData, allStudents);
+
+    if (!isValid) {
+      //Update error state with all validation errors
+      setErrors(validationErrors);
+      // Stop submission if validation fails
+      return;
+    }
+
+    try {
+      // Only now upload the avatar if there's a selected file and no validation errors
+      if (selectedAvatarFile && !errors.avatar) {
+        const imageUrl = await CloudinaryUploadService.uploadAvatar(selectedAvatarFile);
+        studentData.avatar = imageUrl;
+      }
+
+      // If validation passed and avatar upload succeeded (if applicable), proceed with saving
+      handleSaveStudent(studentData);
+    } catch (error) {
+      console.error('Error during form submission:', error);
+      setErrors((prev) => ({
+        ...prev,
+        avatar: error instanceof Error ? error.message : 'Failed to upload avatar',
+      }));
+    }
+  };
+
   // Save student (add or update)
   const handleSaveStudent = async (studentData: Partial<IStudent>) => {
     try {
@@ -153,7 +366,6 @@ const StudentsPage = (): JSX.Element => {
           ...studentData,
           id: generateUUID(), // Generate a unique ID
         } as IStudent;
-        console.log(newStudent);
         const createdStudent = await service.create(newStudent);
 
         setAllStudents((prevStudents) => [...prevStudents, createdStudent]); // Add the new student to the allStudents state.
@@ -198,7 +410,7 @@ const StudentsPage = (): JSX.Element => {
       'Delete Student',
       `Are you sure you want to delete this student ${student.name} ?`, // Confirmation message.
       () => deleteStudent(student),
-      () => console.log('Delete cancelled'),
+      () => {},
     );
   };
 
@@ -207,11 +419,6 @@ const StudentsPage = (): JSX.Element => {
     setShowForm(false); // Close the form modal.
     setSelectedStudent(undefined); // Clear the selected student state.
   };
-
-  const getStudents = useCallback(async (): Promise<IStudent[]> => {
-    const service = await getDataService();
-    return service.getAll();
-  }, []);
 
   return (
     <div>
@@ -229,13 +436,13 @@ const StudentsPage = (): JSX.Element => {
             marginBottom: '10px',
           }}
         >
-          <div className="page__header">
-            <Title className="page__title" title="Students List" />
+          <div className="page-header" style={{ backgroundColor: 'transparent' }}>
+            <Text className="page-name" text="Students List" />
           </div>
-          <div className="page__action">
+          <div className="page-actions">
             <StudentSortDropdown onSortChange={handleSortChange} initialConfig={sortConfig} />
             <Button
-              className="btn btn--add"
+              variant="add"
               aria-label="Add new student"
               onClick={() => {
                 setSelectedStudent(undefined); // Clear the selected student state.
@@ -268,10 +475,14 @@ const StudentsPage = (): JSX.Element => {
           <StudentForm
             isOpen={showForm}
             onClose={() => setShowForm(false)}
-            onSave={handleSaveStudent}
+            formData={formData}
+            errors={errors}
+            tempAvatarUrl={tempAvatarUrl}
+            isEditMode={isEditMode}
+            onInputChange={handleInputChange}
+            onFileSelect={handleFileSelect}
+            onSave={handleSubmitForm}
             onCancel={handleCancelForm}
-            getStudents={getStudents}
-            student={selectedStudent}
           />
         )}
       </section>

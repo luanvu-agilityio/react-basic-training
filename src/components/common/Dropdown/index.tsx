@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@components/common/Button';
-import { Overlay } from '@components/common/Overlay';
+import { Overlay } from 'models/Overlay';
 import './index.css';
 import FormInput from '@components/common/FormInput';
 /**
@@ -115,7 +115,8 @@ const GenericDropdown = ({
     <div className={`sort-dropdown ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
       <Button
         id={`${id}Button`}
-        className={`sort-dropdown__button ${id === 'sortOrder' ? 'sort-dropdown__button--order' : ''}`}
+        variant="dropdown"
+        className={`${id === 'sortOrder' ? 'sort-dropdown-order' : id === 'sortField' ? 'sort-dropdown-field' : ''}`}
         onClick={toggleOpen}
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -131,13 +132,13 @@ const GenericDropdown = ({
           <Overlay onClick={toggleOpen}>
             <div
               id={`${id}Menu`}
-              className="sort-dropdown__menu"
+              className="dropdown-menu"
               role="menu"
               tabIndex={-1}
               aria-labelledby={`${id}Button`}
             >
               {/* Mobile drawer indicator */}
-              <div className="sort-dropdown__drawer-indicator"></div>
+              <div className="drawer-indicator"></div>
               {/* Menu content - shared between mobile and desktop */}
               {renderMenuContent()}
             </div>
@@ -145,7 +146,7 @@ const GenericDropdown = ({
         ) : (
           <div
             id={`${id}Menu`}
-            className="sort-dropdown__menu"
+            className="dropdown-menu"
             role="menu"
             aria-labelledby={`${id}Button`}
           >
@@ -158,7 +159,7 @@ const GenericDropdown = ({
       {!isOpen && !isMobile && (
         <div
           id={`${id}Menu`}
-          className="sort-dropdown__menu hidden"
+          className="dropdown-menu hidden"
           role="menu"
           aria-labelledby={`${id}Button`}
         >
@@ -174,24 +175,25 @@ const GenericDropdown = ({
       <>
         {/* Search field */}
         {searchable && (
-          <div className="sort-dropdown__search">
+          <div className="dropdown-search">
             <FormInput
-              id={`${id}Search`}
+              name={`${id}Search`}
               type="text"
               placeholder="Search fields..."
               value={searchText}
-              onChange={handleSearchInputChange}
+              onInputChange={handleSearchInputChange}
               onClick={(e) => e.stopPropagation()}
             />
           </div>
         )}
 
         {/* Dropdown options */}
-        <div className="sort-dropdown__options">
+        <div className="dropdown-options">
           {filteredOptions.map((option) => (
             <Button
               key={option.value}
-              className={`sort-dropdown__item ${currentValue === option.value ? 'active' : ''}`}
+              variant="dropdown"
+              className={`dropdown-item ${currentValue === option.value ? 'active' : ''}`}
               onClick={() => handleOptionSelect(option.value, option.text)}
               role="menuitem"
             >
@@ -199,7 +201,7 @@ const GenericDropdown = ({
             </Button>
           ))}
           {searchable && filteredOptions.length === 0 && (
-            <div className="sort-dropdown__no-results">No matching fields</div>
+            <div className="no-results">No matching fields</div>
           )}
         </div>
       </>

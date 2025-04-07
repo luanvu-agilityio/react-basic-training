@@ -2,9 +2,7 @@
   padding: 1rem 2rem;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: 1rem;
   font-size: var(--font-size-12);
-  font-weight: var(--font-weight-bold);
 }
 
 .btn-text {

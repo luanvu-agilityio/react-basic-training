@@ -1,24 +1,23 @@
-.content__header {
+.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 6rem;
-  background-color: var(--white-color);
   padding: 1rem 2rem;
 }
 
-.back-icon {
+.btn-back {
   border: none;
   background-color: transparent;
 }
 
-.back-icon img {
+.btn-back img {
   width: 2.3rem;
   height: 2.3rem;
   cursor: pointer;
 }
 
-.back-icon:hover {
+.btn-back:hover {
   background-color: var(--orange-color);
   border-radius: 1rem;
   color: var(--black-color);
@@ -33,7 +32,7 @@
   align-items: center;
 }
 
-.content__notification {
+.btn-notification {
   border: none;
   background-color: transparent;
   position: relative;
@@ -41,7 +40,7 @@
   cursor: pointer;
 }
 
-.content__notification img {
+.btn-notification img {
   width: 1.7rem;
   height: 2rem;
 }

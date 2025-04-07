@@ -9,7 +9,7 @@ interface UserCardProps {
   userAvatar: string;
 }
 const UserCard = ({ username, userRole, userAvatar }: UserCardProps) => (
-  <div className="sidebar__profile">
+  <div className="user-profile">
     <Avatar
       className="avatar"
       src={userAvatar}

@@ -14,12 +14,33 @@ import './index.css';
  * - `disabled` (boolean, optional): A flag to disable the button. Defaults to `false`.
  * - `...restProps` (ButtonHTMLAttributes<HTMLButtonElement>): Additional props for the button element.
  */
+
+// Define button variants
+export type ButtonVariant =
+  | 'submit'
+  | 'add'
+  | 'back'
+  | 'toggle'
+  | 'close'
+  | 'upload'
+  | 'delete'
+  | 'edit'
+  | 'cancel'
+  | 'confirm'
+  | 'pagination'
+  | 'notification'
+  | 'link'
+  | 'save'
+  | 'dropdown';
+
 export interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type'> {
   children: React.ReactNode;
   onClick: (event: MouseEvent<HTMLButtonElement>) => void;
   isLoading?: boolean;
-  className: string;
+  className?: string;
+  variant?: ButtonVariant;
+  size?: 'small' | 'medium' | 'large';
 }
 
 export const Button = ({
@@ -28,6 +49,8 @@ export const Button = ({
   isLoading,
   className,
   disabled = false,
+  variant,
+
   ...restProps
 }: ButtonProps) => {
   /**
@@ -47,9 +70,13 @@ export const Button = ({
     }
   };
 
+  const buttonClasses = ['btn', `btn-${variant}`, isLoading ? 'btn-loading' : '', className]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <button
-      className={className}
+      className={buttonClasses}
       onClick={handleClick}
       disabled={disabled || isLoading}
       {...restProps}

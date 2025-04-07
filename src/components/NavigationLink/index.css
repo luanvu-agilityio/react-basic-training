@@ -1,9 +1,9 @@
-.sidebar__nav {
+.sidebar-nav {
   margin: 0 auto;
   width: 20rem;
 }
 
-.sidebar__nav-item {
+.nav-link {
   display: flex;
   align-items: center;
   padding: 12px 64px 12px 56px;
@@ -14,69 +14,73 @@
   text-decoration: none;
 }
 
-.sidebar__nav-item:hover {
+.nav-link:hover {
   background-color: var(--orange-color);
 }
 
-.sidebar__nav-item:hover .sidebar__nav-text {
+.nav-link:hover .nav-text {
   font-weight: var(--font-weight-bold);
 }
 
-.sidebar__nav-item .sidebar__nav-icon {
+.nav-link .nav-icon {
   width: 1.8rem;
   margin-right: 12px;
   display: flex;
   justify-content: center;
 }
 
-.sidebar__nav-item .sidebar__nav-text {
+.nav-link .nav-text {
   text-decoration: none;
   color: var(--black-color);
   font-size: var(--font-size-14);
 }
 
-.sidebar__nav-item .sidebar__nav-text:hover {
+.nav-link .nav-text:hover {
   font-weight: var(--font-weight-bold);
 }
 
-.sidebar__nav-item.student {
+.nav-link.student {
   padding: 12px 64px 12px 54px;
 }
 
-.sidebar__nav-item.home .sidebar__nav-icon {
+.nav-link.home .nav-icon {
   width: 1.9rem;
   height: 1.7rem;
 }
 
-.sidebar__nav-item.course .sidebar__nav-icon {
+.nav-link.course .nav-icon {
   width: 1.2rem;
   height: 1.5rem;
   margin-right: 1.6rem;
 }
 
-.sidebar__nav-item.student .sidebar__nav-icon {
+.nav-link.student .nav-icon {
   width: 2rem;
   height: 1.6rem;
   margin-right: 1rem;
 }
 
-.sidebar__nav-item.payment .sidebar__nav-icon {
+.nav-link.payment .nav-icon {
   width: 1.5rem;
   height: 1.7rem;
 }
 
-.sidebar__nav-item.report .sidebar__nav-icon {
+.nav-link.report .nav-icon {
   width: 1.3rem;
   height: 1.7rem;
 }
 
-.sidebar__nav-item.setting .sidebar__nav-icon {
+.nav-link.setting .nav-icon {
   width: 1.5rem;
   height: 1.7rem;
 }
 
-.sidebar__nav-icon {
+.nav-icon {
   margin-right: 1rem;
   width: 20px;
   text-align: center;
+}
+
+.nav-link.sidebar-logout .nav-text {
+  display: block;
 }

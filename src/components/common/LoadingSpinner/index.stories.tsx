@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
-import { useLoadingSpinner } from '@contexts/LoadingSpinner.context';
 import { LoadingSpinner } from './index';
+import { Button } from '@components/common/Button';
 
 const meta: Meta<typeof LoadingSpinner> = {
   title: 'Components/LoadingSpinner',
@@ -49,23 +49,26 @@ export const CustomText: Story = {
 
 // Example with the global loading spinner manager
 export const GlobalSpinnerDemo: React.FC = () => {
-  const { show, hide, isLoading } = useLoadingSpinner();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleFetchData = async () => {
-    show(); // Show the spinner
     try {
+      setIsLoading(true);
       // Your async operations here
       await new Promise((resolve) => setTimeout(resolve, 2000));
+    } catch (error) {
+      console.error('Error fetching data:', error);
     } finally {
-      hide(); // Hide the spinner
+      setIsLoading(false);
     }
   };
 
   return (
     <div>
-      <button onClick={handleFetchData} disabled={isLoading}>
+      {isLoading && <LoadingSpinner loadingText="Fetching data..." />}
+      <Button onClick={handleFetchData} disabled={isLoading} className="button">
         {isLoading ? 'Loading...' : 'Fetch Data'}
-      </button>
+      </Button>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Text from '@components/common/Text';
 import './index.css';
 import ImageIcon from '@components/common/ImageIcon';
+import Button from '@components/common/Button';
 
 /**
  * NavigationLink Component Props
@@ -16,14 +17,11 @@ interface NavigationLinkProps {
   icon?: string;
   /** Whether the icon should be displayed on the right side */
   iconRight?: boolean;
-  /** Additional CSS class names */
   className?: string;
-  /** Whether the item is currently active */
   isActive?: boolean;
   /** Click handler for the navigation item */
   onClick: (e: React.MouseEvent) => void;
-  /** Optional data-testid for testing */
-  testId?: string;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -32,21 +30,20 @@ interface NavigationLinkProps {
  * A unified component for sidebar navigation and action items with consistent styling.
  * Supports both navigation links (using React Router) and action buttons.
  */
-export const NavigationLink: React.FC<NavigationLinkProps> = ({
+export const NavigationLink = ({
   text,
   to,
   icon,
   iconRight = false,
   className = '',
-  isActive = false,
+  isActive = true,
   onClick,
-  testId,
-}) => {
+}: NavigationLinkProps) => {
   // Base class for all navigation items
-  const baseClass = 'sidebar__nav-item';
+  const baseClass = 'nav-link';
 
   // Combine all class names
-  const fullClassName = `${baseClass} ${className} ${isActive ? 'active' : ''}`;
+  const fullClassName = `${baseClass} ${className} ${isActive ? '' : 'inactive'}`;
 
   // Handler for keyboard accessibility
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -62,7 +59,7 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
       {icon && !iconRight && (
         <ImageIcon
           loading="lazy"
-          className="sidebar__nav-icon"
+          className="nav-icon"
           src={icon}
           alt={`${text} icon`}
           onError={(e) => {
@@ -71,13 +68,13 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
         />
       )}
 
-      <Text text={text} className="sidebar__nav-text" as="p" />
+      <Text text={text} className="nav-text" as="p" />
 
       {/* Icon on the right if iconRight is true */}
       {icon && iconRight && (
         <ImageIcon
           loading="lazy"
-          className="sidebar__logout-icon"
+          className="logout-icon"
           src={icon}
           alt={`${text} icon`}
           onError={(e) => {
@@ -97,7 +94,6 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
         onClick={onClick}
         onKeyDown={handleKeyDown}
         tabIndex={0}
-        data-testid={testId}
       >
         {content}
       </Link>
@@ -106,16 +102,9 @@ export const NavigationLink: React.FC<NavigationLinkProps> = ({
 
   // For action items (like logout), render as a button-like div
   return (
-    <div
-      className={fullClassName}
-      onClick={onClick}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-      role="button"
-      data-testid={testId}
-    >
+    <Button className={fullClassName} onClick={onClick} onKeyDown={handleKeyDown} tabIndex={0}>
       {content}
-    </div>
+    </Button>
   );
 };
 

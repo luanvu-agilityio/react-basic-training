@@ -19,7 +19,7 @@ interface LabelProps {
 const FormLabel = ({ htmlFor, children, className = '' }: LabelProps) => (
   <label
     htmlFor={htmlFor}
-    className={`form__label ${className}`}
+    className={`form-label ${className}`}
     style={{
       fontSize: '14px',
       fontWeight: 'var(--font-weight-semibold)',

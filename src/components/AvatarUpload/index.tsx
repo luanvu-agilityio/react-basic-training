@@ -28,14 +28,11 @@ const AvatarUpload = ({ avatar, onFileSelect, previewUrl, error }: AvatarUploadP
   // Reference to hidden file input
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const displayAvatar = previewUrl || avatar || CAMERA_ICON;
+  const displayAvatar = previewUrl ?? avatar ?? CAMERA_ICON;
   const isPlaceholder = !avatar && !previewUrl;
 
   // Handle image loading error and set fallback to default image
-  const handleImageError = () => {
-    console.warn('Image failed to load, using default profile image');
-    // Use DEFAULT_PROFILE_IMAGE as fallback
-  };
+  const handleImageError = () => {};
 
   /**
    * Triggers the hidden file input click when select button is clicked
@@ -68,15 +65,16 @@ const AvatarUpload = ({ avatar, onFileSelect, previewUrl, error }: AvatarUploadP
       <div className="profile-placeholder">
         <Avatar
           src={displayAvatar}
-          alt={isPlaceholder ? 'camera' : 'Student avatar'}
-          className={isPlaceholder ? '' : 'student-avatar'}
+          alt={isPlaceholder ? 'camera' : 'avatar'}
+          className={isPlaceholder ? '' : 'avatar'}
           onError={handleImageError}
           loading="lazy"
+          style={{ width: '65px', height: '65px', backgroundColor: 'transparent' }}
         />
       </div>
 
       {/* Custom upload button */}
-      <Button className="upload-btn" onClick={handleUploadClick}>
+      <Button variant="upload" onClick={handleUploadClick}>
         Select photo
       </Button>
 

@@ -3,12 +3,11 @@
   display: inline-block;
 }
 
-.sort-dropdown__button {
+.btn-dropdown {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  min-width: 180px;
   padding: 10px 14px;
   background-color: white;
   border: 1px solid #e0e0e0;
@@ -19,13 +18,11 @@
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   min-height: 38px;
+  margin-left: 0;
+  max-width: 240px;
 }
 
-.sort-dropdown__button--order {
-  min-width: 140px;
-}
-
-.sort-dropdown__button:hover {
+.btn-dropdown:hover {
   border-color: #ccc;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -42,7 +39,7 @@
   transform: rotate(180deg);
 }
 
-.sort-dropdown__menu {
+.dropdown-menu {
   position: absolute;
   top: calc(100% + 5px);
   left: 0;
@@ -65,7 +62,7 @@
   height: 0;
 }
 
-.sort-dropdown__menu:not(.hidden) {
+.dropdown-menu:not(.hidden) {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -74,7 +71,7 @@
   max-height: 300px;
 }
 
-.sort-dropdown__search {
+.dropdown-search {
   padding: 10px;
   border-bottom: 1px solid #f0f0f0;
   position: sticky;
@@ -83,7 +80,7 @@
   z-index: 1;
 }
 
-.sort-dropdown__search input {
+.dropdown-search input {
   width: 100%;
   padding: 8px 10px;
   border: 1px solid #e0e0e0;
@@ -93,25 +90,25 @@
   box-sizing: border-box;
 }
 
-.sort-dropdown__search input:focus {
+.dropdown-search input:focus {
   border-color: #1677ff;
   box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
 }
 
-.sort-dropdown__options {
+.dropdown-options {
   max-height: 240px;
   overflow-y: auto;
   min-height: 40px;
 }
 
-.sort-dropdown__no-results {
+.no-results {
   padding: 16px;
   text-align: center;
   color: #999;
   font-style: italic;
 }
 
-.sort-dropdown__item {
+.dropdown-item {
   padding: 10px 16px;
   cursor: pointer;
   font-size: 14px;
@@ -126,23 +123,24 @@
   justify-content: space-between;
   min-height: 40px;
   box-sizing: border-box;
+  min-width: 100%;
 }
 
-.sort-dropdown__item:not(:last-child) {
+.dropdown-item:not(:last-child) {
   border-bottom: 1px solid #f0f0f0;
 }
 
-.sort-dropdown__item:hover {
+.dropdown-item:hover {
   background-color: #f8f8f8;
 }
 
-.sort-dropdown__item.active {
+.dropdown-item.active {
   background-color: #f5f8ff;
   color: #1677ff;
   font-weight: 500;
 }
 
-.sort-dropdown__item::after {
+.dropdown-item::after {
   content: '';
   width: 16px;
   height: 16px;
@@ -150,7 +148,7 @@
   flex-shrink: 0;
 }
 
-.sort-dropdown__item.active::after {
+.dropdown-item.active::after {
   content: '✓';
   color: #1677ff;
   font-weight: bold;
@@ -160,29 +158,33 @@
   display: none;
 }
 
+.sort-dropdown-field {
+  width: 240px;
+}
+
 @media screen and (max-width: 768px) {
   .sort-dropdown {
     width: 100%;
   }
 
-  .sort-dropdown__button {
+  .btn-dropdown {
     width: 100%;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .sort-dropdown__button {
+  .btn-dropdown {
     min-width: unset;
     padding: 8px 12px;
     font-size: 13px;
     min-height: 36px;
   }
 
-  .sort-dropdown__button--order {
+  .sort-dropdown-order {
     min-width: unset;
   }
 
-  .sort-dropdown__menu {
+  .dropdown-menu {
     position: fixed;
     top: auto;
     bottom: 0;
@@ -196,11 +198,11 @@
     transform: translateY(100%);
   }
 
-  .sort-dropdown__menu:not(.hidden) {
+  .dropdown-menu:not(.hidden) {
     transform: translateY(0);
   }
 
-  .sort-dropdown__search {
+  .dropdown-search {
     padding: 12px;
     position: sticky;
     top: 0;
@@ -208,22 +210,23 @@
     z-index: 1;
   }
 
-  .sort-dropdown__options {
+  .dropdown-options {
     max-height: 50vh;
   }
 
-  .sort-dropdown__item {
+  .dropdown-item {
     padding: 12px 16px;
     font-size: 15px;
     min-height: 45px;
+    min-width: 100%;
   }
 
-  .sort-dropdown__search input {
+  .dropdown-search input {
     padding: 10px 12px;
     font-size: 15px;
   }
 
-  .sort-dropdown__menu::before {
+  .dropdown-menu::before {
     content: '';
     display: block;
     width: 40px;
@@ -242,13 +245,13 @@
 
 /* Small mobile devices */
 @media screen and (max-width: 320px) {
-  .sort-dropdown__button {
+  .btn-dropdown {
     font-size: 12px;
     padding: 6px 10px;
     min-height: 32px;
   }
 
-  .sort-dropdown__item {
+  .dropdown-item {
     padding: 10px 12px;
     font-size: 13px;
     min-height: 40px;

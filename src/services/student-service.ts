@@ -12,14 +12,9 @@ interface IEnvironment {
 }
 
 const environment: IEnvironment = {
-  localApiUrl: 'http://localhost:3000',
-  remoteApiUrl: 'https://crud-api-vuea.onrender.com',
-  allowedOrigins: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://react-basic-training-luanvu.vercel.app',
-    'https://crud-api-vuea.onrender.com',
-  ],
+  localApiUrl: import.meta.env.VITE_LOCAL_API_URL || 'http://localhost:3000',
+  remoteApiUrl: import.meta.env.VITE_REMOTE_API_URL || 'https://crud-api-vuea.onrender.com',
+  allowedOrigins: (import.meta.env.VITE_ALLOWED_ORIGINS || '').split(','),
 };
 
 /**

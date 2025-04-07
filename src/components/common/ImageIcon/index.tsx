@@ -5,12 +5,11 @@ interface ImageIconProps {
   alt: string;
   size?: number;
   className?: string;
-  onClick?: () => void;
   onError?: (e: HTMLImageElement) => void;
   loading?: 'lazy' | 'eager';
 }
 
-const ImageIcon: React.FC<ImageIconProps> = ({ src, alt, size = 24, className = '', onClick }) => {
+const ImageIcon: React.FC<ImageIconProps> = ({ src, alt, size = 24, className = '' }) => {
   return (
     <img
       src={src}
@@ -19,7 +18,6 @@ const ImageIcon: React.FC<ImageIconProps> = ({ src, alt, size = 24, className = 
       height={size}
       className={`image-icon ${className}`}
       loading="lazy"
-      onClick={onClick}
       style={{
         objectFit: 'contain',
         display: 'inline-block',

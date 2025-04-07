@@ -128,23 +128,6 @@
   text-transform: uppercase;
 }
 
-.close-btn {
-  position: absolute;
-  right: 2rem;
-  top: 1.5rem;
-  padding: none;
-
-  border: none;
-  font-size: var(--font-size-32);
-  background: none;
-  color: var(--black-color);
-  cursor: pointer;
-}
-
-.close-btn:hover {
-  color: #f44336;
-}
-
 /* Form footer component */
 .popup-footer {
   padding: 1.5rem 2rem;

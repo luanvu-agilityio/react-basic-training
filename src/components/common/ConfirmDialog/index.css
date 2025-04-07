@@ -44,7 +44,7 @@
 }
 
 /* Styling for the confirmation dialog */
-.confirm-dialog--warning .toast__icon {
+.warning .toast-icon {
   color: var(--orange-color);
 }
 
@@ -60,54 +60,54 @@
 }
 
 /* Make the confirmation buttons more prominent */
-.confirm-dialog .toast__actions {
+.confirm-dialog .toast-actions {
   display: flex;
   justify-content: flex-end;
   padding: 1.2rem 1.6rem;
   gap: 1rem;
 }
 
-.confirm-dialog .toast__button--primary,
-.confirm-dialog .toast__button--secondary {
+.confirm-dialog .btn-confirm,
+.confirm-dialog .btn-cancel {
   padding: 0.8rem 1.6rem;
   border-radius: 0.5rem;
   font-weight: var(--font-weight-semibold);
   transition: background-color 0.2s;
 }
 
-.confirm-dialog .toast__button--primary {
+.confirm-dialog .btn-confirm {
   background-color: #dc3545;
   color: var(--white-color);
+  border: none;
 }
 
-.confirm-dialog .toast__button--primary:hover {
+.confirm-dialog .btn-confirm:hover {
   background-color: #c82333;
 }
 
-.confirm-dialog .toast__button--secondary {
+.confirm-dialog .btn-cancel {
   background-color: #f8f9fa;
-  color: #212529;
   border: 1px solid #ced4da;
 }
 
-.confirm-dialog .toast__button--secondary:hover {
+.confirm-dialog .btn-cancel:hover {
   background-color: #e2e6ea;
 }
 
-.confirm-dialog .toast__content {
+.confirm-dialog .toast-content {
   padding: 1.6rem 2rem;
   font-size: var(--font-size-17);
 }
 
-.confirm-dialog .toast__title {
+.confirm-dialog .toast-title {
   font-size: var(--font-size-20);
   font-weight: 600;
 }
 
-.toast__close {
+.btn-close {
   position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;
+  top: 1.8rem;
+  right: 1.8rem;
 
   display: flex;
   align-items: center;
@@ -125,13 +125,13 @@
   opacity: 0.7;
 }
 
-.toast__close:hover {
+.btn-close:hover {
   color: #ed1c0e;
   font-size: var(--font-size-32);
   font-weight: var(--font-weight-semibold);
 }
 
-.toast__icon {
+.toast-icon {
   display: flex;
   align-items: center;
   justify-content: center;

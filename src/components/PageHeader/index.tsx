@@ -1,8 +1,8 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from '@components/common/Button';
 import SearchBar from '@components/common/SearchBar';
-import { filterStudentsByQuery } from '@helpers/filter-student-by-query';
+import { filterStudentsByQuery } from '@utils/filter-student-by-query';
 import { IStudent } from 'types/student';
 import './index.css';
 import ImageIcon from '@components/common/ImageIcon';
@@ -30,7 +30,6 @@ const PageHeader = ({
   searchPlaceholder = 'Search students...',
 }: PageHeaderProps) => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   /**
    * Handles back button navigation with the following logic:
@@ -41,21 +40,6 @@ const PageHeader = ({
   const handleBackClick = () => {
     if (customBackHandler) {
       customBackHandler();
-      return;
-    }
-
-    // Extract current pagination parameters
-    const currentSearchParams = new URLSearchParams(location.search);
-    const currentPage = currentSearchParams.get('page') ?? '1';
-    const currentPerPage = currentSearchParams.get('perPage') ?? '5';
-
-    // Check if there's a previous state in browser history
-    const historyState = window.history.state;
-    const historyIndex = historyState?.idx;
-
-    // If at the beginning of history or coming from login, go to student list
-    if (historyIndex <= 1 || window.document.referrer.includes('/login')) {
-      navigate(`/?page=${currentPage}&perPage=${currentPerPage}`);
       return;
     }
 
@@ -73,8 +57,8 @@ const PageHeader = ({
   };
 
   return (
-    <header className="content__header">
-      <Button className="back-icon" onClick={handleBackClick} aria-label="Go back">
+    <header className="page-header">
+      <Button variant="back" onClick={handleBackClick} aria-label="Go back">
         <ImageIcon
           src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742868124/back_sk4lcp.svg"
           alt="Click to get back"
@@ -82,10 +66,10 @@ const PageHeader = ({
       </Button>
       <div className="content-actions">
         {showSearch && (
-          <SearchBar onSearch={handleSearch} placeholder={searchPlaceholder} debounceTime={300} />
+          <SearchBar onSearch={handleSearch} placeholder={searchPlaceholder} debounceTime={500} />
         )}
         <Button
-          className="content__notification"
+          variant="notification"
           onClick={() => onNotificationClick?.()}
           aria-label="Notifications"
           tabIndex={0}

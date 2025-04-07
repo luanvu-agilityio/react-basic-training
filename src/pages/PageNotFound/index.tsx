@@ -6,19 +6,19 @@ import Text from '@components/common/Text';
 const PageNotAvailable = ({ pageName }: { pageName: string }) => {
   return (
     <div className="page-not-available">
-      <div className="page__header">
-        <Title className="page__title" title={pageName} />
+      <div className="page-header">
+        <Title className="page-name" title={pageName} />
       </div>
-      <div className="page-not-available__content">
-        <div className="page-not-available__icon">
+      <div className="page-content">
+        <div className="page-image">
           <img
             src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742868072/page-not-found_omhbr6.png"
             alt="Page Not Found"
           />
         </div>
-        <Text className="page-not-available__title" text="Page not available at the moment" />
+        <Text className="page-notification" text="Page not available at the moment" />
         <Text
-          className="page-not-available__message"
+          className="page-message"
           text="This feature is under development and will be updated soon. Please check back later."
         />
       </div>

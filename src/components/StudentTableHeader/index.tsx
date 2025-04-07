@@ -25,7 +25,7 @@ const StudentTableHeader = (): JSX.Element => {
     <thead>
       <tr>
         {TABLE_HEADERS.map((header) => (
-          <th key={header.key} className={`students__table-header ${header.className}`}>
+          <th key={header.key} className={`table-header ${header.className}`}>
             {header.label}
           </th>
         ))}

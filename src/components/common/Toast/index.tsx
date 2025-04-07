@@ -62,23 +62,23 @@ const Toast = ({ type, title, message, duration = 3000, onClose }: ToastProps) =
   return (
     <div className="toast-container">
       {/* Main toast component with dynamic classes based on type and visibility */}
-      <div className={`toast toast--${type} ${isVisible ? 'toast--visible' : 'toast--hidden'}`}>
+      <div className={`toast toast-${type} ${isVisible ? 'toast-visible' : 'toast-hidden'}`}>
         {/* Icon section - uses dangerouslySetInnerHTML for SVG icons */}
-        <div className="toast__icon" dangerouslySetInnerHTML={{ __html: ICON[type] }}></div>
-        <div className="toast__content">
-          <p className="toast__title">{title}</p>
-          <p className="toast__message">{message}</p>
+        <div className="toast-icon" dangerouslySetInnerHTML={{ __html: ICON[type] }}></div>
+        <div className="toast-content">
+          <p className="toast-title">{title}</p>
+          <p className="toast-message">{message}</p>
         </div>
 
         {/* Close button */}
-        <Button className="toast__close" onClick={handleCloseClick}>
+        <Button variant="close" onClick={handleCloseClick}>
           &times;
         </Button>
 
         {/* Progress bar indicating remaining time */}
-        <div className="toast__progress">
+        <div className="toast-progress">
           <div
-            className="toast__progress-bar"
+            className="progress-bar"
             style={{
               animation: `progress ${duration}ms linear forwards`,
             }}

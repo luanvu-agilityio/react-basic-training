@@ -27,42 +27,24 @@ export const LoadingSpinner = ({
   minimumDisplayTime = 1000,
 }: LoadingSpinnerProps) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [shouldBeVisible, setShouldBeVisible] = useState(false);
-  const [showTimestamp, setShowTimestamp] = useState(0);
+  const [showTimestamp] = useState(Date.now());
 
   useEffect(() => {
     // When the component mounts, make it visible
-    setShowTimestamp(Date.now());
     setIsVisible(true);
-    setShouldBeVisible(true);
 
-    // Set up a cleanup function to hide the spinner when component unmounts
-    return () => {
-      setShouldBeVisible(false);
-    };
-  }, []);
+    // If there's a minimum display time, handle it
+    if (minimumDisplayTime > 0) {
+      const elapsedTime = Date.now() - showTimestamp;
+      const remainingTime = Math.max(0, minimumDisplayTime - elapsedTime);
 
-  // Handle the minimum display time logic
-  useEffect(() => {
-    if (!shouldBeVisible && isVisible) {
-      const timeSinceShow = Date.now() - showTimestamp;
+      const timerId = setTimeout(() => {
+        setIsVisible(true);
+      }, remainingTime);
 
-      if (timeSinceShow < minimumDisplayTime) {
-        // If spinner hasn't been shown for minimum time, delay hiding
-        const timeoutId = setTimeout(() => {
-          setIsVisible(false);
-        }, minimumDisplayTime - timeSinceShow);
-
-        return () => clearTimeout(timeoutId);
-      } else {
-        // If minimum time has passed, hide immediately
-        setIsVisible(false);
-      }
+      return () => clearTimeout(timerId);
     }
-  }, [shouldBeVisible, isVisible, showTimestamp, minimumDisplayTime]);
-
-  // If spinner shouldn't be visible, don't render anything
-  if (!isVisible) return null;
+  }, [minimumDisplayTime, showTimestamp]);
 
   return (
     <div

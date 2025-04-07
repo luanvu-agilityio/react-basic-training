@@ -25,7 +25,7 @@
 }
 
 /* Element: Header Logo */
-.header__title {
+.header-title {
   position: relative;
   padding-left: 4.5rem;
   margin-bottom: 3rem;
@@ -36,7 +36,7 @@
   text-transform: uppercase;
 }
 
-.header__title::before {
+.header-title::before {
   content: '';
   position: absolute;
   left: 4.5rem;
@@ -49,7 +49,7 @@
 }
 
 /* Element: Header Subtitle */
-.header__subtitle {
+.header-subtitle {
   font-size: 2.2rem;
   color: var(--black-color);
   font-weight: var(--font-weight-semibold);
@@ -59,7 +59,7 @@
 }
 
 /* Element: Header Description */
-.header__description {
+.header-description {
   font-size: var(--font-size-14);
   color: var(--dark-gray-color);
   text-align: center;
@@ -67,21 +67,21 @@
 }
 
 /* Block: Form */
-.card__form {
+.card-form {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
 
 /* Element: Form Group */
-.form__group {
+.form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
 /* Element: Form Input */
-.form__input {
+.form-input {
   padding: 1.2rem 1.6rem;
   border: 1px solid var(--input-border-color);
   border-radius: 0.4rem;
@@ -90,18 +90,18 @@
   transition: border-color 0.3s;
 }
 
-.form__input::placeholder {
+.form-input::placeholder {
   font-size: var(--font-size-12);
   color: var(--light-gray-color);
 }
 
-.form__input:focus {
+.form-input:focus {
   outline: none;
   border-color: var(--input-focus-color);
 }
 
 /* Element: Form Submit */
-.form__submit {
+.btn-submit {
   margin-top: 1rem;
   padding: 1.4rem;
   border: none;
@@ -116,11 +116,42 @@
   transition: background-color 0.3s;
 }
 
-.form__submit:hover {
+.btn-submit:hover {
   background-color: var(--button-hover-color);
 }
 
 .error-message {
   color: var(--color-error);
   font-size: var(--font-size-12);
+}
+
+.link-container .reset-link {
+  font-size: 14px;
+  padding: 0;
+  margin-bottom: 0;
+  margin-left: 3px;
+}
+
+.link-container .reset-link:hover {
+  text-decoration: underline;
+  background-color: transparent;
+}
+.link-container .reset-link:hover .nav-text {
+  font-weight: var(--font-weight-regular);
+  color: brown;
+}
+
+@media screen and (max-width: 999px) {
+  .link-container .reset-link .nav-text {
+    display: block;
+  }
+
+  .card {
+    margin: 10px;
+  }
+  .page-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

@@ -48,8 +48,8 @@ const TABLE_COLUMNS = [
       onEdit: (student: IStudent) => void,
       onDelete: (student: IStudent) => void,
     ) => (
-      <div className="students__table-action">
-        <Button className="btn btn--edit" onClick={() => student.id && onEdit(student)}>
+      <div className="students-table-action">
+        <Button variant="edit" onClick={() => student.id && onEdit(student)}>
           <ImageIcon
             src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742868082/edit_gxvseg.svg"
             alt="Edit student"
@@ -57,7 +57,7 @@ const TABLE_COLUMNS = [
             size={18}
           />
         </Button>
-        <Button className="btn btn--delete" onClick={() => student.id && onDelete(student)}>
+        <Button variant="delete" onClick={() => student.id && onDelete(student)}>
           <ImageIcon
             src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742868081/delete_oynjal.svg"
             alt="Delete student"
@@ -93,11 +93,11 @@ interface StudentTableRowProps {
  */
 const StudentTableRow = ({ student, onEdit, onDelete }: StudentTableRowProps) => {
   return (
-    <tr key={student.id} className="students__table-row" data-id={student.id}>
+    <tr key={student.id} className="table-row" data-id={student.id}>
       {TABLE_COLUMNS.map((column) => (
         <td
           key={column.key}
-          className={`students__table-cell ${column.key === 'Name' ? 'name-cell' : ''} ${column.key === 'Email' ? 'email-cell' : ''}`}
+          className={`table-cell ${column.key === 'Name' ? 'name-cell' : ''} ${column.key === 'Email' ? 'email-cell' : ''}`}
           data-label={column.key !== 'avatar' && column.key !== 'actions' ? column.key : undefined}
         >
           {column.key === 'actions'
@@ -117,8 +117,8 @@ const StudentAvatar = ({ student }: { student: IStudent }) => {
   return (
     <div className="avatar-container">
       <Avatar
-        className="student-avatar"
-        src={student.avatar || DEFAULT_AVATAR}
+        className="avatar"
+        src={student.avatar ?? DEFAULT_AVATAR}
         alt={`Student ${student.name}`}
         style={{
           width: '65px',

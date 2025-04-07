@@ -20,7 +20,7 @@
   overflow: hidden;
 }
 
-.upload-btn {
+.btn-upload {
   border: none;
   border-radius: 4px;
   padding: 0.8rem 1.6rem;
@@ -31,6 +31,6 @@
   cursor: pointer;
 }
 
-.upload-btn:hover {
+.btn-upload:hover {
   background-color: #ddd;
 }

@@ -28,13 +28,13 @@ interface StudentListProps {
 const StudentList = ({ students, onEdit, onDelete }: StudentListProps) => {
   return (
     <div>
-      <table className="students__table">
+      <table className="students-table">
         <StudentTableHeader />
         <tbody>
           {students.length === 0 ? (
             // Empty state message
-            <tr className="students__table-row">
-              <td className="students__table-cell text-center" colSpan={7}>
+            <tr className="table-row">
+              <td className="table-cell text-center" colSpan={7}>
                 No students found. Click ADD NEW STUDENT to add one.
               </td>
             </tr>

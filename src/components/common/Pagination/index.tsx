@@ -3,7 +3,7 @@ import Button from '@components/common/Button';
 import FormLabel from '../FormLabel';
 import InputField from '../FormInput';
 import Text from '../Text';
-import SelectBox from '@components/SelectBox';
+import SelectBox from '@components/common/SelectBox';
 import { paginationOptions } from '@constants/pagination-options';
 import './index.css';
 
@@ -140,10 +140,9 @@ const Pagination = ({
    */
   const createPageButton = (page: number) => (
     <Button
+      variant="pagination"
       key={`page-${page}`}
-      className={`pagination__button pagination__button--number ${
-        page === currentPage ? 'pagination__button--active' : ''
-      }`}
+      className={`btn--number ${page === currentPage ? 'active' : ''}`}
       onClick={() => handlePageClick(page)}
     >
       {page}
@@ -151,13 +150,13 @@ const Pagination = ({
   );
 
   const createEllipsis = (key: string) => (
-    <span key={key} className="pagination__ellipsis">
+    <span key={key} className="pagination-ellipsis">
       ...
     </span>
   );
 
   const createPlaceholder = (index: number) => (
-    <span key={`placeholder-${index}`} className="pagination__placeholder" aria-hidden="true">
+    <span key={`placeholder-${index}`} className="pagination-placeholder" aria-hidden="true">
       {/* Empty placeholder for layout stability */}
     </span>
   );
@@ -208,24 +207,27 @@ const Pagination = ({
 
   return (
     <div className="pagination">
-      <div className="pagination__controls">
-        <div className="pagination__items-per-page">
-          <FormLabel htmlFor="itemsPerPage" className="pagination__label">
+      <div className="pagination-controls">
+        {/* Items per page */}
+        <div className="items-per-page">
+          <FormLabel htmlFor="itemsPerPage" className="pagination-label">
             Show
           </FormLabel>
           <SelectBox
             id="itemsPerPage"
-            className="pagination__select"
+            className="pagination-select"
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
             options={paginationOptions}
           />
-          <Text text="students" className="pagination__label" as="span" />
+          <Text text="students" className="pagination-label" as="span" />
         </div>
 
-        <div className="pagination__navigation">
+        {/* Page numbers and navigation buttons */}
+        <div className="pagination-btns">
           <Button
-            className="pagination__button pagination__button--first"
+            variant="pagination"
+            className=" btn-first"
             aria-label="First page"
             disabled={currentPage === 1}
             onClick={handleFirstPage}
@@ -233,7 +235,8 @@ const Pagination = ({
             <Text text="&laquo;&laquo;" aria-hidden="true" as="span" />
           </Button>
           <Button
-            className="pagination__button pagination__button--prev"
+            variant="pagination"
+            className="btn-prev"
             aria-label="Previous page"
             disabled={currentPage === 1}
             onClick={handlePrevPage}
@@ -241,12 +244,13 @@ const Pagination = ({
             <Text text="&laquo;" aria-hidden="true" as="span" />
           </Button>
 
-          <div className="pagination__page-indicator">
-            <div className="pagination__page-numbers">{pageNumbers}</div>
+          <div className="page-indicator">
+            <div className="page-numbers">{pageNumbers}</div>
           </div>
 
           <Button
-            className="pagination__button pagination__button--next"
+            variant="pagination"
+            className="btn-next"
             aria-label="Next page"
             disabled={currentPage === totalPages}
             onClick={handleNextPage}
@@ -254,7 +258,8 @@ const Pagination = ({
             <Text text="&raquo;" aria-hidden="true" as="span" />
           </Button>
           <Button
-            className="pagination__button pagination__button--last"
+            variant="pagination"
+            className="btn-last"
             aria-label="Last page"
             disabled={currentPage === totalPages}
             onClick={handleLastPage}
@@ -263,21 +268,23 @@ const Pagination = ({
           </Button>
         </div>
 
-        <div className="pagination__goto">
-          <FormLabel htmlFor="gotoPage" className="pagination__label">
+        {/* Go to page input */}
+        <div className="goto-btn">
+          <FormLabel htmlFor="gotoPage" className="pagination-label">
             Go to page
           </FormLabel>
           <InputField
-            id="gotoPage"
+            name="gotoPage"
             type="number"
             min="1"
             max={totalPages}
-            className="pagination__input"
+            className="pagination-input"
             value={goToPage}
-            onChange={handleGoToInputChange}
+            onInputChange={handleGoToInputChange}
             onKeyDown={handleGoToKeyPress}
+            style={{ width: '4rem', padding: '0' }}
           />
-          <Button className="pagination__button pagination__button--go" onClick={handleGoToPage}>
+          <Button variant="pagination" className="btn-go" onClick={handleGoToPage}>
             Go
           </Button>
         </div>

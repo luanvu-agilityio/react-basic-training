@@ -2,28 +2,28 @@
 export const FORM_FIELDS = [
   {
     label: 'Name',
-    id: 'name',
+    fieldName: 'name',
     type: 'text',
     placeholder: 'Enter student name',
     valueKey: 'name',
   },
   {
     label: 'Email',
-    id: 'email',
+    fieldName: 'email',
     type: 'text',
     placeholder: 'Enter your email',
     valueKey: 'email',
   },
   {
     label: 'Phone Number',
-    id: 'phone',
+    fieldName: 'phone',
     type: 'text',
     placeholder: 'Enter you phone number',
     valueKey: 'phoneNum',
   },
   {
     label: 'Enroll Number',
-    id: 'enroll',
+    fieldName: 'enroll',
     disabled: true,
     valueKey: 'enrollNum',
   },

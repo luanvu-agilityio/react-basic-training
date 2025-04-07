@@ -82,14 +82,14 @@ const SearchBar = ({
   // Configuration object for the search icon
 
   return (
-    <div className="content__search">
+    <div className="searchbar">
       <FormInput
         type="text"
-        id="search"
-        className="content__search-input"
+        name="search"
+        className="searchbar-input"
         placeholder={placeholder}
         value={searchQuery}
-        onChange={handleSearchChange}
+        onInputChange={handleSearchChange}
         onKeyDown={handleKeyDown}
         imgSrc={ICON_SRC.search.src}
         imgAlt={ICON_SRC.search.alt}

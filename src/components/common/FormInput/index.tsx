@@ -23,12 +23,12 @@ import ImageIcon from '../ImageIcon';
  */
 
 export interface InputFieldProps {
-  id: string;
+  name: string;
   type?: string;
   placeholder?: string;
   value: string;
   disabled?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
   style?: React.CSSProperties;
@@ -39,16 +39,17 @@ export interface InputFieldProps {
   imgClassName?: string;
   min?: string;
   max?: number;
+  id?: string;
 }
 
 const InputField = ({
-  id,
+  name,
   type = 'text',
   placeholder = '',
   value,
   style,
   disabled,
-  onChange,
+  onInputChange,
   onKeyDown,
   onClick,
   className = '',
@@ -89,11 +90,11 @@ const InputField = ({
         <input
           type={type}
           className="form-input"
-          id={id}
+          name={name}
           placeholder={placeholder}
           value={value}
           disabled={disabled}
-          onChange={onChange}
+          onChange={onInputChange}
           onKeyDown={onKeyDown}
           style={disabledStyles && { border: 'none', outline: 'none' }}
           onClick={onClick}
@@ -108,11 +109,11 @@ const InputField = ({
     <input
       type={type}
       className={`form-input ${className}`}
-      id={id}
+      name={name}
       placeholder={placeholder}
       value={value}
       disabled={disabled}
-      onChange={onChange}
+      onChange={onInputChange}
       onKeyDown={onKeyDown}
       onClick={onClick}
       style={{ ...style, ...disabledStyles, ...errorStyles }}

@@ -1,14 +1,14 @@
 import React, { ChangeEvent } from 'react';
 
 interface SelectOption {
-  value: number;
+  value: number | string;
   label?: string;
 }
 
 interface SelectBoxProps {
   id: string;
   className?: string;
-  value: number;
+  value: number | string;
   options: SelectOption[];
   onChange: (value: number) => void;
   disabled?: boolean;
@@ -30,7 +30,7 @@ const SelectBox = ({
     <select id={id} className={className} value={value} onChange={handleChange} disabled={disabled}>
       {options.map((option) => (
         <option key={option.value} value={option.value}>
-          {option.label || option.value}
+          {option.label ?? option.value}
         </option>
       ))}
     </select>

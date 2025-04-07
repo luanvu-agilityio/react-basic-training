@@ -7,7 +7,7 @@
   transition: all 0.3s ease;
 }
 
-.sidebar__title {
+.sidebar-title {
   padding-left: 2rem;
   margin-bottom: 5.4rem;
   font-size: var(--font-size-20);
@@ -17,7 +17,7 @@
   text-transform: uppercase;
 }
 
-.sidebar__title::before {
+.sidebar-title::before {
   content: '';
   position: absolute;
   left: 3rem;
@@ -28,7 +28,7 @@
   border-radius: 4px;
 }
 
-.sidebar__profile {
+.user-profile {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,33 +52,47 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-.mobile-sidebar-toggle {
-  display: none;
+.btn-toggle {
   position: absolute;
-  bottom: 50px;
+  bottom: -13px;
   left: 50%;
   transform: translateX(-50%);
-  width: 30px;
-  height: 30px;
-  background-color: transparent;
-  padding: 0;
+  width: 40px;
+  height: 40px;
+  background-color: #f8d442;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
   z-index: 100;
+  display: none;
 }
 
-.mobile-sidebar-toggle img {
-  width: 14px;
-  height: 14px;
+.btn-toggle:hover {
+  background-color: #f8d442;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
 }
 
+.btn-toggle img {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.expanded .btn-toggle img {
+  transform: rotate(180deg);
+}
 .sidebar-toggle img {
   width: 2.4rem;
   height: 2.4rem;
   position: relative;
 }
 
-.sidebar__logout {
+.sidebar-logout {
   position: absolute;
   bottom: 20px;
   display: flex;
@@ -97,7 +111,7 @@
   background-color: transparent;
 }
 
-.sidebar__logout:hover {
+.sidebar-logout:hover {
   background-color: var(--orange-color);
   font-weight: var(--font-weight-bold);
   border-radius: 1rem;
@@ -105,7 +119,7 @@
   align-items: center;
 }
 
-.sidebar__logout-icon {
+.logout-icon {
   margin-left: 1rem;
   width: 1.7rem;
   height: 1.7rem;
@@ -115,16 +129,16 @@
 
 /* Large tablets and small laptops */
 @media screen and (max-width: 1200px) {
-  .sidebar__nav {
+  .sidebar-nav {
     width: 16rem;
   }
 
-  .sidebar__logout {
+  .sidebar-logout {
     width: 16rem;
   }
 
-  .sidebar__nav-item,
-  .sidebar__nav-item.student {
+  .nav-link,
+  .nav-link.student {
     padding: 12px 32px;
   }
 }
@@ -155,12 +169,12 @@
     overflow-y: auto;
   }
 
-  .sidebar__title,
-  .sidebar__profile {
+  .sidebar-title,
+  .user-profile {
     display: none;
   }
 
-  .sidebar__nav {
+  .sidebar-nav {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -171,7 +185,7 @@
     overflow-x: auto;
   }
 
-  .sidebar__nav-item {
+  .nav-link {
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -180,16 +194,16 @@
     min-width: 6rem;
   }
 
-  .sidebar__nav-item .sidebar__nav-icon {
+  .nav-link .nav-icon {
     margin-right: 0;
     margin-bottom: 0.5rem;
   }
 
-  .sidebar__nav-item .sidebar__nav-text {
+  .nav-link .nav-text {
     display: none;
   }
 
-  .sidebar__logout {
+  .sidebar-logout {
     position: relative;
     margin: 0 auto;
     padding: 0.8rem;
@@ -197,7 +211,7 @@
     gap: 2rem;
   }
 
-  .sidebar__logout-icon {
+  .logout-icon {
     margin-left: 0;
   }
 
@@ -209,28 +223,35 @@
   */ .content {
     margin-bottom: 10rem;
   }
+  .btn-toggle {
+    display: block;
+    padding: 0;
+  }
+  .sidebar.expanded .btn-toggle {
+    bottom: 130px;
+  }
 }
 
 /* Small tablets and large phones */
 @media screen and (max-width: 768px) {
-  .sidebar__nav-item {
+  .nav-link {
     min-width: 5rem;
   }
 
-  .sidebar__nav-item .sidebar__nav-icon {
+  .nav-link .nav-icon {
     margin: 0;
   }
 
-  .sidebar__nav-item.course .sidebar__nav-icon,
-  .sidebar__nav-item.student .sidebar__nav-icon {
+  .nav-link.course .nav-icon,
+  .nav-link.student .nav-icon {
     margin: 0;
   }
 
-  .sidebar__nav-item.student {
+  .nav-link.student {
     padding: 8px;
   }
 
-  .mobile-sidebar-toggle {
+  .btn-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -258,23 +279,23 @@
     overflow: hidden;
   }
 
-  .sidebar.expanded .mobile-sidebar-toggle {
+  .sidebar.expanded .btn-toggle {
     bottom: 120px;
   }
 }
 
 /* Phones */
 @media screen and (max-width: 576px) {
-  .sidebar__nav {
+  .sidebar-nav {
     padding-left: 1rem;
     padding-right: 1rem;
   }
 
-  .sidebar__nav-item {
+  .nav-link {
     min-width: 4.5rem;
   }
 
-  .sidebar__nav-item .sidebar__nav-icon {
+  .nav-link .nav-icon {
     margin-right: 0;
   }
 
@@ -293,13 +314,13 @@
 
 /* Very small phones */
 @media screen and (max-width: 380px) {
-  .sidebar__nav-item {
+  .nav-link {
     min-width: 4rem;
     padding: 0.6rem;
   }
 
-  .sidebar__nav-icon,
-  .sidebar__logout-icon {
+  .nav-icon,
+  .logout-icon {
     width: 1.8rem;
     height: 1.8rem;
   }

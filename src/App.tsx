@@ -8,7 +8,6 @@ import { ToastProvider } from 'contexts/Toast.context';
 import ProtectedLayout from '@components/ProtectedLayout';
 import { GenericPage } from '@pages/GenericPage';
 import './styles/index.css';
-import { LoadingProvider } from '@contexts/LoadingSpinner.context';
 
 /**
  * App Component
@@ -34,36 +33,30 @@ function App(): JSX.Element {
   return (
     <Router>
       <ToastProvider>
-        <LoadingProvider spinnerProps={{ loadingText: 'Loading application...' }}>
-          <AuthProvider>
-            <NavigationProvider>
-              <Routes>
-                {/* Login Route */}
-                <Route path={ROUTES.LOGIN} element={<LoginForm />} />
+        <AuthProvider>
+          <NavigationProvider>
+            <Routes>
+              {/* Login Route */}
+              <Route path={ROUTES.LOGIN} element={<LoginForm />} />
 
-                {/* Dynamic Protected Routes */}
-                {PAGE_CONFIG.map(({ path, name, component }: RouteConfig) => (
-                  <Route
-                    key={path}
-                    path={path}
-                    element={
-                      <ProtectedLayout>
-                        {component ? (
-                          React.createElement(component)
-                        ) : (
-                          <GenericPage pageName={name} />
-                        )}
-                      </ProtectedLayout>
-                    }
-                  />
-                ))}
+              {/* Dynamic Protected Routes */}
+              {PAGE_CONFIG.map(({ path, name, component }: RouteConfig) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={
+                    <ProtectedLayout>
+                      {component ? React.createElement(component) : <GenericPage pageName={name} />}
+                    </ProtectedLayout>
+                  }
+                />
+              ))}
 
-                {/* Fallback Route */}
-                <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
-              </Routes>
-            </NavigationProvider>
-          </AuthProvider>
-        </LoadingProvider>
+              {/* Fallback Route */}
+              <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
+            </Routes>
+          </NavigationProvider>
+        </AuthProvider>
       </ToastProvider>
     </Router>
   );

@@ -70,30 +70,30 @@ const ConfirmDialog = ({ title, message, onClose, onConfirm, onCancel }: Confirm
    * Used for styling and animations
    */
   const getDialogClassName = () => {
-    return `confirm-dialog confirm-dialog--warning ${!isVisible ? 'confirm-dialog--hidden' : ''}`;
+    return `confirm-dialog warning ${!isVisible ? 'hidden' : ''}`;
   };
 
   return (
     <div className="confirm-container">
       <div className={getDialogClassName()}>
-        <div className="toast__icon" dangerouslySetInnerHTML={{ __html: ICON['warning'] }}></div>
+        <div className="toast-icon" dangerouslySetInnerHTML={{ __html: ICON['warning'] }}></div>
 
         {/* Content section with title, message and action buttons */}
-        <div className="toast__content">
-          <p className="toast__title">{title}</p>
-          <p className="toast__message">{message}</p>
-          <div className="toast__actions">
-            <Button className="toast__button toast__button--primary" onClick={handleConfirmClick}>
+        <div className="toast-content">
+          <p className="toast-title">{title}</p>
+          <p className="toast-message">{message}</p>
+          <div className="toast-actions">
+            <Button variant="confirm" onClick={handleConfirmClick}>
               Confirm
             </Button>
-            <Button className="toast__button toast__button--secondary" onClick={handleCancelClick}>
+            <Button variant="cancel" onClick={handleCancelClick}>
               Cancel
             </Button>
           </div>
         </div>
 
         {/* Close button (X) */}
-        <Button className="toast__close" onClick={handleCloseClick}>
+        <Button variant="close" onClick={handleCloseClick}>
           &times;
         </Button>
       </div>
