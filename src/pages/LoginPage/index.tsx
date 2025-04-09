@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginForm from 'models/LoginForm';
 import { LOGIN_ERROR_MESSAGES } from '@constants/login-error-message';
 import { FormErrors, validateLoginForm } from '@utils/login-validation';
 import { useAuth } from '@contexts/Auth.context';
 import { useToast } from 'contexts/Toast.context';
 import { getUserService } from 'services/user-service';
 import { ROUTES } from 'route/config';
+import NavigationLink from '@components/NavigationLink';
+import Text from '@components/common/Text';
+import { Form } from '@components/common/Form';
+import './index.css';
 
 /**
  * LoginPage Component
@@ -30,6 +33,7 @@ import { ROUTES } from 'route/config';
 interface LoginFormState {
   email: string;
   password: string;
+  [key: string]: string;
 }
 
 const LoginPage = () => {
@@ -127,17 +131,55 @@ const LoginPage = () => {
     }
   };
 
+  const loginFormFields = [
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'email',
+      placeholder: 'Enter your email',
+      required: true,
+    },
+    {
+      name: 'password',
+      label: 'Password',
+      type: 'password',
+      placeholder: 'Enter your password',
+      required: true,
+    },
+  ];
+
   const handleResetPassword = () => {};
 
+  const resetPasswordLink = (
+    <div className="link-container">
+      <Text text="Forgot your password? " className="link-text" as="span" />
+      <span>
+        <NavigationLink
+          className="reset-link"
+          to="reset"
+          text="Reset Password"
+          onClick={handleResetPassword}
+        />
+      </span>
+    </div>
+  );
+
   return (
-    <LoginForm
-      formState={formState}
-      errors={errors}
-      isLoading={isLoading}
-      onInputChange={handleInputChange}
-      onSubmit={handleSubmit}
-      onResetPassword={handleResetPassword}
-    />
+    <div className="auth">
+      <Form
+        title="crud operations"
+        subtitle="sign in"
+        description="Enter your credentials to access your account"
+        fields={loginFormFields}
+        values={formState}
+        errors={errors}
+        isLoading={isLoading}
+        onInputChange={handleInputChange}
+        onSubmit={handleSubmit}
+        submitText="sign in"
+        footer={resetPasswordLink}
+      />
+    </div>
   );
 };
 

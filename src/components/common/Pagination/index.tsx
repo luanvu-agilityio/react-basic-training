@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Button from '@components/common/Button';
-import FormLabel from '../FormLabel';
-import InputField from '../FormInput';
 import Text from '../Text';
 import SelectBox from '@components/common/SelectBox';
 import { paginationOptions } from '@constants/pagination-options';
 import './index.css';
+import FormField from '../FormField';
 
 /**
  * A Pagination component
@@ -30,9 +29,9 @@ const Pagination = ({
   initialPage = 1,
   initialItemsPerPage = 5,
 }: PaginationProps) => {
-  const effectiveItemsPerPage = initialItemsPerPage || 5;
+  const effectiveItemsPerPage = initialItemsPerPage ?? 5;
   const effectiveTotalPages = Math.max(1, Math.ceil(totalItems / effectiveItemsPerPage));
-  const effectiveInitialPage = Math.min(initialPage || 1, effectiveTotalPages);
+  const effectiveInitialPage = Math.min(initialPage ?? 1, effectiveTotalPages);
 
   // Then use in useState:
   // State management for pagination
@@ -142,7 +141,7 @@ const Pagination = ({
     <Button
       variant="pagination"
       key={`page-${page}`}
-      className={`btn--number ${page === currentPage ? 'active' : ''}`}
+      className={`btn-number ${page === currentPage ? 'active' : ''}`}
       onClick={() => handlePageClick(page)}
     >
       {page}
@@ -210,9 +209,7 @@ const Pagination = ({
       <div className="pagination-controls">
         {/* Items per page */}
         <div className="items-per-page">
-          <FormLabel htmlFor="itemsPerPage" className="pagination-label">
-            Show
-          </FormLabel>
+          <Text text="Show" className="pagination-label" as="span" />
           <SelectBox
             id="itemsPerPage"
             className="pagination-select"
@@ -270,10 +267,8 @@ const Pagination = ({
 
         {/* Go to page input */}
         <div className="goto-btn">
-          <FormLabel htmlFor="gotoPage" className="pagination-label">
-            Go to page
-          </FormLabel>
-          <InputField
+          <Text text="Go to page" className="pagination-label" as="span" />
+          <FormField
             name="gotoPage"
             type="number"
             min="1"

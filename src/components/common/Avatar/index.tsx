@@ -5,11 +5,10 @@ interface AvatarProps {
   src: string;
   alt: string;
   style?: React.CSSProperties;
-  loading?: 'lazy' | 'eager';
   onError?: () => void;
 }
 
-const Avatar = ({ src, alt, className = '', style, loading = 'lazy' }: AvatarProps) => {
-  return <img className={className} src={src} alt={alt} style={style} loading={loading} />;
+const Avatar = ({ src, alt, className = 'avatar', style, onError }: AvatarProps) => {
+  return <img className={className} src={src} alt={alt} style={style} onError={onError} />;
 };
 export default Avatar;

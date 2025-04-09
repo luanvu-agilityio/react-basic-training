@@ -68,7 +68,6 @@ const AvatarUpload = ({ avatar, onFileSelect, previewUrl, error }: AvatarUploadP
           alt={isPlaceholder ? 'camera' : 'avatar'}
           className={isPlaceholder ? '' : 'avatar'}
           onError={handleImageError}
-          loading="lazy"
           style={{ width: '65px', height: '65px', backgroundColor: 'transparent' }}
         />
       </div>

@@ -25,6 +25,7 @@ export const FORM_FIELDS = [
     label: 'Enroll Number',
     fieldName: 'enroll',
     disabled: true,
+    type: 'text',
     valueKey: 'enrollNum',
   },
 ];

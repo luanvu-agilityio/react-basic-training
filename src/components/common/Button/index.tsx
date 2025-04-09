@@ -78,7 +78,7 @@ export const Button = ({
     <button
       className={buttonClasses}
       onClick={handleClick}
-      disabled={disabled || isLoading}
+      disabled={disabled ?? isLoading}
       {...restProps}
     >
       {/* Show loading indicator or children content */}

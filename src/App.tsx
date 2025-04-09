@@ -6,8 +6,9 @@ import { AuthProvider } from '@contexts/Auth.context';
 import { NavigationProvider } from '@contexts/Navigation.context';
 import { ToastProvider } from 'contexts/Toast.context';
 import ProtectedLayout from '@components/ProtectedLayout';
-import { GenericPage } from '@pages/GenericPage';
+import { PageLayout } from '@pages/PageLayout';
 import './styles/index.css';
+import PublicLayout from '@pages/PublicLayout';
 
 /**
  * App Component
@@ -40,14 +41,29 @@ function App(): JSX.Element {
               <Route path={ROUTES.LOGIN} element={<LoginForm />} />
 
               {/* Dynamic Protected Routes */}
-              {PAGE_CONFIG.map(({ path, name, component }: RouteConfig) => (
+              {PAGE_CONFIG.map(({ path, name, component, isPublic }: RouteConfig) => (
                 <Route
                   key={path}
                   path={path}
                   element={
-                    <ProtectedLayout>
-                      {component ? React.createElement(component) : <GenericPage pageName={name} />}
-                    </ProtectedLayout>
+                    isPublic ? (
+                      // Public routes with navigation layout
+                      <PublicLayout>
+                        {component ? (
+                          React.createElement(component)
+                        ) : (
+                          <PageLayout pageName={name} />
+                        )}
+                      </PublicLayout>
+                    ) : (
+                      <ProtectedLayout>
+                        {component ? (
+                          React.createElement(component)
+                        ) : (
+                          <PageLayout pageName={name} />
+                        )}
+                      </ProtectedLayout>
+                    )
                   }
                 />
               ))}

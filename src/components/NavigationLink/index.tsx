@@ -11,7 +11,7 @@ import Button from '@components/common/Button';
 interface NavigationLinkProps {
   /** Text to display in the navigation link */
   text: string;
-  /** URL for the link (optional for action items like logout) */
+  /** URL for the link */
   to?: string;
   /** Icon URL to display */
   icon?: string;
@@ -21,14 +21,13 @@ interface NavigationLinkProps {
   isActive?: boolean;
   /** Click handler for the navigation item */
   onClick: (e: React.MouseEvent) => void;
-  style?: React.CSSProperties;
 }
 
 /**
  * NavigationLink Component
  *
- * A unified component for sidebar navigation and action items with consistent styling.
- * Supports both navigation links (using React Router) and action buttons.
+ * A component for sidebar navigation and action items with consistent styling.
+ *
  */
 export const NavigationLink = ({
   text,

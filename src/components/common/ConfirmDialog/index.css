@@ -121,13 +121,12 @@
   background: none;
   color: #999;
   cursor: pointer;
-  font-size: var(--font-size-22);
+  font-size: var(--font-size-32);
   opacity: 0.7;
 }
 
 .btn-close:hover {
   color: #ed1c0e;
-  font-size: var(--font-size-32);
   font-weight: var(--font-weight-semibold);
 }
 

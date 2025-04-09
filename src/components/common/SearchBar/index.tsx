@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './index.css';
-import FormInput from '@components/common/FormInput';
 import { ICON_SRC } from '@constants/icon-src';
+import FormField from '../FormField';
+import useDebounce from '@hooks/useDebounce';
 
 /**
  * A reusable SearchBar component with debounced search functionality.
@@ -30,8 +31,8 @@ const SearchBar = ({
 }: SearchBarProps) => {
   // State for managing the immediate search query input
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  // State for managing the debounced version of the search query
-  const [debounceQuery, setDebounceQuery] = useState<string>(initialQuery);
+  // Custom hook to debounce the search query
+  const debouncedQuery = useDebounce(searchQuery, debounceTime);
 
   /**
    * Performs the actual search operation using the provided query
@@ -42,24 +43,11 @@ const SearchBar = ({
   };
 
   /**
-   * Debounce effect: Delays updating the debounced query to prevent excessive searches
-   * Cleanup function removes the timeout if component unmounts or query changes
-   */
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebounceQuery(searchQuery);
-    }, debounceTime);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchQuery, debounceTime]);
-
-  /**
    * Effect to trigger search when debounced query changes
    */
   useEffect(() => {
-    performSearch(debounceQuery);
-  }, [debounceQuery]);
+    performSearch(debouncedQuery);
+  }, [debouncedQuery, onSearch]);
 
   /**
    * Handles real-time input changes
@@ -83,7 +71,7 @@ const SearchBar = ({
 
   return (
     <div className="searchbar">
-      <FormInput
+      <FormField
         type="text"
         name="search"
         className="searchbar-input"

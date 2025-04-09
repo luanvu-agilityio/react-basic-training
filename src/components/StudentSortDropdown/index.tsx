@@ -2,7 +2,7 @@ import { ISortConfig } from 'types/sort';
 import React, { useState } from 'react';
 import { SORT_FIELDS, SORT_ORDERS } from '@constants/sort-options';
 import './index.css';
-import GenericDropdown, { DropdownOption } from '@components/common/Dropdown';
+import Dropdown, { DropdownOption } from '@components/common/Dropdown';
 
 /**
  * dropdown components for sorting functionality.
@@ -85,7 +85,7 @@ const StudentSortDropdown = ({
   return (
     <div className="dual-sort-container">
       {/* Field Dropdown */}
-      <GenericDropdown
+      <Dropdown
         id="sortField"
         label="Sort By"
         options={fieldOptions}
@@ -93,11 +93,10 @@ const StudentSortDropdown = ({
         onSelect={handleFieldSelect}
         isOpen={isFieldOpen}
         toggleOpen={toggleFieldDropdown}
-        searchable={true}
       />
 
       {/* Order Dropdown */}
-      <GenericDropdown
+      <Dropdown
         id="sortOrder"
         label="Order"
         options={orderOptions}

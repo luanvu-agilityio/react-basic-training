@@ -9,7 +9,14 @@ interface ImageIconProps {
   loading?: 'lazy' | 'eager';
 }
 
-const ImageIcon: React.FC<ImageIconProps> = ({ src, alt, size = 24, className = '' }) => {
+const ImageIcon: React.FC<ImageIconProps> = ({
+  src,
+  alt,
+  size = 24,
+  className = '',
+  loading = 'lazy',
+  onError,
+}) => {
   return (
     <img
       src={src}
@@ -17,11 +24,18 @@ const ImageIcon: React.FC<ImageIconProps> = ({ src, alt, size = 24, className = 
       width={size}
       height={size}
       className={`image-icon ${className}`}
-      loading="lazy"
+      loading={loading}
       style={{
         objectFit: 'contain',
         display: 'inline-block',
         verticalAlign: 'middle',
+      }}
+      onError={(e) => {
+        if (onError) {
+          onError(e.currentTarget);
+        } else {
+          e.currentTarget.style.display = 'none';
+        }
       }}
     />
   );

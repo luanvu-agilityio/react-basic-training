@@ -5,7 +5,7 @@ import { ISortConfig } from 'types/sort';
 import { action } from '@storybook/addon-actions';
 
 const meta: Meta<typeof SortDropdown> = {
-  title: 'Component/SortDropdown',
+  title: 'Components/StudentSortDropdown',
   component: SortDropdown,
   parameters: {
     layout: 'centered',

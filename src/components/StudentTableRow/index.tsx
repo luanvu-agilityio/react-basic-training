@@ -125,7 +125,6 @@ const StudentAvatar = ({ student }: { student: IStudent }) => {
           height: '65px',
           borderRadius: '5px',
         }}
-        loading="eager"
       />
     </div>
   );

@@ -27,6 +27,7 @@ export interface RouteConfig {
   name: string;
   component: ComponentType | null;
   navItem: NavItem;
+  isPublic?: boolean;
 }
 
 export type NavItem = 'home' | 'students' | 'courses' | 'payments' | 'reports' | 'settings';
@@ -34,7 +35,7 @@ export type NavItem = 'home' | 'students' | 'courses' | 'payments' | 'reports' |
 export const PAGE_CONFIG: RouteConfig[] = [
   { path: ROUTES.DEFAULT, name: 'Students', component: StudentsPage, navItem: 'students' },
   { path: ROUTES.HOME, name: 'Home', component: null, navItem: 'home' },
-  { path: ROUTES.COURSES, name: 'Course', component: null, navItem: 'courses' },
+  { path: ROUTES.COURSES, name: 'Course', component: null, navItem: 'courses', isPublic: true },
   { path: ROUTES.PAYMENT, name: 'Payment', component: null, navItem: 'payments' },
   { path: ROUTES.REPORT, name: 'Report', component: null, navItem: 'reports' },
   { path: ROUTES.SETTINGS, name: 'Settings', component: null, navItem: 'settings' },

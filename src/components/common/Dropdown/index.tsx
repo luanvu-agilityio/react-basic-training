@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Button } from '@components/common/Button';
-import { Overlay } from 'models/Overlay';
 import './index.css';
-import FormInput from '@components/common/FormInput';
+import FormField from '../FormField';
+import useIsMobile from '@hooks/useIsMobile';
+import { useEscapeKey } from '@hooks/useEscapeKey';
+import useClickOutside from '@hooks/useClickOutside';
+
 /**
  * dropdown components for sorting functionality.
  *
@@ -17,87 +20,45 @@ export interface DropdownOption {
   text: string;
 }
 
-interface GenericDropdownProps {
+interface DropdownProps {
   id: string;
   label: string;
   options: DropdownOption[];
   currentValue: string;
-  onSelect: (value: string, text: string) => void;
   isOpen: boolean;
+  onSelect: (value: string, text: string) => void;
   toggleOpen: () => void;
-  searchable?: boolean;
 }
 
-const GenericDropdown = ({
+const Dropdown = ({
   id,
   label,
   options,
   currentValue,
-  onSelect,
   isOpen,
+  onSelect,
   toggleOpen,
-  searchable = false,
-}: GenericDropdownProps) => {
+}: DropdownProps) => {
   const [searchText, setSearchText] = useState<string>('');
-  const [filteredOptions, setFilteredOptions] = useState<DropdownOption[]>(options);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   // Check if screen is mobile size
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth <= 480);
-    };
-
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkIsMobile);
-    };
-  }, []);
+  const isMobile = useIsMobile();
 
   // Setup global Escape key handler to close dropdown
-  useEffect(() => {
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
-        toggleOpen();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscapeKey);
-    return () => {
-      document.removeEventListener('keydown', handleEscapeKey);
-    };
-  }, [isOpen, toggleOpen]);
+  useEscapeKey(() => {
+    if (isOpen) toggleOpen();
+  });
 
   //Setup click outside handler
-  useEffect(() => {
-    if (!isMobile) {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-          if (isOpen) toggleOpen();
-        }
-      };
-
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [isOpen, toggleOpen]);
+  const dropdownRef = useClickOutside<HTMLDivElement>(() => {
+    if (isOpen) toggleOpen();
+  }, isOpen && !isMobile);
 
   // Filter options based on search text
-  useEffect(() => {
-    if (searchable && searchText) {
-      const filtered = options.filter((option) =>
-        option.text.toLowerCase().includes(searchText.toLowerCase()),
-      );
-      setFilteredOptions(filtered);
-    } else {
-      setFilteredOptions(options);
-    }
-  }, [searchText, options, searchable]);
+  const filteredOptions = useMemo(() => {
+    if (!searchText) return options;
+    return options.filter((option) => option.text.toLowerCase().includes(searchText.toLowerCase()));
+  }, [searchText, options]);
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
@@ -107,8 +68,14 @@ const GenericDropdown = ({
   // Function to handle option selection
   const handleOptionSelect = (value: string, text: string) => {
     onSelect(value, text);
-    if (searchable) setSearchText('');
+    setSearchText('');
     toggleOpen();
+  };
+
+  const getDropdownClassName = (id: string): string => {
+    if (id === 'sortOrder') return 'sort-dropdown-order';
+    if (id === 'sortField') return 'sort-dropdown-field';
+    return '';
   };
 
   return (
@@ -116,7 +83,7 @@ const GenericDropdown = ({
       <Button
         id={`${id}Button`}
         variant="dropdown"
-        className={`${id === 'sortOrder' ? 'sort-dropdown-order' : id === 'sortField' ? 'sort-dropdown-field' : ''}`}
+        className={getDropdownClassName(id)}
         onClick={toggleOpen}
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -129,7 +96,7 @@ const GenericDropdown = ({
 
       {isOpen &&
         (isMobile ? (
-          <Overlay onClick={toggleOpen}>
+          <div className="modal-background" onClick={toggleOpen}>
             <div
               id={`${id}Menu`}
               className="dropdown-menu"
@@ -142,7 +109,7 @@ const GenericDropdown = ({
               {/* Menu content - shared between mobile and desktop */}
               {renderMenuContent()}
             </div>
-          </Overlay>
+          </div>
         ) : (
           <div
             id={`${id}Menu`}
@@ -174,9 +141,9 @@ const GenericDropdown = ({
     return (
       <>
         {/* Search field */}
-        {searchable && (
+        {
           <div className="dropdown-search">
-            <FormInput
+            <FormField
               name={`${id}Search`}
               type="text"
               placeholder="Search fields..."
@@ -185,7 +152,7 @@ const GenericDropdown = ({
               onClick={(e) => e.stopPropagation()}
             />
           </div>
-        )}
+        }
 
         {/* Dropdown options */}
         <div className="dropdown-options">
@@ -200,12 +167,10 @@ const GenericDropdown = ({
               <span>{option.text}</span>
             </Button>
           ))}
-          {searchable && filteredOptions.length === 0 && (
-            <div className="no-results">No matching fields</div>
-          )}
+          {filteredOptions.length === 0 && <div className="no-results">No matching fields</div>}
         </div>
       </>
     );
   }
 };
-export default GenericDropdown;
+export default Dropdown;
