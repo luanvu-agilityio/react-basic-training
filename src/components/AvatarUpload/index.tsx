@@ -1,8 +1,9 @@
-import React from 'react';
+import { ChangeEvent, useRef } from 'react';
 import Button from '@components/common/Button';
 import { CAMERA_ICON } from '@constants/avatar';
 import './index.css';
 import Avatar from '@components/common/Avatar';
+
 /**
  * AvatarUpload Component
  *
@@ -26,7 +27,7 @@ interface AvatarUploadProps {
 
 const AvatarUpload = ({ avatar, onFileSelect, previewUrl, error }: AvatarUploadProps) => {
   // Reference to hidden file input
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const displayAvatar = previewUrl ?? avatar ?? CAMERA_ICON;
   const isPlaceholder = !avatar && !previewUrl;
@@ -45,7 +46,7 @@ const AvatarUpload = ({ avatar, onFileSelect, previewUrl, error }: AvatarUploadP
    * Handles file selection and passes file to parent for later upload
    * @param e - Change event from file input
    */
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) {
       onFileSelect(null);

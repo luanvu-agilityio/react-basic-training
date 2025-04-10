@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@components/common/Button';
 import SearchBar from '@components/common/SearchBar';
@@ -66,7 +65,12 @@ const PageHeader = ({
       </Button>
       <div className="content-actions">
         {showSearch && (
-          <SearchBar onSearch={handleSearch} placeholder={searchPlaceholder} debounceTime={500} />
+          <SearchBar
+            onSearch={handleSearch}
+            placeholder={searchPlaceholder}
+            debounceTime={500}
+            type="search"
+          />
         )}
         <Button
           variant="notification"

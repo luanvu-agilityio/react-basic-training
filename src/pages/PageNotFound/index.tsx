@@ -1,4 +1,3 @@
-import React from 'react';
 import './index.css';
 import Title from '@components/common/Title';
 import Text from '@components/common/Text';

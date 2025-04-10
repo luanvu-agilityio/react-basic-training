@@ -1,4 +1,4 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import './index.css';
 import Button from '@components/common/Button';
 import Text from '@components/common/Text';
@@ -18,7 +18,7 @@ interface ModalProps {
   isOpen: boolean;
   closeModal: (value: boolean) => void;
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
   onSubmit?: () => void;
   submitText?: string;
   submitDisabled?: boolean;

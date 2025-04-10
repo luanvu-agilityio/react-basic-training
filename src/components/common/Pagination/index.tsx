@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, ChangeEvent, KeyboardEvent } from 'react';
 import Button from '@components/common/Button';
 import Text from '../Text';
 import SelectBox from '@components/common/SelectBox';
@@ -104,13 +104,13 @@ const Pagination = ({
   /**
    * Handlers for "Go to page" functionality
    */
-  const handleGoToInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGoToInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Only allow numbers
     const value = e.target.value.replace(/\D/g, '');
     setGoToPage(value);
   };
 
-  const handleGoToKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleGoToKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleGoToPage();
     }

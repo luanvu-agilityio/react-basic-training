@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ChangeEvent, ReactElement, ReactNode } from 'react';
 import Modal from '@components/common/Modal';
 import FormField from '@components/common/FormField';
 
@@ -27,7 +27,7 @@ interface ModalFormProps<T extends Record<string, unknown>> {
   // Form data and handlers
   readonly formData: T;
   readonly errors: Record<string, string>;
-  readonly onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  readonly onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
   readonly onSubmit: () => void;
 
   // Modal props
@@ -58,7 +58,7 @@ function ModalForm<T extends Record<string, unknown>>({
   fields,
   renderBeforeFields,
   renderAfterFields,
-}: ModalFormProps<T>): React.ReactElement {
+}: ModalFormProps<T>): ReactElement {
   // Determine if form should be disabled based on errors
   const hasErrors = submitDisabled ?? Object.keys(errors).length > 0;
 

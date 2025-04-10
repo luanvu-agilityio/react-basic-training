@@ -1,16 +1,16 @@
-import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@contexts/Auth.context';
 import { useNavigation } from '@contexts/Navigation.context';
 import { ROUTES } from 'route/config';
 import Sidebar from '@components/SideBar';
+import { ReactNode } from 'react';
 
 /**
  * A layout component that protects routes requiring authentication.
  */
 interface ProtectedLayoutProps {
   /** React components to render in the main content area */
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {

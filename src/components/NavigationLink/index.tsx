@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { Link } from 'react-router-dom';
 import Text from '@components/common/Text';
 import './index.css';
 import ImageIcon from '@components/common/ImageIcon';
 import Button from '@components/common/Button';
+import { KeyboardEvent, MouseEvent } from 'react';
 
 /**
  * NavigationLink Component Props
@@ -20,7 +20,7 @@ interface NavigationLinkProps {
   className?: string;
   isActive?: boolean;
   /** Click handler for the navigation item */
-  onClick: (e: React.MouseEvent) => void;
+  onClick: (e: MouseEvent) => void;
 }
 
 /**
@@ -45,9 +45,9 @@ export const NavigationLink = ({
   const fullClassName = `${baseClass} ${className} ${isActive ? '' : 'inactive'}`;
 
   // Handler for keyboard accessibility
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
-      onClick(e as unknown as React.MouseEvent);
+      onClick(e as unknown as MouseEvent);
     }
   };
 

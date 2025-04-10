@@ -1,4 +1,4 @@
-import React from 'react';
+import { HTMLAttributes } from 'react';
 
 /**
  * A Text component
@@ -12,7 +12,7 @@ import React from 'react';
  * - `style` (React.CSSProperties, optional): Inline styles
  * - `...rest`: Any additional props will be passed to the rendered element
  */
-interface TextProps extends React.HTMLAttributes<HTMLElement> {
+interface TextProps extends HTMLAttributes<HTMLElement> {
   text: string;
   as?: 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'div';
   className?: string;

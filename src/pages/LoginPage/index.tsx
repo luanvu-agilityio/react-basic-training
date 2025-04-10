@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LOGIN_ERROR_MESSAGES } from '@constants/login-error-message';
 import { FormErrors, validateLoginForm } from '@utils/login-validation';
@@ -61,7 +61,7 @@ const LoginPage = () => {
    * Updates form state and clears corresponding error
    * @param e - Input change event
    */
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormState({
       ...formState,
@@ -85,7 +85,7 @@ const LoginPage = () => {
    * 4. Handles success/failure cases
    * @param e - Form submit event
    */
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 

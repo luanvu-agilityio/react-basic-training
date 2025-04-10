@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ChangeEvent, CSSProperties, KeyboardEvent, MouseEvent, ReactNode } from 'react';
 import ImageIcon from '../ImageIcon';
 
 /**
@@ -37,10 +37,10 @@ export interface FormFieldProps {
   value: string;
   disabled?: boolean;
   required?: boolean;
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
-  style?: React.CSSProperties;
+  onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onClick?: (e: MouseEvent<HTMLInputElement>) => void;
+  style?: CSSProperties;
   className?: string;
   labelClassName?: string;
   hasError?: boolean;
@@ -77,7 +77,7 @@ const FormField = ({
   max,
 }: FormFieldProps) => {
   // Styling config
-  const disabledStyles: React.CSSProperties = disabled
+  const disabledStyles: CSSProperties = disabled
     ? {
         backgroundColor: 'var(--gray-color)',
         color: 'var(--dark-gray-color)',
@@ -86,7 +86,7 @@ const FormField = ({
       }
     : {};
 
-  const errorStyles: React.CSSProperties = hasError
+  const errorStyles: CSSProperties = hasError
     ? {
         border: '1px solid var(--color-error)',
       }
@@ -137,7 +137,7 @@ const FormField = ({
   const renderInput = () => {
     // If we have an icon, render a container with both input and icon
     if (iconElement) {
-      const containerStyles: React.CSSProperties = {
+      const containerStyles: CSSProperties = {
         border: hasError ? '1px solid var(--color-error)' : '1px solid var(--input-border-color)',
         display: 'flex',
         alignItems: 'center',
@@ -147,14 +147,14 @@ const FormField = ({
         ...style,
       };
 
-      const inputStyles: React.CSSProperties = {
+      const inputStyles: CSSProperties = {
         ...disabledStyles,
         border: 'none',
         outline: 'none',
         flex: 1,
       };
 
-      const iconStyles: React.CSSProperties = {
+      const iconStyles: CSSProperties = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

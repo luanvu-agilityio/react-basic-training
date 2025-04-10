@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo, ChangeEvent } from 'react';
 import { Button } from '@components/common/Button';
 import './index.css';
 import FormField from '../FormField';
@@ -60,7 +60,7 @@ const Dropdown = ({
     return options.filter((option) => option.text.toLowerCase().includes(searchText.toLowerCase()));
   }, [searchText, options]);
 
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
   const selectedText = options.find((option) => option.value === currentValue)?.text ?? label;

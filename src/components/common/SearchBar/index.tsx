@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import './index.css';
 import { ICON_SRC } from '@constants/icon-src';
 import FormField from '../FormField';
@@ -21,6 +21,7 @@ export interface SearchBarProps {
   placeholder?: string;
   debounceTime?: number;
   initialQuery?: string;
+  type?: string;
 }
 
 const SearchBar = ({
@@ -28,6 +29,7 @@ const SearchBar = ({
   placeholder = 'Search...',
   debounceTime = 300,
   initialQuery = '',
+  type = 'text',
 }: SearchBarProps) => {
   // State for managing the immediate search query input
   const [searchQuery, setSearchQuery] = useState(initialQuery);
@@ -53,7 +55,7 @@ const SearchBar = ({
    * Handles real-time input changes
    * Updates the searchQuery state, which triggers the debounce effect
    */
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
@@ -61,7 +63,7 @@ const SearchBar = ({
    * Handles Enter key press for immediate search
    * Bypasses the debounce delay when user explicitly requests search
    */
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       performSearch(searchQuery);
     }
@@ -72,7 +74,7 @@ const SearchBar = ({
   return (
     <div className="searchbar">
       <FormField
-        type="text"
+        type={type}
         name="search"
         className="searchbar-input"
         placeholder={placeholder}

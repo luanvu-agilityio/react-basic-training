@@ -1,10 +1,9 @@
-import React from 'react';
-
+import { CSSProperties } from 'react';
 interface AvatarProps {
   className: string;
   src: string;
   alt: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   onError?: () => void;
 }
 

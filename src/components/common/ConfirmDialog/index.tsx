@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ICON from '@constants/toast-icon-src';
 import './index.css';
 import Button from '@components/common/Button';

@@ -1,5 +1,5 @@
 import { ISortConfig } from 'types/sort';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SORT_FIELDS, SORT_ORDERS } from '@constants/sort-options';
 import './index.css';
 import Dropdown, { DropdownOption } from '@components/common/Dropdown';

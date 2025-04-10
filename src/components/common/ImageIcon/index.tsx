@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ImageIconProps {
   src: string;
   alt: string;
@@ -9,14 +7,14 @@ interface ImageIconProps {
   loading?: 'lazy' | 'eager';
 }
 
-const ImageIcon: React.FC<ImageIconProps> = ({
+const ImageIcon = ({
   src,
   alt,
   size = 24,
   className = '',
   loading = 'lazy',
   onError,
-}) => {
+}: ImageIconProps) => {
   return (
     <img
       src={src}

@@ -1,5 +1,4 @@
 import './index.css';
-import React from 'react';
 import { IStudent } from 'types/student';
 import StudentTableHeader from '../StudentTableHeader/index';
 import StudentTableRow from '../StudentTableRow/index';

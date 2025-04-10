@@ -38,7 +38,8 @@
       "@pages/*": ["pages/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
-      "@models/*": ["models/*"]
+      "@models/*": ["models/*"],
+      "@layouts/*": ["layouts/*"]
     }
   },
   "include": ["src"]

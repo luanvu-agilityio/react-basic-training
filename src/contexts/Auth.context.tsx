@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import { createContext, useContext, useEffect, useState, useMemo, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'route/config';
 import { useToast } from './Toast.context';
@@ -53,7 +53,7 @@ const AuthContext = createContext<AuthContextType>({
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Child components to wrap
  */
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // State management
   const [user, setUser] = useState<UserData | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);

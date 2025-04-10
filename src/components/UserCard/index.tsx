@@ -1,6 +1,4 @@
-import React from 'react';
 import Avatar from '@components/common/Avatar';
-
 import Text from '@components/common/Text';
 
 interface UserCardProps {

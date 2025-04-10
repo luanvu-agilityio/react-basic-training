@@ -1,16 +1,15 @@
-import { REQUEST_ERROR_MESSAGES } from '@constants/request-error-message';
+/**
+ * Custom error class that includes status code and response information
+ */
+export class ApiError extends Error {
+  status?: number;
 
-interface ToastService {
-  showToast(type: string, title: string, message: string): void;
-}
-
-declare global {
-  interface Window {
-    toastService?: ToastService;
+  constructor(message: string, status?: number) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
   }
 }
-
-export {};
 /**
  * Generic type param T represents the resource type (e.g., IStudent, IUser, ICategory if we have in the future)
  * Generic type param ID represents the type of the identifier (usually string or number)
@@ -74,46 +73,31 @@ export abstract class BaseService<T, ID = string> {
     }
     return await response.json();
   }
-
   /**
-   * Common error handling method with flexible error toast
+   * Common error handling method that converts errors to ApiError
    * @param error - The error object
    * @param operation - Description of the operation that failed
-   * @param customErrorMessages - Optional custom error messages for specific status codes
-   * @returns An Error instance
+   * @returns An ApiError instance
    */
-  protected handleError(
-    error: unknown,
-    operation: string,
-    customErrorMessages?: Partial<Record<number, string>>,
-  ): Error {
+  protected handleError(error: unknown, operation: string): ApiError {
     console.error(`Error during ${operation}:`, error);
 
-    const defaultErrorMessages: Record<number, string> = {
-      400: REQUEST_ERROR_MESSAGES.BAD_REQUEST,
-      401: REQUEST_ERROR_MESSAGES.UNAUTHORIZED,
-      403: REQUEST_ERROR_MESSAGES.FORBIDDEN,
-      404: REQUEST_ERROR_MESSAGES.NOT_FOUND,
-      500: REQUEST_ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
-    };
-
-    const errorMessages = { ...defaultErrorMessages, ...customErrorMessages };
-
     if (error instanceof Response) {
-      const errorMessage = errorMessages[error.status] ?? REQUEST_ERROR_MESSAGES.DEFAULT_ERROR;
-      window.toastService?.showToast('error', 'Operation failed', errorMessage);
-    } else if (error instanceof Error) {
-      const errorMessage = error.message.includes('NetworkError')
-        ? REQUEST_ERROR_MESSAGES.NETWORK_ERROR
-        : REQUEST_ERROR_MESSAGES.UNEXPECTED_ERROR;
-      window.toastService?.showToast('error', 'Operation failed', errorMessage);
-    } else {
-      window.toastService?.showToast(
-        'error',
-        'Operation failed',
-        REQUEST_ERROR_MESSAGES.UNEXPECTED_ERROR,
+      return new ApiError(error.statusText || 'Request failed', error.status);
+    }
+
+    if (error instanceof ApiError) {
+      return error;
+    }
+
+    if (error instanceof Error) {
+      return new ApiError(
+        error.message.includes('NetworkError')
+          ? 'Network error - please check your connection'
+          : error.message,
       );
     }
-    return error instanceof Error ? error : new Error('An error occurred');
+
+    return new ApiError('An unexpected error occurred');
   }
 }

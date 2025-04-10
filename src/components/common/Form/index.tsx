@@ -1,9 +1,9 @@
-import React from 'react';
 import Title from '../Title';
 import Text from '../Text';
 import FormField from '../FormField';
 import Button from '../Button';
 import './index.css';
+import { ChangeEvent, FormEvent, ReactNode } from 'react';
 
 interface FormFieldConfig {
   name: string;
@@ -21,9 +21,9 @@ interface FormProps {
   values: Record<string, string | number | boolean>;
   errors: Record<string, string>;
   isLoading?: boolean;
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent) => void;
-  footer?: React.ReactNode;
+  onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: (e: FormEvent) => void;
+  footer?: ReactNode;
   submitText?: string;
 }
 

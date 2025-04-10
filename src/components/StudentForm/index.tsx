@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { IStudent } from 'types/student';
 import { formatDateForInput } from '@utils/date-formatter';
 import AvatarUpload from '@components/AvatarUpload';
@@ -18,7 +18,7 @@ interface StudentFormViewProps {
   tempAvatarUrl: string | null;
   isOpen: boolean;
   isEditMode: boolean;
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onFileSelect: (file: File | null) => void;
   onSubmit: () => void;
   onClose: () => void;

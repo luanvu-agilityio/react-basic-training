@@ -1,9 +1,9 @@
-import React from 'react';
 import Sidebar from '@components/SideBar';
 import { useNavigation } from '@contexts/Navigation.context';
+import { ReactNode } from 'react';
 
 interface PublicLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const PublicLayout = ({ children }: PublicLayoutProps) => {

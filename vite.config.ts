@@ -6,7 +6,13 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig(
   viteDefineConfig({
     // ... other Vite configurations
-    plugins: [react(), tsconfigPaths()],
+    plugins: [
+      react({
+        jsxRuntime: 'automatic',
+        jsxImportSource: 'react',
+      }),
+      tsconfigPaths(),
+    ],
     server: {
       proxy: {
         '/api': {

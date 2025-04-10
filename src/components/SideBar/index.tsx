@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Title from '@components/common/Title';
 import NavigationLink from '../NavigationLink';
 import UserCard from '../UserCard';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { IStudent } from 'types/student';
 import Button from '@components/common/Button';
 import Avatar from '@components/common/Avatar';

@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import { JSX } from 'react';
 import PageHeader from '@components/PageHeader';
 import PageNotAvailable from '@pages/PageNotFound';
 

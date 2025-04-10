@@ -1,4 +1,4 @@
-import React, { useState, useEffect, JSX } from 'react';
+import { useState, useEffect, JSX } from 'react';
 import { useLocation } from 'react-router-dom';
 import Button from '@components/common/Button';
 import StudentList from '@components/StudentList';
@@ -15,6 +15,7 @@ import { useStudentOperations } from '@hooks/useStudentOperations';
 import { useStudentForm } from '@hooks/useStudentForm';
 import { usePagination } from '@hooks/usePagination'; // Import the new hook
 import './index.css';
+import LoadingSpinner from '@components/common/LoadingSpinner';
 
 /**
  * StudentsPage Component
@@ -39,6 +40,18 @@ const StudentsPage = (): JSX.Element => {
   const [displayedStudents, setDisplayedStudents] = useState<IStudent[]>([]);
   const [searchedStudents, setSearchedStudents] = useState<IStudent[] | null>(null);
   const [sortConfig, setSortConfig] = useState<ISortConfig>({ field: 'name', order: 'asc' });
+  const [simulatedLoading, setSimulatedLoading] = useState(true); /// for demonstration purposes
+
+  useEffect(() => {
+    if (!isLoading) {
+      // Once actual loading is done, keep showing the loading state for demonstration
+      const timer = setTimeout(() => {
+        setSimulatedLoading(false);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
 
   // Student form management using the custom hook
   const {
@@ -169,8 +182,8 @@ const StudentsPage = (): JSX.Element => {
             </Button>
           </div>
         </div>
-        {isLoading ? (
-          <Text className="loading-text" text="Loading students..." />
+        {isLoading || simulatedLoading ? (
+          <LoadingSpinner loadingText="Loading students list... Please wait..." />
         ) : (
           <>
             <StudentList
