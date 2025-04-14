@@ -1,37 +1,72 @@
-import React, { useEffect, useState } from 'react';
-import './index.css';
-import FormInput from '@components/common/FormInput';
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { ICON_SRC } from '@constants/icon-src';
+import FormField from '../FormField';
+import useDebounce from '@hooks/useDebounce';
 
-/**
- * A reusable SearchBar component with debounced search functionality.
- *
- * This component provides a search input field with debounced search capabilities
- * to efficiently search through any data.
- *
- * Props:
- * - `onSearch` (function): Callback function that receives the search query string
- * - `placeholder` (string, optional): Custom placeholder text. Defaults to "Search..."
- * - `debounceTime` (number, optional): Debounce delay in milliseconds. Defaults to 300ms
- * - `initialQuery` (string, optional): Initial search query. Defaults to empty string
- */
 export interface SearchBarProps {
   onSearch: (query: string) => void;
   placeholder?: string;
   debounceTime?: number;
   initialQuery?: string;
+  type?: string;
 }
+
+// Styled components definition
+const SearchBarContainer = styled.div`
+  position: relative;
+  width: 22rem;
+  height: 3.7rem;
+  border-radius: 4px;
+  border: 1px solid var(--input-border-color);
+`;
+
+// Add a prop to determine icon visibility
+interface StyledFormFieldProps {
+  hideIcon: boolean;
+}
+
+const StyledFormField = styled(FormField)<StyledFormFieldProps>`
+  width: 100%;
+  height: 100%;
+
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+
+  .form-input {
+    padding: 0;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  &::placeholder {
+    font-size: var(--font-size-14);
+    font-weight: var(--font-weight-regular);
+    color: var(--semi-gray-color);
+  }
+
+  .search-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    display: ${(props) => (props.hideIcon ? 'none' : 'block')};
+    transition: opacity 0.2s ease;
+  }
+`;
 
 const SearchBar = ({
   onSearch,
   placeholder = 'Search...',
   debounceTime = 300,
   initialQuery = '',
+  type = 'text',
 }: SearchBarProps) => {
   // State for managing the immediate search query input
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  // State for managing the debounced version of the search query
-  const [debounceQuery, setDebounceQuery] = useState<string>(initialQuery);
+  // Custom hook to debounce the search query
+  const debouncedQuery = useDebounce(searchQuery, debounceTime);
 
   /**
    * Performs the actual search operation using the provided query
@@ -42,30 +77,17 @@ const SearchBar = ({
   };
 
   /**
-   * Debounce effect: Delays updating the debounced query to prevent excessive searches
-   * Cleanup function removes the timeout if component unmounts or query changes
-   */
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebounceQuery(searchQuery);
-    }, debounceTime);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchQuery, debounceTime]);
-
-  /**
    * Effect to trigger search when debounced query changes
    */
   useEffect(() => {
-    performSearch(debounceQuery);
-  }, [debounceQuery]);
+    performSearch(debouncedQuery);
+  }, [debouncedQuery, onSearch]);
 
   /**
    * Handles real-time input changes
    * Updates the searchQuery state, which triggers the debounce effect
    */
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
@@ -73,18 +95,19 @@ const SearchBar = ({
    * Handles Enter key press for immediate search
    * Bypasses the debounce delay when user explicitly requests search
    */
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       performSearch(searchQuery);
     }
   };
 
-  // Configuration object for the search icon
+  // Hide icon when there is a search query
+  const shouldHideIcon = searchQuery.trim().length > 0;
 
   return (
-    <div className="searchbar">
-      <FormInput
-        type="text"
+    <SearchBarContainer className="searchbar">
+      <StyledFormField
+        type={type}
         name="search"
         className="searchbar-input"
         placeholder={placeholder}
@@ -95,8 +118,9 @@ const SearchBar = ({
         imgAlt={ICON_SRC.search.alt}
         imgClassName={ICON_SRC.search.className}
         aria-label={`Search ${placeholder?.toLowerCase() || 'items'}`}
+        hideIcon={shouldHideIcon}
       />
-    </div>
+    </SearchBarContainer>
   );
 };
 

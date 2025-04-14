@@ -1,24 +1,35 @@
-import React from 'react';
 import Avatar from '@components/common/Avatar';
-
 import Text from '@components/common/Text';
+import styled from 'styled-components';
 
 interface UserCardProps {
   username: string;
   userRole: string;
   userAvatar: string;
 }
+
+const UserProfile = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 4rem;
+  padding-bottom: 4rem;
+
+  @media screen and (max-width: 992px) {
+    display: none;
+  }
+`;
+
 const UserCard = ({ username, userRole, userAvatar }: UserCardProps) => (
-  <div className="user-profile">
+  <UserProfile>
     <Avatar
       className="avatar"
+      variant="round"
+      size="large"
       src={userAvatar}
       alt="Avatar"
       style={{
-        height: '120px',
-        width: '120px',
-        borderRadius: '50%',
-        objectFit: 'cover',
         overflow: 'hidden',
         marginBottom: '15px',
       }}
@@ -32,7 +43,11 @@ const UserCard = ({ username, userRole, userAvatar }: UserCardProps) => (
         marginBottom: '0.5rem',
       }}
     />
-    <Text text={userRole} as="span" style={{ color: '#830900', fontSize: 'var(--font-size-14)' }} />
-  </div>
+    <Text
+      text={userRole}
+      as="span"
+      style={{ color: 'var(--orange-color)', fontSize: 'var(--font-size-14)' }}
+    />
+  </UserProfile>
 );
 export default UserCard;

@@ -1,14 +1,13 @@
-import './index.css';
-import React from 'react';
+import styled from 'styled-components';
 import { IStudent } from 'types/student';
-import StudentTableHeader from '../StudentTableHeader/index';
-import StudentTableRow from '../StudentTableRow/index';
+import StudentTableHeaderStyled from '../StudentTableHeader';
+import StudentTableRowStyled from '../StudentTableRow';
 
 /**
- * StudentList Component
+ * StudentListStyled Component
  *
- * A table component that displays a list of students with their information
- * and action buttons for editing and deleting.
+ * A styled-components version of the table component that displays a list of students
+ * with their information and action buttons for editing and deleting.
  */
 interface StudentListProps {
   /** Array of student records to display */
@@ -19,29 +18,66 @@ interface StudentListProps {
   onDelete: (student: IStudent) => void;
 }
 
+const TableContainer = styled.div`
+  width: 100%;
+`;
+
+const StudentsTable = styled.table`
+  width: 100%;
+  border-spacing: 0 1.5rem;
+  table-layout: fixed;
+
+  @media screen and (max-width: 768px) {
+    display: block;
+    width: 100%;
+
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+      width: 100% !important;
+    }
+  }
+`;
+
+const EmptyRow = styled.tr`
+  background-color: var(--white-color);
+`;
+
+const EmptyCell = styled.td`
+  padding: 15px 10px;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+  border: none;
+  text-align: center;
+  border-radius: 1rem;
+`;
+
 /**
- * Renders a table of student records with actions
+ * Renders a table of student records with actions using styled-components
  *
  * @param {StudentListProps} props - Component props
  * @returns {JSX.Element} Table component with student data
  */
-const StudentList = ({ students, onEdit, onDelete }: StudentListProps) => {
+const StudentListStyled = ({ students, onEdit, onDelete }: StudentListProps) => {
   return (
-    <div>
-      <table className="students-table">
-        <StudentTableHeader />
+    <TableContainer>
+      <StudentsTable>
+        <StudentTableHeaderStyled />
         <tbody>
           {students.length === 0 ? (
             // Empty state message
-            <tr className="table-row">
-              <td className="table-cell text-center" colSpan={7}>
+            <EmptyRow>
+              <EmptyCell colSpan={7}>
                 No students found. Click ADD NEW STUDENT to add one.
-              </td>
-            </tr>
+              </EmptyCell>
+            </EmptyRow>
           ) : (
             // Map through students and render rows
             students.map((student) => (
-              <StudentTableRow
+              <StudentTableRowStyled
                 key={student.id}
                 student={student}
                 onEdit={onEdit}
@@ -50,9 +86,9 @@ const StudentList = ({ students, onEdit, onDelete }: StudentListProps) => {
             ))
           )}
         </tbody>
-      </table>
-    </div>
+      </StudentsTable>
+    </TableContainer>
   );
 };
 
-export default StudentList;
+export default StudentListStyled;

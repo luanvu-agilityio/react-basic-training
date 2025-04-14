@@ -1,12 +1,11 @@
 import type { Preview } from '@storybook/react';
-import '../src/components/common/toast/Toast.css';
+import '../src/components/common/Toast/index.css';
 import '../src/styles/index.css';
-import '../src/pages/LoginPage.css';
-import '../src/components/layout/sidebar/Sidebar.css';
-import '../src/components/layout/header/Header.css';
-import '../src/components/common/buttons/Button.css';
-import '../src/components/student/SortDropdown.css';
-import '../src/components/common/pagination/Pagination.css';
+import '../src/components/Sidebar/index.css';
+import '../src/components/PageHeader/index.css';
+import '../src/components/common/Button/index.css';
+import '../src/components/StudentSortDropdown/index.css';
+import '../src/components/common/Pagination/index.css';
 const preview: Preview = {
   parameters: {
     controls: {

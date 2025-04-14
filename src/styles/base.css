@@ -59,15 +59,22 @@ body {
   --semi-gray-color: #c4c4c4;
   --light-gray-color: #cdcdcd;
   --light-brown-color: #f2eae1;
-  --light-blue-color: #3751ff;
+  --semi-light-blue-color: #3751ff;
   --deep-blue-color: #2941e8;
+
+  --light-blue-color: #1677ff;
 
   --input-border-color: #e5e5e5;
   --button-hover-color: #fe7200;
+  --input-border-color: #d1d5db;
 
   /* Box shadow */
   --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
   /* Border radius */
   --border-radius: 4px;
+}
+
+.hidden {
+  display: none;
 }

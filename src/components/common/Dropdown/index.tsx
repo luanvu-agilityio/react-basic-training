@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useMemo, ChangeEvent } from 'react';
+import styled, { css } from 'styled-components';
 import { Button } from '@components/common/Button';
-import { Overlay } from 'models/Overlay';
-import './index.css';
-import FormInput from '@components/common/FormInput';
+import FormField from '../FormField';
+import useIsMobile from '@hooks/useIsMobile';
+import { useEscapeKey } from '@hooks/useEscapeKey';
+import useClickOutside from '@hooks/useClickOutside';
+
 /**
  * dropdown components for sorting functionality.
  *
@@ -17,106 +20,337 @@ export interface DropdownOption {
   text: string;
 }
 
-interface GenericDropdownProps {
+interface DropdownProps {
   id: string;
   label: string;
   options: DropdownOption[];
   currentValue: string;
-  onSelect: (value: string, text: string) => void;
   isOpen: boolean;
+  onSelect: (value: string, text: string) => void;
   toggleOpen: () => void;
-  searchable?: boolean;
 }
 
-const GenericDropdown = ({
+// Styled Components
+const DropdownContainer = styled.div<{ $isOpen: boolean }>`
+  position: relative;
+  display: inline-block;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const ArrowDown = styled.span<{ $isOpen: boolean }>`
+  font-size: 16px;
+  margin-left: 5px;
+  color: #666;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+
+  ${(props) =>
+    props.$isOpen &&
+    css`
+      transform: rotate(180deg);
+    `}
+`;
+
+const DropdownMenuBase = styled.div<{ $isHidden?: boolean }>`
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  min-width: 140px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+
+  ${(props) =>
+    props.$isHidden
+      ? css`
+          display: none;
+        `
+      : css`
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+          pointer-events: auto;
+          height: auto;
+          max-height: 300px;
+        `}
+
+  @media screen and (max-width: 480px) {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 12px 12px 0 0;
+    max-height: 60vh;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transform: translateY(0);
+
+    &::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 4px;
+      background-color: #e0e0e0;
+      border-radius: 2px;
+      margin: 8px auto;
+    }
+  }
+`;
+
+const DropdownMenu = styled(DropdownMenuBase)<{ $isOpen?: boolean }>`
+  opacity: ${(props) => (props.$isOpen ? '1' : '0')};
+  visibility: ${(props) => (props.$isOpen ? 'visible' : 'hidden')};
+  transform: ${(props) => (props.$isOpen ? 'translateY(0)' : 'translateY(-10px)')};
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+  pointer-events: ${(props) => (props.$isOpen ? 'auto' : 'none')};
+  height: ${(props) => (props.$isOpen ? 'auto' : '0')};
+
+  @media screen and (max-width: 480px) {
+    transform: ${(props) => (props.$isOpen ? 'translateY(0)' : 'translateY(100%)')};
+  }
+`;
+
+const DropdownSearch = styled.div`
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+
+  input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: #1677ff;
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    padding: 12px;
+
+    input {
+      padding: 10px 12px;
+      font-size: 15px;
+    }
+  }
+`;
+
+const DropdownOptions = styled.div`
+  max-height: 240px;
+  overflow-y: auto;
+  min-height: 40px;
+
+  @media screen and (max-width: 480px) {
+    max-height: 50vh;
+  }
+`;
+
+const NoResults = styled.div`
+  padding: 16px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+`;
+
+const DropdownItem = styled(Button)<{ $isActive: boolean }>`
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  color: #333;
+  transition: background-color 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+  box-sizing: border-box;
+  min-width: 100%;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  &:hover {
+    background-color: #f8f8f8;
+  }
+
+  ${(props) =>
+    props.$isActive &&
+    css`
+      background-color: #f5f8ff;
+      color: #1677ff;
+      font-weight: 500;
+    `}
+
+  &::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  ${(props) =>
+    props.$isActive &&
+    css`
+      &::after {
+        content: '✓';
+        color: #1677ff;
+        font-weight: bold;
+      }
+    `}
+
+  @media screen and (max-width: 480px) {
+    padding: 12px 16px;
+    font-size: 15px;
+    min-height: 45px;
+  }
+
+  @media screen and (max-width: 320px) {
+    padding: 10px 12px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+`;
+
+const SortDropdownField = styled(Button)`
+  width: 240px;
+`;
+
+const SortDropdownOrder = styled(Button)`
+  @media screen and (max-width: 480px) {
+    min-width: unset;
+  }
+`;
+
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+`;
+
+const DrawerIndicator = styled.div`
+  height: 4px;
+  width: 40px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  margin: 8px auto;
+`;
+
+const Dropdown = ({
   id,
   label,
   options,
   currentValue,
-  onSelect,
   isOpen,
+  onSelect,
   toggleOpen,
-  searchable = false,
-}: GenericDropdownProps) => {
+}: DropdownProps) => {
   const [searchText, setSearchText] = useState<string>('');
-  const [filteredOptions, setFilteredOptions] = useState<DropdownOption[]>(options);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   // Check if screen is mobile size
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth <= 480);
-    };
-
-    checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkIsMobile);
-    };
-  }, []);
+  const isMobile = useIsMobile();
 
   // Setup global Escape key handler to close dropdown
-  useEffect(() => {
-    const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
-        toggleOpen();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscapeKey);
-    return () => {
-      document.removeEventListener('keydown', handleEscapeKey);
-    };
-  }, [isOpen, toggleOpen]);
+  useEscapeKey(() => {
+    if (isOpen) toggleOpen();
+  });
 
   //Setup click outside handler
-  useEffect(() => {
-    if (!isMobile) {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-          if (isOpen) toggleOpen();
-        }
-      };
-
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [isOpen, toggleOpen]);
+  const dropdownRef = useClickOutside<HTMLDivElement>(() => {
+    if (isOpen) toggleOpen();
+  }, isOpen && !isMobile);
 
   // Filter options based on search text
-  useEffect(() => {
-    if (searchable && searchText) {
-      const filtered = options.filter((option) =>
-        option.text.toLowerCase().includes(searchText.toLowerCase()),
-      );
-      setFilteredOptions(filtered);
-    } else {
-      setFilteredOptions(options);
-    }
-  }, [searchText, options, searchable]);
+  const filteredOptions = useMemo(() => {
+    if (!searchText) return options;
+    return options.filter((option) => option.text.toLowerCase().includes(searchText.toLowerCase()));
+  }, [searchText, options]);
 
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
+
   const selectedText = options.find((option) => option.value === currentValue)?.text ?? label;
 
   // Function to handle option selection
   const handleOptionSelect = (value: string, text: string) => {
     onSelect(value, text);
-    if (searchable) setSearchText('');
+    setSearchText('');
     toggleOpen();
   };
 
+  // Helper function to render menu content
+  const renderMenuContent = () => {
+    return (
+      <>
+        {/* Search field */}
+        <DropdownSearch>
+          <FormField
+            name={`${id}Search`}
+            type="text"
+            placeholder="Search fields..."
+            value={searchText}
+            onInputChange={handleSearchInputChange}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </DropdownSearch>
+
+        {/* Dropdown options */}
+        <DropdownOptions>
+          {filteredOptions.map((option) => (
+            <DropdownItem
+              key={option.value}
+              variant="dropdown"
+              $isActive={currentValue === option.value}
+              onClick={() => handleOptionSelect(option.value, option.text)}
+              role="menuitem"
+            >
+              <span>{option.text}</span>
+            </DropdownItem>
+          ))}
+          {filteredOptions.length === 0 && <NoResults>No matching fields</NoResults>}
+        </DropdownOptions>
+      </>
+    );
+  };
+
+  // Determine which Button component to use based on id
+  const DropdownButton =
+    id === 'sortField' ? SortDropdownField : id === 'sortOrder' ? SortDropdownOrder : Button;
+
   return (
-    <div className={`sort-dropdown ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
-      <Button
+    <DropdownContainer $isOpen={isOpen} ref={dropdownRef}>
+      <DropdownButton
         id={`${id}Button`}
         variant="dropdown"
-        className={`${id === 'sortOrder' ? 'sort-dropdown-order' : id === 'sortField' ? 'sort-dropdown-field' : ''}`}
         onClick={toggleOpen}
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -124,88 +358,42 @@ const GenericDropdown = ({
         <span>
           {label}: {selectedText}
         </span>
-        <span className="arrow-down">▼</span>
-      </Button>
+        <ArrowDown $isOpen={isOpen}>▼</ArrowDown>
+      </DropdownButton>
 
       {isOpen &&
         (isMobile ? (
-          <Overlay onClick={toggleOpen}>
-            <div
+          <ModalBackground onClick={toggleOpen}>
+            <DropdownMenu
+              $isOpen={isOpen}
               id={`${id}Menu`}
-              className="dropdown-menu"
               role="menu"
               tabIndex={-1}
               aria-labelledby={`${id}Button`}
             >
-              {/* Mobile drawer indicator */}
-              <div className="drawer-indicator"></div>
-              {/* Menu content - shared between mobile and desktop */}
+              <DrawerIndicator />
               {renderMenuContent()}
-            </div>
-          </Overlay>
+            </DropdownMenu>
+          </ModalBackground>
         ) : (
-          <div
+          <DropdownMenu
+            $isOpen={isOpen}
             id={`${id}Menu`}
-            className="dropdown-menu"
             role="menu"
             aria-labelledby={`${id}Button`}
           >
-            {/* Menu content - shared between mobile and desktop */}
             {renderMenuContent()}
-          </div>
+          </DropdownMenu>
         ))}
 
       {/* For desktop when closed */}
       {!isOpen && !isMobile && (
-        <div
-          id={`${id}Menu`}
-          className="dropdown-menu hidden"
-          role="menu"
-          aria-labelledby={`${id}Button`}
-        >
+        <DropdownMenuBase id={`${id}Menu`} role="menu" aria-labelledby={`${id}Button`} $isHidden>
           {renderMenuContent()}
-        </div>
+        </DropdownMenuBase>
       )}
-    </div>
+    </DropdownContainer>
   );
-
-  // Helper function to render menu content
-  function renderMenuContent() {
-    return (
-      <>
-        {/* Search field */}
-        {searchable && (
-          <div className="dropdown-search">
-            <FormInput
-              name={`${id}Search`}
-              type="text"
-              placeholder="Search fields..."
-              value={searchText}
-              onInputChange={handleSearchInputChange}
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        )}
-
-        {/* Dropdown options */}
-        <div className="dropdown-options">
-          {filteredOptions.map((option) => (
-            <Button
-              key={option.value}
-              variant="dropdown"
-              className={`dropdown-item ${currentValue === option.value ? 'active' : ''}`}
-              onClick={() => handleOptionSelect(option.value, option.text)}
-              role="menuitem"
-            >
-              <span>{option.text}</span>
-            </Button>
-          ))}
-          {searchable && filteredOptions.length === 0 && (
-            <div className="no-results">No matching fields</div>
-          )}
-        </div>
-      </>
-    );
-  }
 };
-export default GenericDropdown;
+
+export default Dropdown;

@@ -1,15 +1,45 @@
-import React from 'react';
+import { CSSProperties } from 'react';
+
+type AvatarSize = 'small' | 'medium' | 'large';
+type AvatarVariant = 'round' | 'rectangle';
 
 interface AvatarProps {
-  className: string;
+  className?: string;
   src: string;
   alt: string;
-  style?: React.CSSProperties;
-  loading?: 'lazy' | 'eager';
+  size?: AvatarSize;
+  variant?: AvatarVariant;
+  style?: CSSProperties;
   onError?: () => void;
 }
 
-const Avatar = ({ src, alt, className = '', style, loading = 'lazy' }: AvatarProps) => {
-  return <img className={className} src={src} alt={alt} style={style} loading={loading} />;
+const getAvatarSize = (size: AvatarSize = 'medium'): number => {
+  const sizes = {
+    small: 32,
+    medium: 65,
+    large: 120,
+  };
+  return sizes[size];
 };
+
+const Avatar = ({
+  src,
+  alt,
+  className = 'avatar',
+  size = 'medium',
+  variant = 'round',
+  style,
+  onError,
+}: AvatarProps) => {
+  const baseStyles: CSSProperties = {
+    width: getAvatarSize(size),
+    height: getAvatarSize(size),
+    borderRadius: variant === 'round' ? '50%' : '4px',
+    objectFit: 'cover',
+    ...style,
+  };
+
+  return <img className={className} src={src} alt={alt} style={baseStyles} onError={onError} />;
+};
+
 export default Avatar;

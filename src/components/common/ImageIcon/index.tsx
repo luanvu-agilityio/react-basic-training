@@ -1,4 +1,4 @@
-import React from 'react';
+import { CSSProperties } from 'react';
 
 interface ImageIconProps {
   src: string;
@@ -7,9 +7,18 @@ interface ImageIconProps {
   className?: string;
   onError?: (e: HTMLImageElement) => void;
   loading?: 'lazy' | 'eager';
+  style?: CSSProperties;
 }
 
-const ImageIcon: React.FC<ImageIconProps> = ({ src, alt, size = 24, className = '' }) => {
+const ImageIcon = ({
+  src,
+  alt,
+  size = 24,
+  className = '',
+  loading = 'lazy',
+  onError,
+  style = { objectFit: 'contain', display: 'inline-block', verticalAlign: 'middle' },
+}: ImageIconProps) => {
   return (
     <img
       src={src}
@@ -17,11 +26,14 @@ const ImageIcon: React.FC<ImageIconProps> = ({ src, alt, size = 24, className = 
       width={size}
       height={size}
       className={`image-icon ${className}`}
-      loading="lazy"
-      style={{
-        objectFit: 'contain',
-        display: 'inline-block',
-        verticalAlign: 'middle',
+      loading={loading}
+      style={style}
+      onError={(e) => {
+        if (onError) {
+          onError(e.currentTarget);
+        } else {
+          e.currentTarget.style.display = 'none';
+        }
       }}
     />
   );

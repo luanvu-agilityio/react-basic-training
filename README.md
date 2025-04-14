@@ -1,4 +1,4 @@
-# React Basic Practice 
+# React Basic Practice
 
 ## Overview
 
@@ -41,7 +41,6 @@ This project showcases practical applications of React with TypeScript while del
 
 - Set up and get to know with Storybook which will assist to manage components system in the development environment
 
-
 ## Prerequisite
 
 - Visual Studio Code version [1.97.2]
@@ -66,9 +65,9 @@ This project showcases practical applications of React with TypeScript while del
 
 ## Tested environments
 
-- Chrome version [], version []
+- Chrome version [134.0.6998.179], version [135.0.7049.42]
 
-- Firefox version [], version []
+- Firefox version [135.0.1], version [136.0.4]
 
 - Safari version [17.5], version [18.3]
 
@@ -85,12 +84,9 @@ This project showcases practical applications of React with TypeScript while del
     |- styles/
 
     |- constants/
-
+    |- contexts/
     |- component/
         |- common/
-        |- layout/
-        |- student/
-   
     |- pages/
         |- LoginPage/
         |- PageNotFound/
@@ -101,10 +97,10 @@ This project showcases practical applications of React with TypeScript while del
         |- StudentService
         |- UserService
         |- ImageUpload
+    |- route/
     |- types/
-    
-    |- helpers/
-   
+    |- models/
+    |- utils/
     |- App.tsx
     |- main.tsx
     |- vite-env.d.ts
@@ -127,25 +123,21 @@ This project showcases practical applications of React with TypeScript while del
 
 ## Step by step to run this app in your local
 
-| Command                                                                   | Action                           |
-| ------------------------------------------------------------------------- | -------------------------------- |
-| git clone https://gitlab.asoft-python.com/luan.vu/react-training.git      | Download the source code         |
-| cd react-basic-practice                                                   | Move to folder                   |
-| git checkout feat/practice                                                | Checkout to branch feat/practice |
-| pnpm install                                                              | Install dependencies             |
-| pnpm run dev                                                              | Run the application              |
-| Open new terminal for story book                                                                             |
-| pnpm storybook                                                            | Run storybook                    |
-| Open new terminal to run JSON server locally                                                                 |
-| pnpm run json-server                                                      | Run Json server locally          |
-
+| Command                                                              | Action                           |
+| -------------------------------------------------------------------- | -------------------------------- |
+| git clone https://gitlab.asoft-python.com/luan.vu/react-training.git | Download the source code         |
+| cd react-basic-practice                                              | Move to folder                   |
+| git checkout feat/practice                                           | Checkout to branch feat/practice |
+| pnpm install                                                         | Install dependencies             |
+| pnpm run dev                                                         | Run the application              |
+| Open new terminal for story book                                     |                                  |
+| pnpm storybook                                                       | Run storybook                    |
+| Open new terminal to run JSON server locally                         |                                  |
+| pnpm run json-server                                                 | Run Json server locally          |
 
 <b>Notes:<b>
 
-
-- Database running at http://localhost:3000
-
-- Alternatively, see the deployment link on Vercel at the end of this document for more details
+- See the deployment link on Vercel at the end of this document for more details
 
 ## Contributing
 
@@ -159,7 +151,7 @@ I welcome any and all contribution! If you have found or encountered any bugs or
 
 [Practice plan](https://docs.google.com/document/d/1NtiwHfMuaavMyQpGGj_O2nzuubNSdHKw/edit)
 
-[Deployment link] (https://react-basic-training-luanvu.vercel.app/login)
+[Deployment link](https://react-basic-training-luanvu.vercel.app/login)
 
 ###
 

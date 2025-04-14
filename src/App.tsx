@@ -1,14 +1,54 @@
-import React, { JSX } from 'react';
+import { createElement, JSX } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { PAGE_CONFIG, ROUTES, RouteConfig } from 'route/config';
 import LoginForm from '@pages/LoginPage';
-import { AuthProvider } from '@contexts/Auth.context';
+import { AuthProvider, useAuth } from '@contexts/Auth.context';
 import { NavigationProvider } from '@contexts/Navigation.context';
 import { ToastProvider } from 'contexts/Toast.context';
-import ProtectedLayout from '@components/ProtectedLayout';
-import { GenericPage } from '@pages/GenericPage';
+import ProtectedLayout from '@layouts/ProtectedLayout';
+import { PageLayout } from 'layouts/PageLayout';
 import './styles/index.css';
+import PublicLayout from 'layouts/PublicLayout';
 
+/**
+ * Route component that handles layout and authentication for each route.
+ *
+ * Render a route with the appropriate layout based on authentication status and route configuration.
+ * If the route is public, it will render the PublicLayout. Otherwise, it will render the ProtectedLayout.
+ */
+const RouteWithLayout = ({ config }: { config: RouteConfig }) => {
+  const { isAuthenticated } = useAuth();
+  const { name, component, isPublic } = config;
+
+  if (isPublic) {
+    return isAuthenticated ? (
+      <ProtectedLayout>
+        {component ? createElement(component) : <PageLayout pageName={name} />}
+      </ProtectedLayout>
+    ) : (
+      <PublicLayout>
+        {component ? createElement(component) : <PageLayout pageName={name} />}
+      </PublicLayout>
+    );
+  }
+  return (
+    <ProtectedLayout>
+      {component ? createElement(component) : <PageLayout pageName={name} />}
+    </ProtectedLayout>
+  );
+};
+
+const LoginRoute = () => {
+  const { isAuthenticated } = useAuth();
+
+  // If user is already authenticated, redirect to the default route
+  if (isAuthenticated) {
+    return <Navigate to={ROUTES.DEFAULT} />;
+  }
+
+  // Otherwise, show login form
+  return <LoginForm />;
+};
 /**
  * App Component
  *
@@ -37,18 +77,14 @@ function App(): JSX.Element {
           <NavigationProvider>
             <Routes>
               {/* Login Route */}
-              <Route path={ROUTES.LOGIN} element={<LoginForm />} />
+              <Route path={ROUTES.LOGIN} element={<LoginRoute />} />
 
-              {/* Dynamic Protected Routes */}
-              {PAGE_CONFIG.map(({ path, name, component }: RouteConfig) => (
+              {/* Dynamic Routes */}
+              {PAGE_CONFIG.map((config: RouteConfig) => (
                 <Route
-                  key={path}
-                  path={path}
-                  element={
-                    <ProtectedLayout>
-                      {component ? React.createElement(component) : <GenericPage pageName={name} />}
-                    </ProtectedLayout>
-                  }
+                  key={config.path}
+                  path={config.path}
+                  element={<RouteWithLayout config={config} />}
                 />
               ))}
 

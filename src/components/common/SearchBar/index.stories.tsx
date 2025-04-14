@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import SearchBar, { SearchBarProps } from './index';
 
 const meta: Meta<SearchBarProps> = {
-  title: 'Components/Header/SearchBar',
+  title: 'Components/SearchBar',
   component: SearchBar,
   tags: ['autodocs'],
 } satisfies Meta<typeof SearchBar>;

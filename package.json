@@ -13,15 +13,17 @@
     "json-server": "json-server --watch ./server/db.json "
   },
   "dependencies": {
-    "@storybook/addon-actions": "^8.6.7",
     "json-server": "^1.0.0-beta.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.3.0"
+    "react-router-dom": "^7.3.0",
+    "react-scripts": "^5.0.1",
+    "styled-components": "^6.1.17"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "3",
     "@eslint/js": "^9.22.0",
+    "@storybook/addon-actions": "^8.6.12",
     "@storybook/addon-essentials": "8.6.7",
     "@storybook/addon-onboarding": "8.6.7",
     "@storybook/blocks": "8.6.7",
@@ -30,8 +32,8 @@
     "@storybook/react-vite": "8.6.7",
     "@storybook/test": "8.6.7",
     "@types/node": "^22.13.13",
-    "@types/react": "^19.0.11",
-    "@types/react-dom": "^19.0.4",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.3.4",
     "@vitest/browser": "^3.0.9",
     "@vitest/coverage-v8": "^3.0.9",
@@ -57,8 +59,14 @@
   },
   "eslintConfig": {
     "extends": [
-      "plugin:storybook/recommended"
-    ]
+      "plugin:storybook/recommended",
+      "react-app",
+      "react-app/jest"
+    ],
+    "rules": {
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off"
+    }
   },
   "pnpm": {
     "ignoredBuiltDependencies": [

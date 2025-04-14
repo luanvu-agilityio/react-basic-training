@@ -13,6 +13,6 @@ export const SORT_FIELDS: SortOption[] = [
 ];
 
 export const SORT_ORDERS = [
-  { order: 'asc', text: 'A to Z' },
-  { order: 'desc', text: 'Z to A' },
+  { order: 'asc', text: 'Ascending' },
+  { order: 'desc', text: 'Descending' },
 ];

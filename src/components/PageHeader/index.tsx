@@ -1,10 +1,9 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import Button from '@components/common/Button';
 import SearchBar from '@components/common/SearchBar';
 import { filterStudentsByQuery } from '@utils/filter-student-by-query';
 import { IStudent } from 'types/student';
-import './index.css';
 import ImageIcon from '@components/common/ImageIcon';
 
 interface PageHeaderProps {
@@ -21,13 +20,33 @@ interface PageHeaderProps {
   searchPlaceholder?: string;
 }
 
+const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 6rem;
+  padding: 1rem 2rem;
+`;
+
+const ContentActions = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const NotificationButton = styled(Button)`
+  img {
+    width: 1.7rem;
+    height: 2rem;
+  }
+`;
+
 const PageHeader = ({
   allStudents = [],
   onSearchResults = () => {},
   onNotificationClick,
   customBackHandler,
   showSearch = true,
-  searchPlaceholder = 'Search students...',
+  searchPlaceholder = 'Search...',
 }: PageHeaderProps) => {
   const navigate = useNavigate();
 
@@ -43,10 +62,19 @@ const PageHeader = ({
       return;
     }
 
-    // Standard back navigation
-    navigate(-1);
-  };
+    // Enhanced back navigation - preserves pagination context
+    const currentParams = new URLSearchParams(location.search);
+    const hasPageParams = currentParams.has('page') || currentParams.has('perPage');
 
+    if (hasPageParams) {
+      // If we're on a paginated page, go back to the main page without pagination
+      // This preserves the correct navigation flow
+      navigate(location.pathname);
+    } else {
+      // Standard back navigation
+      navigate(-1);
+    }
+  };
   /**
    * Handles search queries and filters students
    * @param query - The search query string
@@ -57,18 +85,23 @@ const PageHeader = ({
   };
 
   return (
-    <header className="page-header">
+    <Header>
       <Button variant="back" onClick={handleBackClick} aria-label="Go back">
         <ImageIcon
           src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742868124/back_sk4lcp.svg"
           alt="Click to get back"
         />
       </Button>
-      <div className="content-actions">
+      <ContentActions>
         {showSearch && (
-          <SearchBar onSearch={handleSearch} placeholder={searchPlaceholder} debounceTime={500} />
+          <SearchBar
+            onSearch={handleSearch}
+            placeholder={searchPlaceholder}
+            debounceTime={500}
+            type="search"
+          />
         )}
-        <Button
+        <NotificationButton
           variant="notification"
           onClick={() => onNotificationClick?.()}
           aria-label="Notifications"
@@ -78,9 +111,9 @@ const PageHeader = ({
             src="https://res.cloudinary.com/ds82onf5q/image/upload/v1742868124/notification_myvxdf.svg"
             alt="Notification"
           />
-        </Button>
-      </div>
-    </header>
+        </NotificationButton>
+      </ContentActions>
+    </Header>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import { createContext, useContext, useState, useMemo, ReactNode } from 'react';
 import { NavItem } from 'route/config';
 
 /**
@@ -45,7 +45,7 @@ const NavigationContext = createContext<NavigationContextType>({
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Child components to wrap
  */
-export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
+export const NavigationProvider = ({ children }: { children: ReactNode }) => {
   // State for active navigation item and sidebar expansion
   const [activeItem, setActiveItem] = useState<NavItem>('students');
   const [sidebarExpanded, setSidebarExpanded] = useState(false);

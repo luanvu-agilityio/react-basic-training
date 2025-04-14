@@ -1,8 +1,8 @@
-import React from 'react';
+import { ChangeEvent, useRef } from 'react';
 import Button from '@components/common/Button';
 import { CAMERA_ICON } from '@constants/avatar';
-import './index.css';
 import Avatar from '@components/common/Avatar';
+
 /**
  * AvatarUpload Component
  *
@@ -26,7 +26,7 @@ interface AvatarUploadProps {
 
 const AvatarUpload = ({ avatar, onFileSelect, previewUrl, error }: AvatarUploadProps) => {
   // Reference to hidden file input
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const displayAvatar = previewUrl ?? avatar ?? CAMERA_ICON;
   const isPlaceholder = !avatar && !previewUrl;
@@ -45,7 +45,7 @@ const AvatarUpload = ({ avatar, onFileSelect, previewUrl, error }: AvatarUploadP
    * Handles file selection and passes file to parent for later upload
    * @param e - Change event from file input
    */
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) {
       onFileSelect(null);
@@ -60,16 +60,39 @@ const AvatarUpload = ({ avatar, onFileSelect, previewUrl, error }: AvatarUploadP
   };
 
   return (
-    <div className="profile-upload">
+    <div
+      className="profile-upload"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginBottom: '2rem',
+        flexWrap: 'wrap',
+      }}
+    >
       {/* Avatar preview container */}
-      <div className="profile-placeholder">
+      <div
+        className="profile-placeholder"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '8rem',
+          height: '8rem',
+          marginRight: '2rem',
+          marginBottom: '1rem',
+          backgroundColor: 'var(--white-color)',
+          borderRadius: '50%',
+          overflow: 'hidden',
+        }}
+      >
         <Avatar
+          size="medium"
           src={displayAvatar}
           alt={isPlaceholder ? 'camera' : 'avatar'}
           className={isPlaceholder ? '' : 'avatar'}
           onError={handleImageError}
-          loading="lazy"
-          style={{ width: '65px', height: '65px', backgroundColor: 'transparent' }}
+          style={{ backgroundColor: 'transparent' }}
         />
       </div>
 

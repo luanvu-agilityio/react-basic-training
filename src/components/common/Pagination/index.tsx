@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, ChangeEvent, KeyboardEvent } from 'react';
+import styled from 'styled-components';
 import Button from '@components/common/Button';
-import FormLabel from '../FormLabel';
-import InputField from '../FormInput';
 import Text from '../Text';
 import SelectBox from '@components/common/SelectBox';
 import { paginationOptions } from '@constants/pagination-options';
-import './index.css';
+import FormField from '../FormField';
 
 /**
  * A Pagination component
@@ -24,17 +23,195 @@ interface PaginationProps {
   initialItemsPerPage?: number;
 }
 
+// Styled Components
+const PaginationContainer = styled.div`
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  min-height: 6rem;
+`;
+
+const PaginationControls = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  min-height: 3.5rem;
+
+  @media screen and (max-width: 992px) {
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 1rem;
+    min-height: 12rem;
+  }
+`;
+
+const ItemsPerPage = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+
+  @media (max-width: 768px) {
+    justify-self: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    justify-content: center;
+  }
+`;
+
+const PaginationLabel = styled(Text)`
+  color: var(--black-color);
+  font-size: var(--font-size-12);
+`;
+
+const StyledSelectBox = styled(SelectBox)`
+  min-width: 5rem;
+  width: 5rem;
+  height: 2.5rem;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: var(--font-size-10);
+  box-sizing: border-box;
+
+  & option {
+    font-size: var(--font-size-12);
+  }
+`;
+
+const PaginationButtons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 2.5rem;
+
+  @media (max-width: 768px) {
+    justify-self: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 480px) {
+    flex-wrap: nowrap;
+    justify-content: center;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+`;
+
+const PageIndicator = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 12rem;
+  height: 2.5rem;
+  margin: 0 0.5rem;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    min-width: 10rem;
+    justify-content: center;
+  }
+
+  @media (max-width: 480px) {
+    min-width: 8rem;
+  }
+`;
+
+const PageNumbers = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0 0.5rem;
+  min-width: 10rem;
+  justify-content: center;
+  height: 2.5rem;
+
+  @media (max-width: 768px) {
+    margin: 0 0.25rem;
+  }
+`;
+
+const GoToButton = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  padding: 0;
+  height: 2.5rem;
+
+  @media (max-width: 768px) {
+    justify-self: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    justify-content: center;
+  }
+`;
+
+const StyledFormField = styled(FormField)`
+  width: 4rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  text-align: center;
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-regular);
+  box-sizing: border-box;
+`;
+
+const PaginationButton = styled(Button)`
+  &.active {
+    background-color: var(--semi-light-blue-color);
+    color: white;
+    border-color: var(--semi-light-blue-color);
+    font-weight: var(--font-weight-semibold);
+  }
+`;
+
+const PaginationEllipsis = styled.span`
+  color: #6c757d;
+  font-size: var(--font-size-10);
+  width: 1.5rem;
+  text-align: center;
+  user-select: none;
+  display: inline-block;
+`;
+
+const PlaceholderSpan = styled.span`
+  /* Empty placeholder for layout stability */
+`;
+
 const Pagination = ({
   totalItems,
   onPageChange,
   initialPage = 1,
   initialItemsPerPage = 5,
 }: PaginationProps) => {
-  const effectiveItemsPerPage = initialItemsPerPage || 5;
+  const effectiveItemsPerPage = initialItemsPerPage ?? 5;
   const effectiveTotalPages = Math.max(1, Math.ceil(totalItems / effectiveItemsPerPage));
-  const effectiveInitialPage = Math.min(initialPage || 1, effectiveTotalPages);
+  const effectiveInitialPage = Math.min(initialPage ?? 1, effectiveTotalPages);
 
-  // Then use in useState:
   // State management for pagination
   const [currentPage, setCurrentPage] = useState(effectiveInitialPage);
   const [itemsPerPage, setItemsPerPage] = useState(effectiveItemsPerPage);
@@ -95,7 +272,6 @@ const Pagination = ({
   /**
    * Handlers for pagination controls
    */
-  // Updated to accept a direct number value from SelectBox
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
     setItemsPerPage(newItemsPerPage);
     setCurrentPage(1);
@@ -105,13 +281,13 @@ const Pagination = ({
   /**
    * Handlers for "Go to page" functionality
    */
-  const handleGoToInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGoToInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Only allow numbers
     const value = e.target.value.replace(/\D/g, '');
     setGoToPage(value);
   };
 
-  const handleGoToKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleGoToKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleGoToPage();
     }
@@ -139,26 +315,22 @@ const Pagination = ({
    * Adds ellipsis when there are gaps in the sequence
    */
   const createPageButton = (page: number) => (
-    <Button
+    <PaginationButton
       variant="pagination"
       key={`page-${page}`}
-      className={`btn--number ${page === currentPage ? 'active' : ''}`}
+      className={`btn-number ${page === currentPage ? 'active' : ''}`}
       onClick={() => handlePageClick(page)}
     >
       {page}
-    </Button>
+    </PaginationButton>
   );
 
-  const createEllipsis = (key: string) => (
-    <span key={key} className="pagination-ellipsis">
-      ...
-    </span>
-  );
+  const createEllipsis = (key: string) => <PaginationEllipsis key={key}>...</PaginationEllipsis>;
 
   const createPlaceholder = (index: number) => (
-    <span key={`placeholder-${index}`} className="pagination-placeholder" aria-hidden="true">
+    <PlaceholderSpan key={`placeholder-${index}`} aria-hidden="true">
       {/* Empty placeholder for layout stability */}
-    </span>
+    </PlaceholderSpan>
   );
 
   const pageNumbers = useMemo(() => {
@@ -202,39 +374,36 @@ const Pagination = ({
 
   // Early return an empty placeholder of proper height if there are no items
   if (totalItems === 0) {
-    return <div className="pagination" aria-hidden="true" style={{ minHeight: '6rem' }}></div>;
+    return <PaginationContainer aria-hidden="true"></PaginationContainer>;
   }
 
   return (
-    <div className="pagination">
-      <div className="pagination-controls">
+    <PaginationContainer>
+      <PaginationControls>
         {/* Items per page */}
-        <div className="items-per-page">
-          <FormLabel htmlFor="itemsPerPage" className="pagination-label">
-            Show
-          </FormLabel>
-          <SelectBox
+        <ItemsPerPage>
+          <PaginationLabel as="span">Show</PaginationLabel>
+          <StyledSelectBox
             id="itemsPerPage"
-            className="pagination-select"
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
             options={paginationOptions}
           />
-          <Text text="students" className="pagination-label" as="span" />
-        </div>
+          <PaginationLabel as="span">students</PaginationLabel>
+        </ItemsPerPage>
 
         {/* Page numbers and navigation buttons */}
-        <div className="pagination-btns">
-          <Button
+        <PaginationButtons>
+          <PaginationButton
             variant="pagination"
-            className=" btn-first"
+            className="btn-first"
             aria-label="First page"
             disabled={currentPage === 1}
             onClick={handleFirstPage}
           >
             <Text text="&laquo;&laquo;" aria-hidden="true" as="span" />
-          </Button>
-          <Button
+          </PaginationButton>
+          <PaginationButton
             variant="pagination"
             className="btn-prev"
             aria-label="Previous page"
@@ -242,13 +411,13 @@ const Pagination = ({
             onClick={handlePrevPage}
           >
             <Text text="&laquo;" aria-hidden="true" as="span" />
-          </Button>
+          </PaginationButton>
 
-          <div className="page-indicator">
-            <div className="page-numbers">{pageNumbers}</div>
-          </div>
+          <PageIndicator>
+            <PageNumbers>{pageNumbers}</PageNumbers>
+          </PageIndicator>
 
-          <Button
+          <PaginationButton
             variant="pagination"
             className="btn-next"
             aria-label="Next page"
@@ -256,8 +425,8 @@ const Pagination = ({
             onClick={handleNextPage}
           >
             <Text text="&raquo;" aria-hidden="true" as="span" />
-          </Button>
-          <Button
+          </PaginationButton>
+          <PaginationButton
             variant="pagination"
             className="btn-last"
             aria-label="Last page"
@@ -265,31 +434,30 @@ const Pagination = ({
             onClick={handleLastPage}
           >
             <Text text="&raquo;&raquo;" aria-hidden="true" as="span" />
-          </Button>
-        </div>
+          </PaginationButton>
+        </PaginationButtons>
 
         {/* Go to page input */}
-        <div className="goto-btn">
-          <FormLabel htmlFor="gotoPage" className="pagination-label">
+        <GoToButton>
+          <PaginationLabel as="span" style={{ display: 'flex', alignItems: 'center' }}>
             Go to page
-          </FormLabel>
-          <InputField
+          </PaginationLabel>
+          <StyledFormField
             name="gotoPage"
             type="number"
             min="1"
             max={totalPages}
-            className="pagination-input"
             value={goToPage}
             onInputChange={handleGoToInputChange}
             onKeyDown={handleGoToKeyPress}
-            style={{ width: '4rem', padding: '0' }}
           />
-          <Button variant="pagination" className="btn-go" onClick={handleGoToPage}>
+          <PaginationButton variant="pagination" className="btn-go" onClick={handleGoToPage}>
             Go
-          </Button>
-        </div>
-      </div>
-    </div>
+          </PaginationButton>
+        </GoToButton>
+      </PaginationControls>
+    </PaginationContainer>
   );
 };
+
 export default Pagination;

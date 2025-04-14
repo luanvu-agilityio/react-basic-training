@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ICON from '@constants/toast-icon-src';
-import './index.css';
 import Button from '@components/common/Button';
+import Text from '../Text';
 
 /**
  * A ConfirmDialog component for displaying confirmation dialogs
@@ -74,15 +74,58 @@ const ConfirmDialog = ({ title, message, onClose, onConfirm, onCancel }: Confirm
   };
 
   return (
-    <div className="confirm-container">
-      <div className={getDialogClassName()}>
-        <div className="toast-icon" dangerouslySetInnerHTML={{ __html: ICON['warning'] }}></div>
+    <div
+      className="confirm-container"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <div
+        className={getDialogClassName()}
+        style={{
+          position: 'relative',
+          padding: '20px',
+          backgroundColor: '#fff',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          display: 'flex',
+          maxWidth: '400px',
+        }}
+      >
+        <div
+          className="toast-icon"
+          dangerouslySetInnerHTML={{ __html: ICON['warning'] }}
+          style={{ marginRight: '15px' }}
+        ></div>
 
-        {/* Content section with title, message and action buttons */}
-        <div className="toast-content">
-          <p className="toast-title">{title}</p>
-          <p className="toast-message">{message}</p>
-          <div className="toast-actions">
+        <div className="toast-content" style={{ flex: 1 }}>
+          <Text
+            text={title}
+            as="p"
+            className="toast-title"
+            style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '10px' }}
+          />
+
+          <Text
+            text={message}
+            as="p"
+            className="toast-message"
+            style={{
+              marginBottom: '20px',
+              color: 'var(--color-text)',
+              fontSize: 'var(--font-size-14)',
+              lineHeight: '1.5',
+            }}
+          />
+
+          <div className="toast-actions" style={{ display: 'flex', gap: '10px' }}>
             <Button variant="confirm" onClick={handleConfirmClick}>
               Confirm
             </Button>
@@ -92,8 +135,18 @@ const ConfirmDialog = ({ title, message, onClose, onConfirm, onCancel }: Confirm
           </div>
         </div>
 
-        {/* Close button (X) */}
-        <Button variant="close" onClick={handleCloseClick}>
+        <Button
+          variant="close"
+          onClick={handleCloseClick}
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            border: 'none',
+            background: 'none',
+            fontSize: '30px',
+          }}
+        >
           &times;
         </Button>
       </div>
