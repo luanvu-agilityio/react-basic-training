@@ -72,7 +72,7 @@ const ModalContainer = styled.div`
 const HeaderContainer = styled.div`
   padding: 16px 24px;
   margin-bottom: 0;
-  background: linear-gradient(135deg, var(--orange-color), #ff9f43);
+  background: linear-gradient(135deg, var(--orange-color));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -110,7 +110,7 @@ const Footer = styled.div`
   gap: 12px;
   padding: 16px 24px;
   border-top: 1px solid #eee;
-  background-color: #f9f9f9;
+  background-color: var(--white-color);
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
 

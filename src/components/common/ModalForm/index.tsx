@@ -51,7 +51,7 @@ const FormGroup = styled.div`
 `;
 
 const ErrorMessageStyled = styled.div`
-  color: var(--color-error, #ff0000);
+  color: var(--color-error);
   font-size: 12px;
   margin-top: 4px;
 `;

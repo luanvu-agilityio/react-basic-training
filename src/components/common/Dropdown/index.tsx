@@ -65,7 +65,7 @@ const DropdownMenuBase = styled.div<{ $isHidden?: boolean }>`
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   overflow: hidden;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--input-border-color);
 
   ${(props) =>
     props.$isHidden
@@ -99,7 +99,7 @@ const DropdownMenuBase = styled.div<{ $isHidden?: boolean }>`
       display: block;
       width: 40px;
       height: 4px;
-      background-color: #e0e0e0;
+      background-color: var(--input-border-color);
       border-radius: 2px;
       margin: 8px auto;
     }
@@ -124,7 +124,7 @@ const DropdownMenu = styled(DropdownMenuBase)<{ $isOpen?: boolean }>`
 
 const DropdownSearch = styled.div`
   padding: 10px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--semi-gray-color);
   position: sticky;
   top: 0;
   background: white;
@@ -133,14 +133,14 @@ const DropdownSearch = styled.div`
   input {
     width: 100%;
     padding: 8px 10px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--input-border-color);
     border-radius: 4px;
     font-size: 14px;
     outline: none;
     box-sizing: border-box;
 
     &:focus {
-      border-color: #1677ff;
+      border-color: var(--semi-light-blue-color);
       box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
     }
   }
@@ -190,7 +190,7 @@ const DropdownItem = styled(Button)<{ $isActive: boolean }>`
   min-width: 100%;
 
   &:not(:last-child) {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--input-border-color);
   }
 
   &:hover {
@@ -201,7 +201,7 @@ const DropdownItem = styled(Button)<{ $isActive: boolean }>`
     props.$isActive &&
     css`
       background-color: #f5f8ff;
-      color: #1677ff;
+      color: var(--light-blue-color);
       font-weight: 500;
     `}
 
@@ -218,7 +218,7 @@ const DropdownItem = styled(Button)<{ $isActive: boolean }>`
     css`
       &::after {
         content: '✓';
-        color: #1677ff;
+        color: var(--light-blue-color);
         font-weight: bold;
       }
     `}
@@ -259,7 +259,7 @@ const ModalBackground = styled.div`
 const DrawerIndicator = styled.div`
   height: 4px;
   width: 40px;
-  background-color: #e0e0e0;
+  background-color: var(--light-gray-color);
   border-radius: 2px;
   margin: 8px auto;
 `;

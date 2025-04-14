@@ -144,6 +144,7 @@ const StyledButton = styled.button<{
     css`
       border: none;
       background-color: transparent;
+      padding: 0.5rem;
 
       img {
         width: 2.3rem;
@@ -153,7 +154,8 @@ const StyledButton = styled.button<{
 
       &:hover {
         border-radius: 1rem;
-        border: 3px solid var(--orange-color);
+
+        border: 1px solid var(--orange-color);
       }
     `}
   
@@ -167,7 +169,7 @@ const StyledButton = styled.button<{
       transform: translateX(-50%);
       width: 40px;
       height: 40px;
-      background-color: #f8d442;
+
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -178,7 +180,6 @@ const StyledButton = styled.button<{
       display: none;
 
       &:hover {
-        background-color: #f8d442;
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
       }
 
@@ -209,7 +210,6 @@ const StyledButton = styled.button<{
       font-size: 32px;
       width: 32px;
       height: 32px;
-      border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -218,7 +218,7 @@ const StyledButton = styled.button<{
       transition: background-color 0.2s;
 
       &:hover {
-        color: #ed1c0e;
+        color: var(--red-color);
         border: none;
         background-color: transparent;
         font-weight: var(--font-weight-semibold);
@@ -233,7 +233,7 @@ const StyledButton = styled.button<{
       border-radius: 4px;
       padding: 0.8rem 1.6rem;
       font-size: 10px;
-      background-color: #f5f5f5;
+      background-color: var(--light-gray-color);
       color: #555;
 
       &:hover {
@@ -309,7 +309,7 @@ const StyledButton = styled.button<{
       border-radius: 4px;
       border: 1px solid #ced4da;
       background-color: #fff;
-      color: #3751ff;
+      color: var(--semi-light-blue-color);
       transition: all 0.2s ease;
       box-sizing: border-box;
 
@@ -322,8 +322,8 @@ const StyledButton = styled.button<{
       }
 
       &:hover:not(:disabled) {
-        background-color: #83bdf7;
-        border-color: #3751ff;
+        background-color: var(--pagination-btn-color);
+        border-color: var(--semi-light-blue-color);
         color: black;
       }
 
@@ -388,7 +388,7 @@ const StyledButton = styled.button<{
       gap: 8px;
       padding: 10px 14px;
       background-color: white;
-      border: 1px solid #e0e0e0;
+      border: 1px solid var(--input-border-color);
       border-radius: 4px;
       font-size: 14px;
       color: #333;

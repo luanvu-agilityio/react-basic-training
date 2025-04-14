@@ -53,9 +53,7 @@ const InputBase = css<InputProps>`
   width: 100%;
   padding: 1rem;
   border: ${(props) =>
-    props.hasError
-      ? '1px solid var(--color-error, #f44336)'
-      : '1px solid var(--input-border-color, #e0e0e0)'};
+    props.hasError ? '1px solid var(--color-error)' : '1px solid var(--input-border-color)'};
   border-radius: 4px;
   font-size: var(--font-size-14, 14px);
   background-color: ${(props) => (props.disabled ? 'var(--gray-color, #f0f0f0)' : 'transparent')};
@@ -65,7 +63,7 @@ const InputBase = css<InputProps>`
 
   &:focus {
     outline: none;
-    border-color: #f5a623;
+    border-color: var(--yellow-color);
   }
 `;
 
@@ -86,9 +84,7 @@ const InputWithIconContainer = styled.div<InputContainerProps>`
   justify-content: space-between;
   position: relative;
   border: ${(props) =>
-    props.hasError
-      ? '1px solid var(--color-error, #f44336)'
-      : '1px solid var(--input-border-color, #e0e0e0)'};
+    props.hasError ? '1px solid var(--color-error)' : '1px solid var(--input-border-color)'};
   border-radius: 4px;
 `;
 
@@ -114,9 +110,7 @@ const IconContainer = styled.div`
 // Calendar input specific styling
 const CalendarInputContainer = styled.div<{ hasError?: boolean }>`
   border: ${(props) =>
-    props.hasError
-      ? '1px solid var(--color-error, #f44336)'
-      : '1px solid var(--input-border-color, #e0e0e0)'};
+    props.hasError ? '1px solid var(--color-error)' : '1px solid var(--input-border-color)'};
   border-radius: 4px;
   position: relative;
 

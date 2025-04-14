@@ -53,7 +53,7 @@ const HeaderTitle = styled(Title)`
     top: 0;
     height: 100%;
     width: 0.6rem;
-    background-color: #f8d442;
+    background-color: var(--yellow-color);
     border-radius: 6px;
   }
 `;

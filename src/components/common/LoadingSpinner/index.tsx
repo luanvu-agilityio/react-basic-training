@@ -57,8 +57,9 @@ const LoadingContent = styled.div`
 const Spinner = styled.div`
   width: 5rem;
   height: 5rem;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #3498db;
+  border: 3px solid var(--input-border-color);
+  border-top: 3px solid var(--light-blue-color);
+
   border-radius: 50%;
   animation: ${spin} 3s linear infinite;
 `;

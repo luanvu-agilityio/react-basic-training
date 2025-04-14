@@ -81,7 +81,7 @@ const StyledSelectBox = styled(SelectBox)`
   width: 5rem;
   height: 2.5rem;
   padding: 0.375rem 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--input-border-color);
   border-radius: 4px;
   background-color: #fff;
   cursor: pointer;
@@ -172,7 +172,7 @@ const StyledFormField = styled(FormField)`
   width: 4rem;
   height: 2.5rem;
   padding: 0;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--input-border-color);
   border-radius: 4px;
   text-align: center;
   font-size: var(--font-size-10);
@@ -190,7 +190,7 @@ const PaginationButton = styled(Button)`
 `;
 
 const PaginationEllipsis = styled.span`
-  color: #6c757d;
+  color: var(--dark-gray-color);
   font-size: var(--font-size-10);
   width: 1.5rem;
   text-align: center;

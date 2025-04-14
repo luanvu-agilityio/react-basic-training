@@ -50,6 +50,7 @@ body {
   --color-info-light: #e3f2fd;
 
   /* other colors */
+  --red-color: #ed1c0e;
   --orange-color: #feaf00;
   --dark-gray-color: #6c6c6c;
   --black-color: #000000;
@@ -61,7 +62,7 @@ body {
   --light-brown-color: #f2eae1;
   --semi-light-blue-color: #3751ff;
   --deep-blue-color: #2941e8;
-
+  --pagination-btn-color: #83bdf7;
   --light-blue-color: #1677ff;
 
   --input-border-color: #e5e5e5;
