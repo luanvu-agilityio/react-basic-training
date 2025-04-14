@@ -1,5 +1,4 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { LOGIN_ERROR_MESSAGES } from '@constants/login-error-message';
@@ -83,7 +82,6 @@ interface LoginFormState {
   email: string;
   password: string;
   [key: string]: string;
-  [key: string]: string;
 }
 
 const LoginPage = () => {
@@ -112,7 +110,6 @@ const LoginPage = () => {
    * @param e - Input change event
    */
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormState({
       ...formState,
@@ -136,7 +133,6 @@ const LoginPage = () => {
    * 4. Handles success/failure cases
    * @param e - Form submit event
    */
-  const handleSubmit = async (e: FormEvent) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -181,23 +177,6 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
-
-  const loginFormFields = [
-    {
-      name: 'email',
-      label: 'Email',
-      type: 'email',
-      placeholder: 'Enter your email',
-      required: true,
-    },
-    {
-      name: 'password',
-      label: 'Password',
-      type: 'password',
-      placeholder: 'Enter your password',
-      required: true,
-    },
-  ];
 
   const loginFormFields = [
     {

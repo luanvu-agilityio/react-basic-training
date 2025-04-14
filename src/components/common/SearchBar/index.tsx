@@ -62,12 +62,9 @@ const SearchBar = ({
   debounceTime = 300,
   initialQuery = '',
   type = 'text',
-  type = 'text',
 }: SearchBarProps) => {
   // State for managing the immediate search query input
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  // Custom hook to debounce the search query
-  const debouncedQuery = useDebounce(searchQuery, debounceTime);
   // Custom hook to debounce the search query
   const debouncedQuery = useDebounce(searchQuery, debounceTime);
 
@@ -85,14 +82,11 @@ const SearchBar = ({
   useEffect(() => {
     performSearch(debouncedQuery);
   }, [debouncedQuery, onSearch]);
-    performSearch(debouncedQuery);
-  }, [debouncedQuery, onSearch]);
 
   /**
    * Handles real-time input changes
    * Updates the searchQuery state, which triggers the debounce effect
    */
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
@@ -101,7 +95,6 @@ const SearchBar = ({
    * Handles Enter key press for immediate search
    * Bypasses the debounce delay when user explicitly requests search
    */
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       performSearch(searchQuery);

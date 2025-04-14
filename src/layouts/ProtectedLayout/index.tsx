@@ -3,11 +3,7 @@ import { useAuth } from '@contexts/Auth.context';
 import { useNavigation } from '@contexts/Navigation.context';
 import { ROUTES, NavItem } from 'route/config';
 import Sidebar from '@components/SideBar';
-<<<<<<< HEAD
 import { ReactNode, useState } from 'react';
-=======
-import { ReactNode } from 'react';
->>>>>>> 499e644906cc81b5d0c01d40973cfab1b314fd69
 
 /**
  * A layout component that protects routes requiring authentication.

@@ -209,9 +209,7 @@ const Pagination = ({
   initialItemsPerPage = 5,
 }: PaginationProps) => {
   const effectiveItemsPerPage = initialItemsPerPage ?? 5;
-  const effectiveItemsPerPage = initialItemsPerPage ?? 5;
   const effectiveTotalPages = Math.max(1, Math.ceil(totalItems / effectiveItemsPerPage));
-  const effectiveInitialPage = Math.min(initialPage ?? 1, effectiveTotalPages);
   const effectiveInitialPage = Math.min(initialPage ?? 1, effectiveTotalPages);
 
   // State management for pagination
@@ -284,13 +282,11 @@ const Pagination = ({
    * Handlers for "Go to page" functionality
    */
   const handleGoToInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-  const handleGoToInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Only allow numbers
     const value = e.target.value.replace(/\D/g, '');
     setGoToPage(value);
   };
 
-  const handleGoToKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
   const handleGoToKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleGoToPage();
@@ -322,7 +318,6 @@ const Pagination = ({
     <PaginationButton
       variant="pagination"
       key={`page-${page}`}
-      className={`btn-number ${page === currentPage ? 'active' : ''}`}
       className={`btn-number ${page === currentPage ? 'active' : ''}`}
       onClick={() => handlePageClick(page)}
     >

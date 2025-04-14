@@ -1,5 +1,4 @@
 import { HTMLAttributes } from 'react';
-import { HTMLAttributes } from 'react';
 
 /**
  * A Text component
