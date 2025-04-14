@@ -21,10 +21,12 @@ export interface DropdownOption {
 }
 
 interface DropdownProps {
+interface DropdownProps {
   id: string;
   label: string;
   options: DropdownOption[];
   currentValue: string;
+  isOpen: boolean;
   isOpen: boolean;
   onSelect: (value: string, text: string) => void;
   toggleOpen: () => void;
@@ -270,20 +272,29 @@ const Dropdown = ({
   options,
   currentValue,
   isOpen,
+  isOpen,
   onSelect,
   toggleOpen,
+}: DropdownProps) => {
 }: DropdownProps) => {
   const [searchText, setSearchText] = useState<string>('');
 
   // Check if screen is mobile size
+  const isMobile = useIsMobile();
   const isMobile = useIsMobile();
 
   // Setup global Escape key handler to close dropdown
   useEscapeKey(() => {
     if (isOpen) toggleOpen();
   });
+  useEscapeKey(() => {
+    if (isOpen) toggleOpen();
+  });
 
   //Setup click outside handler
+  const dropdownRef = useClickOutside<HTMLDivElement>(() => {
+    if (isOpen) toggleOpen();
+  }, isOpen && !isMobile);
   const dropdownRef = useClickOutside<HTMLDivElement>(() => {
     if (isOpen) toggleOpen();
   }, isOpen && !isMobile);
@@ -293,7 +304,12 @@ const Dropdown = ({
     if (!searchText) return options;
     return options.filter((option) => option.text.toLowerCase().includes(searchText.toLowerCase()));
   }, [searchText, options]);
+  const filteredOptions = useMemo(() => {
+    if (!searchText) return options;
+    return options.filter((option) => option.text.toLowerCase().includes(searchText.toLowerCase()));
+  }, [searchText, options]);
 
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
   const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
@@ -303,6 +319,7 @@ const Dropdown = ({
   // Function to handle option selection
   const handleOptionSelect = (value: string, text: string) => {
     onSelect(value, text);
+    setSearchText('');
     setSearchText('');
     toggleOpen();
   };

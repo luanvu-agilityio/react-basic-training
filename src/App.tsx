@@ -1,10 +1,14 @@
 import { createElement, JSX } from 'react';
+import { createElement, JSX } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { PAGE_CONFIG, ROUTES, RouteConfig } from 'route/config';
 import LoginForm from '@pages/LoginPage';
 import { AuthProvider, useAuth } from '@contexts/Auth.context';
+import { AuthProvider, useAuth } from '@contexts/Auth.context';
 import { NavigationProvider } from '@contexts/Navigation.context';
 import { ToastProvider } from 'contexts/Toast.context';
+import ProtectedLayout from '@layouts/ProtectedLayout';
+import { PageLayout } from 'layouts/PageLayout';
 import ProtectedLayout from '@layouts/ProtectedLayout';
 import { PageLayout } from 'layouts/PageLayout';
 import './styles/index.css';
@@ -81,7 +85,12 @@ function App(): JSX.Element {
 
               {/* Dynamic Routes */}
               {PAGE_CONFIG.map((config: RouteConfig) => (
+              {/* Dynamic Routes */}
+              {PAGE_CONFIG.map((config: RouteConfig) => (
                 <Route
+                  key={config.path}
+                  path={config.path}
+                  element={<RouteWithLayout config={config} />}
                   key={config.path}
                   path={config.path}
                   element={<RouteWithLayout config={config} />}

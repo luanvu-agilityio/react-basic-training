@@ -35,6 +35,13 @@ const ImageIcon = ({
           e.currentTarget.style.display = 'none';
         }
       }}
+      onError={(e) => {
+        if (onError) {
+          onError(e.currentTarget);
+        } else {
+          e.currentTarget.style.display = 'none';
+        }
+      }}
     />
   );
 };

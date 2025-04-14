@@ -1,5 +1,6 @@
 import { ISortConfig } from 'types/sort';
 import { useState } from 'react';
+import { useState } from 'react';
 import { SORT_FIELDS, SORT_ORDERS } from '@constants/sort-options';
 import Dropdown, { DropdownOption } from '@components/common/Dropdown';
 import styled from 'styled-components';
@@ -100,6 +101,7 @@ const StudentSortDropdown = ({
     <DualSortContainer>
       {/* Field Dropdown */}
       <Dropdown
+      <Dropdown
         id="sortField"
         label="Sort By"
         options={fieldOptions}
@@ -110,6 +112,7 @@ const StudentSortDropdown = ({
       />
 
       {/* Order Dropdown */}
+      <Dropdown
       <Dropdown
         id="sortOrder"
         label="Order"

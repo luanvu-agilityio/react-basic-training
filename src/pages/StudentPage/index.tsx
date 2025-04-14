@@ -133,9 +133,32 @@ const StudentsPage = (): JSX.Element => {
   });
 
   // Load students on initial mount
+  // Get URL search params for initial pagination values
+  const searchParams = new URLSearchParams(location.search);
+  const initialPage = parseInt(searchParams.get('page') ?? '1', 10);
+  const initialItemsPerPage = parseInt(searchParams.get('perPage') ?? '5', 10);
+
+  // Use the pagination hook
+  const {
+    currentPage,
+    itemsPerPage,
+    paginatedItems: paginatedStudents,
+    handlePageChange,
+  } = usePagination(displayedStudents, {
+    initialPage,
+    initialItemsPerPage,
+  });
+
+  // Load students on initial mount
   useEffect(() => {
     loadStudents();
+    loadStudents();
   }, []);
+
+  // Update displayed students when allStudents changes
+  useEffect(() => {
+    setDisplayedStudents(allStudents);
+  }, [allStudents]);
 
   // Update displayed students when allStudents changes
   useEffect(() => {
@@ -156,6 +179,11 @@ const StudentsPage = (): JSX.Element => {
     setSortConfig(newConfig);
   };
 
+  // Handle sort change
+  const handleSortChange = (newConfig: ISortConfig) => {
+    setSortConfig(newConfig);
+  };
+
   // Handle search results
   const handleSearchResults = (filteredStudents: IStudent[]) => {
     if (
@@ -163,18 +191,24 @@ const StudentsPage = (): JSX.Element => {
       JSON.stringify(filteredStudents) === JSON.stringify(allStudents)
     ) {
       setSearchedStudents(null);
+      setSearchedStudents(null);
     } else {
       setSearchedStudents(filteredStudents);
     }
   };
 
   // Initialize form when opening the form modal
+  // Initialize form when opening the form modal
   useEffect(() => {
     if (showForm) {
       initializeForm(selectedStudent);
     }
   }, [showForm, selectedStudent, initializeForm]);
+      initializeForm(selectedStudent);
+    }
+  }, [showForm, selectedStudent, initializeForm]);
 
+  // Edit student handler
   // Edit student handler
   const handleEditStudent = (student: IStudent) => {
     setSelectedStudent(student);
@@ -191,9 +225,20 @@ const StudentsPage = (): JSX.Element => {
   };
 
   // Delete student confirmation
+  // Form submission wrapper
+  const handleFormSubmit = async () => {
+    const success = await handleSubmitForm();
+    if (success) {
+      setShowForm(false);
+      setSelectedStudent(undefined);
+    }
+  };
+
+  // Delete student confirmation
   const handleDeleteStudent = (student: IStudent) => {
     showConfirmation(
       'Delete Student',
+      `Are you sure you want to delete this student ${student.name}?`,
       `Are you sure you want to delete this student ${student.name}?`,
       () => deleteStudent(student),
       () => {},
@@ -218,6 +263,7 @@ const StudentsPage = (): JSX.Element => {
               variant="add"
               aria-label="Add new student"
               onClick={() => {
+                setSelectedStudent(undefined);
                 setSelectedStudent(undefined);
                 setShowForm(true);
               }}
@@ -261,5 +307,6 @@ const StudentsPage = (): JSX.Element => {
     </div>
   );
 };
+
 
 export default StudentsPage;
